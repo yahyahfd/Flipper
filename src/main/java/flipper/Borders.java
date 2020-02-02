@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+//cette clase sera plutot dans le datamodel et n'a pas grand chose a voir avec le moteur graphique
 public class Borders{
   public Borders(){}
   private static ArrayList<Border> borders=new ArrayList<Border>();
