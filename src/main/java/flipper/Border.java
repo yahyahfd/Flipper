@@ -13,6 +13,7 @@ public class Border{//une bordure est considerer comme une ligne
     this.posX=posX;
     this.posY=posY;
     this.distance=posX.distance(posY);
-    this.rebond=rebond;
+    if(rebond>=0&&rebond<=1)this.rebond=rebond;
+    else this.rebond=0;
   }
 }
