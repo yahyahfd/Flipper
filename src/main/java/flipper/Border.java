@@ -18,5 +18,5 @@ public class Border{//une bordure est considerer comme une ligne
   }
   public boolean isOnTheLine(Position pos){
     return pos.distance(this.posX)+pos.distance(this.posY)==this.distance;
-  }
+  }  
 }
