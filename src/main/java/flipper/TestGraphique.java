@@ -37,13 +37,6 @@ public class TestGraphique extends Application{
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
         circle.setLayoutY(balle.gravity().getY());
-        if(balle.getPos().getY()>=800){
-
-        try {
-          stop();
-        } catch(Exception e) {
-
-        }
       }
       }
     }));
