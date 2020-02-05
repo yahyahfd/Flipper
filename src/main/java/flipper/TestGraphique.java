@@ -10,7 +10,10 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.animation.TranslateTransition;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import javafx.scene.layout.Pane;
 public class TestGraphique extends Application{
@@ -19,24 +22,33 @@ public class TestGraphique extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
+    Balle balle=new Balle(new Position(200,200),100,5);
     border=new Borders();
     border.addBorder(new Border(new Position(20,800),new Position(580,800),1));
     border.addBorder(new Border(new Position(20,200),new Position(20,800),1));
     border.addBorder(new Border(new Position(580,200),new Position(580,800),1));
-    Circle circle=new Circle(200,200,100);
+    Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
     Pane pane=new Pane();
     pane.getChildren().add(circle);
     for(Border b:border.getBorders()){
       pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
     }
     //Adding all the elements to the path
-    TranslateTransition translateTransition=new TranslateTransition();
-    translateTransition.setDuration(Duration.millis(1020));
-    translateTransition.setNode(circle);
-    translateTransition.setByY(500);
-    translateTransition.setCycleCount(50);
-    translateTransition.setAutoReverse(false);
-    translateTransition.play();
+    Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
+      public void handle(ActionEvent t){
+        circle.setLayoutY(balle.gravity().getY());
+        if(balle.getPos().getY()>=800){
+
+        try {
+          stop();
+        } catch(Exception e) {
+
+        }
+      }
+      }
+    }));
+    timeline.setCycleCount(Timeline.INDEFINITE);
+    timeline.play();
     Scene scene=new Scene(pane,600,900);
     scene.setFill(Color.BROWN);
     primaryStage.setScene(scene);
