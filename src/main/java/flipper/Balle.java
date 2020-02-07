@@ -21,9 +21,9 @@ public class Balle{
     this.a=10;
   }
   public Position gravity(){
-    double t=12*Math.pow(10,-1);//pour avoir 60 ips il nous faut un temps de 17 ms
+    double t=17*Math.pow(10,-1);//pour avoir 60 ips il nous faut un temps de 17 ms
     this.v=this.a*t;
-    double y=pos.getY()+0.5*v*t*t;
+    double y=pos.getY()+0.5*a*t*t;
     pos=new Position(pos.getX(),y);
     return pos;
   }

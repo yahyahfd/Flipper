@@ -38,7 +38,6 @@ public class TestGraphique extends Application{
       public void handle(ActionEvent t){
         circle.setLayoutY(balle.gravity().getY());
       }
-      }
     }));
     timeline.setCycleCount(Timeline.INDEFINITE);
     timeline.play();
