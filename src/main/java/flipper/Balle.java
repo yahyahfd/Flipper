@@ -11,22 +11,22 @@ public class Balle{
   public double getM(){
     return m;
   }
-  private double v;//correspond a la vitesse initiale
-  private double a;//correspond a l'acceleration, pour l'instant c'est seulement la gravite
-  private double t;
+  private Vecteur v;
+  private Vecteur a;//correspond a l'acceleration, pour l'instant c'est seulement la gravite
+  private double t;//intervalle de temps(equivalent a 60fps)
+  private double g=10;//constante de gravité
   public Balle(Position pos,double r,double m){
     this.pos=pos;
     this.r=r;
     this.m=m;
-    this.v=0;
-    this.a=10;
+    this.v=new Vecteur(0,0);
+    this.a=new Vecteur(0,0);
     this.t=17*Math.pow(10,-2);
   }
-  public Position gravity(){
-    this.v=v+this.a*t;
-    double y=pos.getY()+v*t;
-    if(y>=800)y=0;
-    pos=new Position(pos.getX(),y);
-    return pos;
+  public void gravity(){
+    a.setY(g);
+    this.v.setY(v.getY()+a.getY()*t);
+    if(pos.getY()>=800)pos.setY(0);
+    else pos.setY(pos.getY()+v.getY()*t);
   }
 }
