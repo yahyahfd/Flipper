@@ -1,3 +1,4 @@
+package flipper;
 public class Vecteur{
   private double x;
   public double getX(){

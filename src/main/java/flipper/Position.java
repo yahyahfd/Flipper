@@ -1,3 +1,4 @@
+package flipper;
 public class Position {
 	private double x;
 	public double getX(){
