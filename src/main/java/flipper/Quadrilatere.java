@@ -45,4 +45,16 @@ public class Quadrilatere extends Shape{
     }
     return null;
   }
+  public Double[] getAllPosition(){//Double[] est utilise par javafx
+    Double[] d=new Double[8];
+    d[0]=Double.valueOf(posA.getX());
+    d[1]=Double.valueOf(posA.getY());
+    d[2]=Double.valueOf(posB.getX());
+    d[3]=Double.valueOf(posB.getY());
+    d[4]=Double.valueOf(posC.getX());
+    d[5]=Double.valueOf(posC.getY());
+    d[6]=Double.valueOf(posD.getX());
+    d[7]=Double.valueOf(posD.getY());
+    return d;
+  }
 }

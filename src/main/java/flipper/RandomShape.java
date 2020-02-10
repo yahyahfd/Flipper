@@ -4,13 +4,23 @@ public class RandomShape extends Shape{
   private Quadrilatere q;//une forme random a comme base un Quadrilatere
   private ArrayList<Ellipse> e=new ArrayList<Ellipse>();//on aura des demis cercle a chaque extremite pour arrondire les bords, si on veux un bord droit le cercle est donc null
   //Prenons un Quadrilatere ABCD le cercle d'indice 0 est celui entre AB etc
+  public ArrayList<Ellipse> getE(){
+    return e;
+  }
   public RandomShape(Quadrilatere q){
     this.q=q;
+    e.add(null);
+    e.add(null);
+    e.add(null);
+    e.add(null);
   }
   public void addCircle(double d,int border){
     if(border>3)return;
     if(d<q.getBorderLength(border)){
-      e.add(border,new Ellipse(q.getBorderLength(border),d,q.getBorderCenter(border)));
+      e.add(border,new Ellipse(q.getRebond(),q.getBorderLength(border),d,q.getBorderCenter(border)));
+    }
+    else{
+        e.add(border,new Ellipse(q.getRebond(),d,q.getBorderLength(border),q.getBorderCenter(border)));
     }
   }
   public double getArea(){
