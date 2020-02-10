@@ -27,4 +27,22 @@ public class Quadrilatere extends Shape{
     Triangle dap=new Triangle(rebond,posD,posA,pos);
     return almostEquals(abp.getArea()+bcp.getArea()+cdp.getArea()+dap.getArea(),this.getArea());
   }
+  public double getBorderLength(int border){
+    switch (border){
+      case 0:return posA.distance(posB);
+      case 1:return posB.distance(posC);
+      case 2:return posC.distance(posD);
+      case 3:return posD.distance(posA);
+    }
+    return 0;
+  }
+  public Position getBorderCenter(int border){
+    switch (border){
+      case 0:return new Position((posA.getX()+posB.getX())/2,(posA.getY()+posB.getY())/2);
+      case 1:return new Position((posB.getX()+posC.getX())/2,(posB.getY()+posC.getY())/2);
+      case 2:return new Position((posC.getX()+posD.getX())/2,(posC.getY()+posD.getY())/2);
+      case 3:return new Position((posD.getX()+posA.getX())/2,(posD.getY()+posA.getY())/2);
+    }
+    return null;
+  }
 }
