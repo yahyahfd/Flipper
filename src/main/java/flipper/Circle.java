@@ -1,5 +1,9 @@
 package flipper;
 public class Circle extends Shape{
+  private Position pos;
+  public Position getPos(){
+    return pos;
+  }
   //Cette classe est differente de balle, c'est un objet fixe considerer comme une bordure
   private double r;
   public Circle(double r,double rebond,Position pos){

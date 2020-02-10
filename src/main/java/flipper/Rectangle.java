@@ -1,16 +1,7 @@
 package flipper;
-public class Rectangle extends Shape{
-  Position posA;
-  Position posB;
-  Position posC;
-  Position posD;
+public class Rectangle extends Quadrilatere{
   public Rectangle(double rebond,Position posA,Position posB,Position posC,Position posD){
-    this.pos=new Position((posA.getX()+posB.getX())/2,(posA.getY()+posD.getY())/2);//centre du rectangle present dans la classe shape
-    this.rebond=rebond;
-    this.posA=posA;
-    this.posB=posB;
-    this.posC=posC;
-    this.posD=posD;
+    super(rebond,posA,posB,posC,posD);
   }
   public double getLength(){
     return posA.distance(posB);
