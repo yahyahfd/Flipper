@@ -12,7 +12,13 @@ public class Ellipse extends Shape{
   public Position getPos(){
     return pos;
   }
-  public Ellipse(double rebond,double major,double minor,Position pos){
+  private double rotate;//l'ellipse n'est pas "parralele" a l'axe des abcisses
+  //l'angle est par rapport a l'axe des abcisses
+  public double getRotate(){
+    return rotate;
+  }
+  public Ellipse(double rotate,double rebond,double major,double minor,Position pos){
+    this.rotate=rotate;
     this.rebond=rebond;
     this.major=major;
     this.minor=minor;

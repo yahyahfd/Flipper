@@ -1,10 +1,10 @@
 package flipper;
 public class Quadrilatere extends Shape{
   //Nous utiliserons que des Quadrilatere inscriptible (les quatres points font partie d'un meme cercle)
-  Position posA;
-  Position posB;
-  Position posC;
-  Position posD;
+  private Position posA;
+  private Position posB;
+  private Position posC;
+  private Position posD;
   public Quadrilatere(double rebond,Position posA,Position posB,Position posC,Position posD){
     this.rebond=rebond;
     this.posA=posA;
@@ -56,5 +56,15 @@ public class Quadrilatere extends Shape{
     d[6]=Double.valueOf(posD.getX());
     d[7]=Double.valueOf(posD.getY());
     return d;
+  }
+  public double getSlopeOfBorder(int border){
+    double slope=0;
+    switch(border){
+      case(0):slope=(posB.getY()-posA.getY())/(posB.getX()-posA.getX());break;
+      case(1):slope=(posC.getY()-posB.getY())/(posC.getX()-posB.getX());break;
+      case(2):slope=(posD.getY()-posC.getY())/(posD.getX()-posC.getX());break;
+      case(3):slope=(posA.getY()-posD.getY())/(posA.getX()-posD.getX());break;
+    }
+    return Math.toDegrees(Math.atan(slope));
   }
 }

@@ -17,10 +17,10 @@ public class RandomShape extends Shape{
   public void addCircle(double d,int border){
     if(border>3)return;
     if(d<q.getBorderLength(border)){
-      e.add(border,new Ellipse(q.getRebond(),q.getBorderLength(border),d,q.getBorderCenter(border)));
+      e.add(border,new Ellipse(q.getSlopeOfBorder(border),q.getRebond(),q.getBorderLength(border),d,q.getBorderCenter(border)));
     }
     else{
-        e.add(border,new Ellipse(q.getRebond(),d,q.getBorderLength(border),q.getBorderCenter(border)));
+      e.add(border,new Ellipse(q.getSlopeOfBorder(border),q.getRebond(),d,q.getBorderLength(border),q.getBorderCenter(border)));
     }
   }
   public double getArea(){
