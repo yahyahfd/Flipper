@@ -1,3 +1,4 @@
+package flipper;
 public class Balle{
   private Position pos;
   public Position getPos(){

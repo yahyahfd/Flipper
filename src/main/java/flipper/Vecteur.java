@@ -1,3 +1,4 @@
+package flipper;
 public class Vecteur{
   private double x;
   public double getX(){
@@ -21,7 +22,7 @@ public class Vecteur{
     return x*v.x+y*v.y;
   }
   public double angle(Vecteur v){
-    return Math.acos(scalaire(v)/this.norme()*v.norme());
+    return Math.acos(scalaire(v)/(this.norme()*v.norme()));
   }
   public double norme(){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
