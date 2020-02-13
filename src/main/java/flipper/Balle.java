@@ -23,11 +23,18 @@ public class Balle{
     this.v=new Vecteur(0,0);
     this.a=new Vecteur(0,0);
     this.t=17*Math.pow(10,-2);
+    a.setY(g);
   }
   public void gravity(){
     a.setY(g);
     this.v.setY(v.getY()+a.getY()*t);
     if(pos.getY()>=800)pos.setY(0);
     else pos.setY(pos.getY()+v.getY()*t);
+  }
+  public void futur(){
+    this.v.setY(v.getY()+a.getY()*t);
+    this.v.setX(v.getX()+a.getX()*t);
+    pos.setY(pos.getY()+v.getY()*t);
+    pos.setX(pos.getX()+v.getX()*t);
   }
 }
