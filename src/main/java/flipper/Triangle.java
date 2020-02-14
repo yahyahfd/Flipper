@@ -9,6 +9,7 @@ public class Triangle extends Shape{
     this.posB=posB;
     this.posC=posC;
   }
+
   public double getArea(){
     double f1=((posA.getX()*posB.getY())-(posA.getY()*posB.getX()));
     double f2=((posB.getX()*posC.getY())-(posB.getY()*posC.getX()));

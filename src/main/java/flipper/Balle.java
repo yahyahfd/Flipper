@@ -1,4 +1,5 @@
 package flipper;
+import java.util.ArrayList;
 public class Balle{
   private Position pos;
   public Position getPos(){
@@ -30,4 +31,14 @@ public class Balle{
     if(pos.getY()>=800)pos.setY(0);
     else pos.setY(pos.getY()+v.getY()*t);
   }
+
+  public ArrayList<Position> hitbox(int precision){
+    double angle = 2*Math.PI/precision;
+    ArrayList<Position> points = new ArrayList<Position>();
+    for(int i=1;i<precision;i++){
+      points.add(new Position(Math.cos(angle*i), Math.sin(angle*i)));
+    }
+    return points;
+  }
+
 }
