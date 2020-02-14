@@ -31,9 +31,14 @@ public class Balle{
     if(pos.getY()>=800)pos.setY(0);
     else pos.setY(pos.getY()+v.getY()*t);
   }
-  public void futur(){
-    this.v.setY(v.getY()+a.getY()*t);
-    this.v.setX(v.getX()+a.getX()*t);
+  public Position futur(){
+    double vy=v.getY()+a.getY()*t;
+    double vx=v.getX()+a.getX()*t;
+    double x=pos.getX()+v.getX()*t;
+    double y=pos.getY()+v.getY()*t;
+    return new Position(x,y);
+  }
+  public void setFutur(Position pos){
     pos.setY(pos.getY()+v.getY()*t);
     pos.setX(pos.getX()+v.getX()*t);
   }
