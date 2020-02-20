@@ -9,10 +9,19 @@ public class Borders{
   public ArrayList<Border> getBorders(){
     return borders;
   }
-  public boolean isOnALine(Position pos){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
-    for(Border border : this.borders){
-      if(border.isOnTheLine(pos)==true)return true;
-    }
-    return false;
+
+  public static ArrayList<Border> touchedLines(Position pos){
+      ArrayList<Border> b = new ArrayList<Border>();
+      for(Border border : borders){
+        //On teste ici si la position ne dépasse pas une bordure
+        //Ajouter plus tard une règle qui fait qu'on ne puisse pas aller au négatif
+        if(border.getPosX().getY()<pos.getY() || border.getPosX().getX()<pos.getX()){
+          b.add(border);
+          System.out.println("Border Y:"+border.getPosX().getY() + "Balle Y:"+ pos.getY());
+        }
+      }
+      return b;
   }
+
+
 }

@@ -1,4 +1,5 @@
 package flipper;
+import java.util.ArrayList;
 public class Balle{
   private Position pos;
   public Position getPos(){
@@ -12,6 +13,11 @@ public class Balle{
   public double getM(){
     return m;
   }
+
+  public Vecteur getV(){
+    return v;
+  }
+
   private Vecteur v;
   private Vecteur a;//correspond a l'acceleration, pour l'instant c'est seulement la gravite
   private double t;//intervalle de temps(equivalent a 60fps)
@@ -31,10 +37,37 @@ public class Balle{
     if(pos.getY()>=800)pos.setY(0);
     else pos.setY(pos.getY()+v.getY()*t);
   }
-  public void futur(){
-    this.v.setY(v.getY()+a.getY()*t);
-    this.v.setX(v.getX()+a.getX()*t);
-    pos.setY(pos.getY()+v.getY()*t);
-    pos.setX(pos.getX()+v.getX()*t);
+  public Position futur(){
+    double vx = v.getX()+a.getX()*t;
+    double vy = v.getY()+a.getY()*t;
+    double y = pos.getY()+vy*t;
+    double x = pos.getX()+vx*t;
+    this.v.setY(vy);
+    this.v.setX(vx);
+    ArrayList<Border> stock = Borders.touchedLines(new Position(x,y));
+    for(Border b : stock){
+      if(b.getPosX().getX()<x){
+        x=b.getPosX().getX();
+      }
+      if(b.getPosX().getY()<y){
+        y=b.getPosX().getY();
+      }
+    }
+    return new Position(x,y);
+  }
+
+  public Position collision(double E){
+    double vx = v.getX()+a.getX()*t;
+    double vy = E*(Math.sqrt(2*10*this.pos.getY()));
+    double y = pos.getY()-vy*t;
+    double x = pos.getX()+vx*t;
+    this.v.setY(-vy);
+    this.v.setX(vx);
+    return new Position(x,y);
+  }
+
+  public void setFutur(Position p){
+    this.pos.setX(p.getX());
+    this.pos.setY(p.getY());
   }
 }

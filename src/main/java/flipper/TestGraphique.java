@@ -37,11 +37,9 @@ public class TestGraphique extends Application{
     Polygon p =new Polygon();
     p.setFill(Color.GREEN);
     p.getPoints().addAll(q.getAllPosition());
-    Balle balle=new Balle(new Position(200,200),100,5);
-    border=new Borders();
-    border.addBorder(new Border(new Position(20,800),new Position(580,800),1));
-    border.addBorder(new Border(new Position(20,200),new Position(20,800),1));
-    border.addBorder(new Border(new Position(580,200),new Position(580,800),1));
+    Balle balle=new Balle(new Position(200,200),10,5);
+    border = new Borders();
+    border.addBorder(new Border(new Position(20,500),new Position(580,500),1));
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
     Pane pane=new Pane();
     pane.getChildren().add(circle);
@@ -53,7 +51,28 @@ public class TestGraphique extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        balle.futur();
+        /*if(border.isOnALine(balle.getPos())==null){
+          balle.setFutur(balle.futur());
+        }else{
+          balle.setFutur(balle.collision(1));
+        }
+        double vx = balle.getV().getX();
+        double vy = balle.getV().getY();
+        if(border.isTobePrevented(balle.futur())==null){
+          balle.setFutur(balle.futur());
+        }else{
+          double by = border.isTobePrevented(balle.futur()).getPosY().getY();
+          System.out.println(by);
+          balle.getV().setY(vy);
+          balle.getV().setX(vx);
+          balle.setFutur(new Position(balle.getPos().getX(),by));
+          balle.setFutur(balle.collision(1));
+        }*/
+        if(balle.getPos().getY()==500){
+          balle.setFutur(balle.collision(1));
+        }else{
+          balle.setFutur(balle.futur());
+        }
         circle.setLayoutY(balle.getPos().getY());
       }
     }));
