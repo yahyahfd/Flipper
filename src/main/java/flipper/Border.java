@@ -10,6 +10,9 @@ public class Border{//une bordure est considerer comme une ligne
   }
   private double distance;
   private double rebond;//contient une variable de rebond entre 0 et 1
+  public double getRebond(){
+    return this.rebond;
+  }
   public Border(Position posX,Position posY,double rebond){
     this.posX=posX;
     this.posY=posY;
