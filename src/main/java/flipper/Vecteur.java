@@ -27,4 +27,12 @@ public class Vecteur{
   public double norme(){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
   }
+
+  public Vecteur vectUnitaire(){
+    return new Vecteur(this.x*this.norme(),this.y*this.norme());
+  }
+
+  public Vecteur vectNormUni(){
+    return new Vecteur(-(this.x/this.y)*this.vectUnitaire().x,this.vectUnitaire().y);
+  }
 }
