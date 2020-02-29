@@ -9,10 +9,13 @@ public class Borders{
   public ArrayList<Border> getBorders(){
     return borders;
   }
-  public boolean isOnALine(Position pos){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
+  public boolean isOnALine(Balle balle){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
     for(Border border : this.borders){
-      if(border.isOnTheLine(pos)==true)return true;
+      if(border.isOnTheLine(balle)==true){
+        System.out.println("test");
+        return border;
+      }
     }
-    return false;
+    return null;
   }
 }

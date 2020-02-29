@@ -36,6 +36,8 @@ public class Balle{
     double vx=v.getX()+a.getX()*t;
     double x=pos.getX()+v.getX()*t;
     double y=pos.getY()+v.getY()*t;
+    v.setY(vy);
+    v.setX(vx);
     return new Position(x,y);
   }
   public void setFutur(Position pos){
