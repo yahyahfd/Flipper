@@ -24,6 +24,7 @@ public class Balle{
     this.a=new Vecteur(0,0);
     this.t=17*Math.pow(10,-3);
     a.setX(5);
+    a.setY(5);
   }
   public void gravity(){
     a.setY(g);
