@@ -9,10 +9,17 @@ public class Borders{
   public ArrayList<Border> getBorders(){
     return borders;
   }
-  public boolean isOnALine(Position pos){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
+  public Border isOnALine(Balle balle){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
+    double dist=-1;
+    Border b=null;
     for(Border border : this.borders){
-      if(border.isOnTheLine(pos)==true)return true;
+      if(border.isOnTheLine(balle)==true){
+        if(dist==-1||dist>balle.getPos().distance(border.intersection(balle))){
+          dist=balle.getPos().distance(border.intersection(balle));
+          b=border;
+        }
+      }
     }
-    return false;
+    return b;
   }
 }

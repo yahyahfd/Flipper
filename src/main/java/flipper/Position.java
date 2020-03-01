@@ -29,4 +29,7 @@ public class Position {
 		double[] res={x,y};
 		return res;
 	}
+	public String toString(){
+		return "x: "+String.valueOf(x)+" y: "+String.valueOf(y);
+	}
 }

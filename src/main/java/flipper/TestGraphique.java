@@ -37,11 +37,10 @@ public class TestGraphique extends Application{
     Polygon p =new Polygon();
     p.setFill(Color.GREEN);
     p.getPoints().addAll(q.getAllPosition());
-    Balle balle=new Balle(new Position(200,200),100,5);
+    Balle balle=new Balle(new Position(100,0),10,5);
     border=new Borders();
-    border.addBorder(new Border(new Position(20,800),new Position(580,800),1));
-    border.addBorder(new Border(new Position(20,200),new Position(20,800),1));
-    border.addBorder(new Border(new Position(580,200),new Position(580,800),1));
+    border.addBorder(new Border(new Position(600,100),new Position(500,600),0.9));
+    border.addBorder(new Border(new Position(0,600),new Position(500,600),0.9));
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
     Pane pane=new Pane();
     pane.getChildren().add(circle);
@@ -53,8 +52,8 @@ public class TestGraphique extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        balle.futur();
-        circle.setLayoutY(balle.getPos().getY());
+        balle.setFutur(balle.collision(b));
+        circle.relocate(balle.getPos().getX(),balle.getPos().getY());
       }
     }));
     timeline.setCycleCount(Timeline.INDEFINITE);
