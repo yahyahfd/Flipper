@@ -65,7 +65,7 @@ public class Border{//une bordure est considerer comme une ligne
     }
     //Balle
     if(balle.futur().getY()==balle.getPos().getY()){//cas d'une balle avec mouvement horizontale
-      aa=1;
+      aa=0;
       pp=balle.futur().getY();
     }
     else if(balle.futur().getX()==balle.getPos().getX()){//cas d'une balle avec mouvement verticale
