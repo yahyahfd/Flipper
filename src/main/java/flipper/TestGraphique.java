@@ -53,7 +53,7 @@ public class TestGraphique extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        balle.gravity();
+        balle.futur();
         circle.setLayoutY(balle.getPos().getY());
       }
     }));
