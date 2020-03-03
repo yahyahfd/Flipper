@@ -37,9 +37,13 @@ public class TestGraphique extends Application{
     Polygon p =new Polygon();
     p.setFill(Color.GREEN);
     p.getPoints().addAll(q.getAllPosition());
-    Balle balle=new Balle(new Position(100,0),10,5);
+    Balle balle=new Balle(new Position(100,200),10,5);
     border=new Borders();
-    border.addBorder(new Border(new Position(600,100),new Position(500,600),0.9));
+    border.addBorder(new Border(new Position(400,100),new Position(500,600),0.9));
+    border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
+    border.addBorder(new Border(new Position(110,550),new Position(150,500),0.9));
+    border.addBorder(new Border(new Position(350,500),new Position(400,450),0.9));
+    border.addBorder(new Border(new Position(50,100),new Position(100,600),0.9));
     border.addBorder(new Border(new Position(0,600),new Position(500,600),0.9));
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
     Pane pane=new Pane();
@@ -52,7 +56,13 @@ public class TestGraphique extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        balle.setFutur(balle.collision(b));
+        Border b=border.isOnALine(balle);
+        if(b!=null){
+          pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5));
+          balle.setFutur(balle.collision(b));
+        }else {
+          balle.setFutur(balle.futur());
+        }
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
       }
     }));
