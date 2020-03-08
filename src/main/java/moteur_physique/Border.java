@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 public class Border{//une bordure est considerer comme une ligne
   private Position posX;
   public Position getPosX(){

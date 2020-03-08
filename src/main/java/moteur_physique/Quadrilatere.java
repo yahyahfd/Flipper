@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 public class Quadrilatere extends Shape{
   //Nous utiliserons que des Quadrilatere inscriptible (les quatres points font partie d'un meme cercle)
   private Position posA;

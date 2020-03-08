@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 public class Balle{
   private Position pos;
   public Position getPos(){
@@ -22,9 +22,9 @@ public class Balle{
     this.m=m;
     this.v=new Vecteur(0,0);
     this.a=new Vecteur(0,0);
-    this.t=17*Math.pow(10,-2);
+    this.t=16*0.01;
     a.setX(0);
-    a.setY(2);
+    a.setY(5);
   }
   public void gravity(){
     a.setY(g);

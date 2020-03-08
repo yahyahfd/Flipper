@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 public class Vecteur{
   private double x;
   public double getX(){

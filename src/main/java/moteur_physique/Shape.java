@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 public abstract class Shape{
   protected double rebond;
   public double getRebond(){

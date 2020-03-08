@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 public class Ellipse extends Shape{
   private double major;//par convention major sera le diametre de l'axe majeur et non le rayon
   public double getMajor(){

@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 import java.util.*;
 public class RandomShape extends Shape{
   private Quadrilatere q;//une forme random a comme base un Quadrilatere
