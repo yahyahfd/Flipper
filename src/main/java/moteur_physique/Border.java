@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 public class Border{//une bordure est considerer comme une ligne
   private Position posX;
   public Position getPosX(){
@@ -99,22 +99,22 @@ public class Border{//une bordure est considerer comme une ligne
     Position c=intersection(balle);
     double dx=balle.futur().getX()-balle.getPos().getX();//positif si on descend
     double dy=balle.futur().getY()-balle.getPos().getY();//positif vers la droite
-    if(dx>0&&dy>0&&balle.getPos().getX()<c.getX()&&balle.getPos().getY()<c.getY()&&(c.getX()<=balle.futur().getX()||c.getY()<=balle.futur().getY())){
+    if(dx>0&&dy>0&&balle.getPos().getX()<=c.getX()&&balle.getPos().getY()<c.getY()&&(c.getX()<=balle.futur().getX()||c.getY()<=balle.futur().getY())){
       return true;
     }
-    if(dx<0&&dy>0&&balle.getPos().getX()>c.getX()&&balle.getPos().getY()<c.getY()&&(c.getX()>=balle.futur().getX()||c.getY()<=balle.futur().getY())){
+    if(dx<0&&dy>0&&balle.getPos().getX()>=c.getX()&&balle.getPos().getY()<c.getY()&&(c.getX()>=balle.futur().getX()||c.getY()<=balle.futur().getY())){
       return true;
     }
-    if(dx>0&&dy<0&&balle.getPos().getX()<c.getX()&&balle.getPos().getY()>c.getY()&&(c.getX()<=balle.futur().getX()||c.getY()>=balle.futur().getY())){
+    if(dx>0&&dy<0&&balle.getPos().getX()<=c.getX()&&balle.getPos().getY()>c.getY()&&(c.getX()<=balle.futur().getX()||c.getY()>=balle.futur().getY())){
       return true;
     }
-    if(dx<0&&dy<0&&balle.getPos().getX()>c.getX()&&balle.getPos().getY()>c.getY()&&(c.getX()>=balle.futur().getX()||c.getY()>=balle.futur().getY())){
+    if(dx<0&&dy<0&&balle.getPos().getX()>c.getX()&&balle.getPos().getY()>=c.getY()&&(c.getX()>=balle.futur().getX()||c.getY()>=balle.futur().getY())){
       return true;
     }
-    if(dx==0&&dy>0&&balle.getPos().getY()<c.getY()&&c.getY()<=balle.futur().getY())return true;
-    if(dx==0&&dy<0&&balle.getPos().getY()>c.getY()&&c.getY()>=balle.futur().getY())return true;
-    if(dx>0&&dy==0&&balle.getPos().getX()<c.getX()&&c.getX()<=balle.futur().getX())return true;
-    if(dx<0&&dy==0&&balle.getPos().getX()>c.getX()&&c.getX()>=balle.futur().getX())return true;
+    if(dx==0&&dy>0&&balle.getPos().getY()<=c.getY()&&c.getY()<=balle.futur().getY())return true;
+    if(dx==0&&dy<0&&balle.getPos().getY()>=c.getY()&&c.getY()>=balle.futur().getY())return true;
+    if(dx>0&&dy==0&&balle.getPos().getX()<=c.getX()&&c.getX()<=balle.futur().getX())return true;
+    if(dx<0&&dy==0&&balle.getPos().getX()>=c.getX()&&c.getX()>=balle.futur().getX())return true;
     return false;
   }
 }

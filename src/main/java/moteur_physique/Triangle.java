@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 public class Triangle extends Shape{
   private Position posA;
   private Position posB;

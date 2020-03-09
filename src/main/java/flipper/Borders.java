@@ -1,4 +1,5 @@
 package flipper;
+import moteur_physique.*;
 import java.util.ArrayList;
 public class Borders{
   public Borders(){}

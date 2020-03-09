@@ -1,4 +1,4 @@
-package flipper;
+package moteur_physique;
 public class Vecteur{
   private double x;
   public double getX(){
@@ -29,10 +29,11 @@ public class Vecteur{
   }
 
   public Vecteur vectUnitaire(){
-    return new Vecteur(this.x*this.norme(),this.y*this.norme());
+    if(this.norme()==0)return new Vecteur(0,0);
+    return new Vecteur(this.x/this.norme(),this.y/this.norme());
   }
 
   public Vecteur vectNormUni(){
-    return new Vecteur(-(this.x/this.y)*this.vectUnitaire().x,this.vectUnitaire().y);
+    return new Vecteur(-this.vectUnitaire().y,this.vectUnitaire().x);
   }
 }
