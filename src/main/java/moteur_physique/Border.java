@@ -16,11 +16,20 @@ public class Border{//une bordure est considerer comme une ligne
   public Vecteur getUni(){
     return this.unitaire;
   }
+  public void setUni(Vecteur u){
+    unitaire=u;
+  }
   private Vecteur normal;
   public Vecteur getNorm(){
     return this.normal;
   }
+  public void setNorm(Vecteur n){
+    normal=n;
+  }
   private double distance;
+  public double getDistance(){
+    return distance;
+  }
   private double rebond;//contient une variable de rebond entre 0 et 1
   public double getRebond(){
     return rebond;

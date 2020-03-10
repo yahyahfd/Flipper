@@ -40,8 +40,17 @@ public class Balle{
     return new Position(x,y);
   }
   public Position collision(Border b){
-    double vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
-    double vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+    double vx;
+    double vy;
+    if(b instanceof Flip){
+      Flip tmp=(Flip)b;
+      vx=-v.scalaire(tmp.vitesse)*tmp.getRebond()*tmp.vitesse.getX()+v.scalaire(tmp.getUni())*tmp.getUni().getX()*tmp.getRebond();
+      vy=-v.scalaire(tmp.vitesse)*tmp.vitesse.getY()*tmp.getRebond()+v.scalaire(tmp.getUni())*tmp.getUni().getY()*tmp.getRebond();
+    }
+    else{
+      vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
+      vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+    }
     double x=pos.getX()+vx*t;
     double y=pos.getY()+vy*t;
     return new Position(x,y);

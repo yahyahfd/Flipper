@@ -36,4 +36,7 @@ public class Vecteur{
   public Vecteur vectNormUni(){
     return new Vecteur(-this.vectUnitaire().y,this.vectUnitaire().x);
   }
+  public String toString(){
+    return "Vecteur : ("+x+","+y+")";
+  }
 }
