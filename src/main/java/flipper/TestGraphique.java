@@ -27,10 +27,10 @@ public class TestGraphique extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
-    Quadrilatere q=new Quadrilatere(0.5,new Position(241,232),new Position(573,158),new Position(581,64),new Position(225,56));
+    Quadrilatere q=new Quadrilatere(0.5,new Position(110,640),new Position(100,540),new Position(200,700),new Position(200,700));
     RandomShape r=new RandomShape(q);
-    r.addCircle(15,3);
-    r.addCircle(40,1);
+    r.addCircle(15,2);
+    r.addCircle(15,1);
     Ellipse e1=new Ellipse(r.getE().get(1).getPos().getX(),r.getE().get(1).getPos().getY(),r.getE().get(1).getMinor()/2,r.getE().get(1).getMajor()/2);
     Rotate rotate=new Rotate(90+r.getE().get(1).getRotate(),r.getE().get(1).getPos().getX(),r.getE().get(1).getPos().getY());
     e1.getTransforms().add(rotate);
@@ -40,12 +40,17 @@ public class TestGraphique extends Application{
     p.getPoints().addAll(q.getAllPosition());
     Balle balle=new Balle(new Position(100,200),10,5);
     border=new Borders();
-    border.addBorder(new Border(new Position(400,100),new Position(500,600),0.9));
-    border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
-    border.addBorder(new Border(new Position(110,550),new Position(150,500),0.9));
-    border.addBorder(new Border(new Position(350,500),new Position(400,450),0.9));
-    border.addBorder(new Border(new Position(50,100),new Position(100,600),0.9));
-    border.addBorder(new Border(new Position(0,600),new Position(500,600),0.9));
+    border.addBorder(new Border(new Position(490,540),new Position(390,700),0.9));
+    border.addBorder(new Border(new Position(480,640),new Position(490,540),0.9));
+    border.addBorder(new Border(new Position(480,640),new Position(390,700),0.9));
+    border.addBorder(new Border(new Position(20,680),new Position(220,750),0.9));
+    border.addBorder(new Border(new Position(550,680),new Position(350,750),0.9));
+    border.addBorder(new Border(new Position(20,815),new Position(550,845),0.9));
+    border.addBorder(new Border(new Position(550,300),new Position(550,810),0.9));
+    border.addBorder(new Border(new Position(580,0),new Position(580,860),0.9));
+    border.addBorder(new Border(new Position(20,0),new Position(20,860),0.9));
+    border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
+    border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
     Pane pane=new Pane();
     pane.getChildren().add(circle);
