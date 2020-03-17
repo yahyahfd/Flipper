@@ -13,6 +13,9 @@ public class Balle{
     return m;
   }
   private Vecteur v;
+  public Vecteur getV(){
+    return v;
+  }
   private Vecteur a;//correspond a l'acceleration, pour l'instant c'est seulement la gravite
   private double t;//intervalle de temps(equivalent a 60fps)
   private double g=10;//constante de gravité
@@ -24,7 +27,7 @@ public class Balle{
     this.a=new Vecteur(0,0);
     this.t=16*0.01;
     a.setX(0);
-    a.setY(5);
+    a.setY(10);
   }
   public void gravity(){
     a.setY(g);
@@ -51,6 +54,17 @@ public class Balle{
       vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
       vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
     }
+    double x=pos.getX()+vx*t;
+    double y=pos.getY()+vy*t;
+    return new Position(x,y);
+  }
+  public Position sliding(Border b){
+    double a=v.angle(b.getNorm());
+    double aa=Math.toRadians(45);
+    double ax=5*Math.sin(aa);
+    double ay=5*Math.cos(aa);
+    double vx=v.getX()+ax*t;
+    double vy=v.getY()+ay*t;
     double x=pos.getX()+vx*t;
     double y=pos.getY()+vy*t;
     return new Position(x,y);

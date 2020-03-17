@@ -33,14 +33,15 @@ public class TestGraphique extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
-    Balle balle=new Balle(new Position(120,200),10,5);
+    Balle balle=new Balle(new Position(100,200),10,5);
     Flip f1=new Flip(new Position(110,500),new Position(175,520),0.9);
     Flip f2=new Flip(new Position(240,500),new Position(175,520),0.9);
     border=new Borders();
-    border.addBorder(new Border(new Position(110,100),new Position(110,600),1));
-    border.addBorder(new Border(new Position(240,100),new Position(240,600),1));
-    border.addBorder(new Border(new Position(110,150),new Position(240,150),1));
-    border.addBorder(new Border(new Position(0,600),new Position(500,600),1));
+    // border.addBorder(new Border(new Position(110,100),new Position(110,600),1));
+    border.addBorder(new Border(new Position(0,200),new Position(600,600),0.5));
+    // border.addBorder(new Border(new Position(240,100),new Position(240,600),1));
+    // border.addBorder(new Border(new Position(110,150),new Position(240,150),1));
+    // border.addBorder(new Border(new Position(0,600),new Position(500,600),1));
     border.addBorder(f1);
     border.addBorder(f2);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
@@ -60,10 +61,16 @@ public class TestGraphique extends Application{
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
         Border b=border.isOnALine(balle);
-        if(b!=null){
-          pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5));
+        Border s=border.isSliding(balle);
+        if(s!=null){
+          pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),3));
+          balle.setFutur(balle.sliding(s));
+        }
+        else if(b!=null){
+          pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5,Color.WHITE));
           balle.setFutur(balle.collision(b));
-        }else {
+        }
+        else{
           balle.setFutur(balle.futur());
         }
         if(flipLUP==true)f1.moveFlipUp();

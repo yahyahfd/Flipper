@@ -73,7 +73,7 @@ public class Border{//une bordure est considerer comme une ligne
       p=posX.getY()-(posX.getX()*a);//p=y-ax
     }
     //Balle
-    if(balle.futur().getY()==balle.getPos().getY()){//cas d'une balle avec mouvement horizontale
+     if(balle.futur().getY()==balle.getPos().getY()){//cas d'une balle avec mouvement horizontale
       aa=0;
       pp=balle.futur().getY();
     }
@@ -101,7 +101,7 @@ public class Border{//une bordure est considerer comme une ligne
   public boolean isOnTheSegment(Balle balle){//on regarde si le point d'intersection est sur le segment
     Position c=intersection(balle);
     if(c==null)return false;
-    return c.distance(this.posX)+c.distance(this.posY)<=this.distance+5&&c.distance(this.posX)+c.distance(this.posY)>=this.distance-5;
+    return c.distance(this.posX)+c.distance(this.posY)<=this.distance+0.05&&c.distance(this.posX)+c.distance(this.posY)>=this.distance-0.05;
   }
   public boolean isOnTheLine(Balle balle){
     if(!isOnTheSegment(balle))return false;
@@ -126,4 +126,16 @@ public class Border{//une bordure est considerer comme une ligne
     if(dx<0&&dy==0&&balle.getPos().getX()>=c.getX()&&c.getX()>=balle.futur().getX())return true;
     return false;
   }
+  public double angle(){
+    return this.unitaire.angle(new Vecteur(1,0));
+  }
+  public boolean isSliding(Balle balle){
+    boolean b0=(balle.getV().getX()<0.5&&balle.getV().getX()>-0.5&&balle.getV().getY()<0.5&&balle.getV().getX()>-0.5);
+    boolean b1=(balle.getV().getX()*unitaire.getY()>=balle.getV().getY()*unitaire.getX()-1&&balle.getV().getX()*unitaire.getY()<=balle.getV().getY()*unitaire.getX()+1);
+    if(b0||b1){
+      return balle.getPos().distance(this.posX)+balle.getPos().distance(this.posY)<=this.distance+0.05&&balle.getPos().distance(this.posX)+balle.getPos().distance(this.posY)>=this.distance-0.05;
+    }
+    return false;
+  }
+
 }
