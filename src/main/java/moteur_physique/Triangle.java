@@ -21,4 +21,17 @@ public class Triangle extends Shape{
     Triangle acp=new Triangle(rebond,posA,posC,pos);
     return almostEquals(abp.getArea()+bcp.getArea()+acp.getArea(),this.getArea());
   }
+
+  public boolean isInTheShape(Balle balle){
+    Border A = new Border(posA,posB,rebond);
+    Border B = new Border(posB,posC,rebond);
+    Border C = new Border(posC,posA,rebond);
+    boolean res1 = A.isOnTheLine(balle);
+    boolean res2 = B.isOnTheLine(balle);
+    boolean res3 = C.isOnTheLine(balle);
+    if(res1==true || res2==true || res3==true){
+      return true;
+    }
+    return false;
+  }
 }

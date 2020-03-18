@@ -67,4 +67,19 @@ public class Quadrilatere extends Shape{
     }
     return Math.toDegrees(Math.atan(slope));
   }
+
+  public boolean isInTheShape(Balle balle){
+    Border A = new Border(posA,posB,rebond);
+    Border B = new Border(posB,posC,rebond);
+    Border C = new Border(posC,posD,rebond);
+    Border D = new Border(posD,posA,rebond);
+    boolean res1 = A.isOnTheLine(balle);
+    boolean res2 = B.isOnTheLine(balle);
+    boolean res3 = C.isOnTheLine(balle);
+    boolean res4= D.isOnTheLine(balle);
+    if(res1==true || res2==true || res3==true || res4==true){
+      return true;
+    }
+    return false;
+  }
 }
