@@ -21,6 +21,8 @@ import javafx.event.EventHandler;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 public class TestGraphique extends Application{
   Borders border;
   public static void main(String[] args) {
@@ -138,17 +140,29 @@ public class TestGraphique extends Application{
     border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
     border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
+
+    Image image = new Image("file:rectangle_arrondi.png");
+    ImageView iv = new ImageView();
+    iv.setImage(image);
+    iv.setRotate(90);
+    iv.setPreserveRatio(true);
+    iv.setFitWidth(150);
+    iv.setX(50);
+    iv.setY(300);
+
     Pane pane=new Pane();
     pane.getChildren().add(circle);
-    pane.getChildren().add(p);
-    pane.getChildren().add(p2);
-    pane.getChildren().add(p3);
-    pane.getChildren().add(p4);
-    pane.getChildren().add(p5);
-    pane.getChildren().add(p6);
-    pane.getChildren().add(p7);
-    pane.getChildren().add(p8);
+    pane.getChildren().add(p); //triangle bas gauche
     pane.getChildren().add(e1);
+    pane.getChildren().add(p2); //triangle haut
+    pane.getChildren().add(p3); //rectanle 1(en partant de la gauche)
+    pane.getChildren().add(p4); //rectangle 2
+    pane.getChildren().add(p5); //rectangle 3
+    pane.getChildren().add(p6); //rectangle 4
+    pane.getChildren().add(p7); //losange 1(qui est censé etre un rond)
+    pane.getChildren().add(p8); //losange 2
+
+    pane.getChildren().add(iv);
     for(Border b:border.getBorders()){
       pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
     }
