@@ -46,7 +46,7 @@ public class Ellipse extends Shape{
     double z1 = Math.pow(q,2)+Math.pow(a,2)*Math.pow(r,2); //a
     double z2 = 2*a*b*Math.pow(r,2)-2*c*Math.pow(q,2)-2*a*d*Math.pow(r,2); //b
     double z3 = Math.pow(c,2)*Math.pow(q,2)+Math.pow(r,2)*(Math.pow(b,2)+Math.pow(d,2)-2*b*d-Math.pow(q,2)); //c
-    double tmp = Math.pow(z2,2)-4*z1*z3;
+    double tmp = Math.pow(z2,2)-4*z1*z3; //delta
     if(tmp<0){
       return null;
     }else{ //les racines

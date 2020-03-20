@@ -46,6 +46,14 @@ public class TestGraphique extends Application{
     border.addBorder(new Border(new Position(350,500),new Position(400,450),0.9));
     border.addBorder(new Border(new Position(50,100),new Position(100,600),0.9));
     border.addBorder(new Border(new Position(0,600),new Position(500,600),0.9));
+    Triangle t1 = new Triangle(0.5,new Position(300,500),new Position(450,500),new Position(300,550));
+    for(Border b:t1.turnIntoBorders()){
+      border.addBorder(b);
+    }
+    Quadrilatere q1 = new Quadrilatere(0.5, new Position(250,350), new Position(350,350), new Position(350,400), new Position(250,400));
+    for(Border b:q1.turnIntoBorders()){
+      border.addBorder(b);
+    }
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
     Pane pane=new Pane();
     pane.getChildren().add(circle);
@@ -54,6 +62,7 @@ public class TestGraphique extends Application{
     for(Border b:border.getBorders()){
       pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
     }
+
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){

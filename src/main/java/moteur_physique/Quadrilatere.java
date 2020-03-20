@@ -91,4 +91,13 @@ public class Quadrilatere extends Shape{
     }
     return null;
   }
+
+  public Border[] turnIntoBorders(){
+    Border[] res = new Border[4];
+    res[0] = new Border(posA,posB,rebond);
+    res[1] = new Border(posB,posC,rebond);
+    res[2] = new Border(posC,posD,rebond);
+    res[3] = new Border(posD,posA,rebond);
+    return res;
+  }
 }

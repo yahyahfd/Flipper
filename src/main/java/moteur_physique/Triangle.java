@@ -40,4 +40,12 @@ public class Triangle extends Shape{
     }
     return null;
   }
+
+  public Border[] turnIntoBorders(){
+    Border[] res = new Border[3];
+    res[0] = new Border(posA,posB,rebond);
+    res[1] = new Border(posB,posC,rebond);
+    res[2] = new Border(posC,posA,rebond);
+    return res;
+  }
 }
