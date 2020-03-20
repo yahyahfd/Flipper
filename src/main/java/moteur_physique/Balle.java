@@ -13,6 +13,9 @@ public class Balle{
     return m;
   }
   private Vecteur v;
+  public Vecteur getV(){
+    return this.v;
+  }
   private Vecteur a;//correspond a l'acceleration, pour l'instant c'est seulement la gravite
   private double t;//intervalle de temps(equivalent a 60fps)
   private double g=10;//constante de gravité

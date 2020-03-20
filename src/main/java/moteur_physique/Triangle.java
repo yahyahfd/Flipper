@@ -22,16 +22,22 @@ public class Triangle extends Shape{
     return almostEquals(abp.getArea()+bcp.getArea()+acp.getArea(),this.getArea());
   }
 
-  public boolean isInTheShape(Balle balle){
+  public Border isInTheShape(Balle balle){
     Border A = new Border(posA,posB,rebond);
     Border B = new Border(posB,posC,rebond);
     Border C = new Border(posC,posA,rebond);
     boolean res1 = A.isOnTheLine(balle);
     boolean res2 = B.isOnTheLine(balle);
     boolean res3 = C.isOnTheLine(balle);
-    if(res1==true || res2==true || res3==true){
-      return true;
+    if(res1==true){
+      return A;
     }
-    return false;
+    if(res2==true){
+      return B;
+    }
+    if(res3==true){
+      return C;
+    }
+    return null;
   }
 }
