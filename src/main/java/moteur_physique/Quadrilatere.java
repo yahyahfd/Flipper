@@ -1,5 +1,5 @@
 package moteur_physique;
-public class Quadrilatere extends Shape{
+public class Quadrilatere extends moteurShape{
   //Nous utiliserons que des Quadrilatere inscriptible (les quatres points font partie d'un meme cercle)
   private Position posA;
   private Position posB;

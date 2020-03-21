@@ -1,5 +1,5 @@
 package moteur_physique;
-public class Triangle extends Shape{
+public class Triangle extends moteurShape{
   private Position posA;
   private Position posB;
   private Position posC;

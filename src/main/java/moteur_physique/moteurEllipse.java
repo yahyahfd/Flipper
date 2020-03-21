@@ -1,5 +1,5 @@
 package moteur_physique;
-public class Ellipse extends Shape{
+public class moteurEllipse extends moteurShape{
   private double major;//par convention major sera le diametre de l'axe majeur et non le rayon
   public double getMajor(){
     return major;
@@ -17,7 +17,7 @@ public class Ellipse extends Shape{
   public double getRotate(){
     return rotate;
   }
-  public Ellipse(double rotate,double rebond,double major,double minor,Position pos){
+  public moteurEllipse(double rotate,double rebond,double major,double minor,Position pos){
     this.rotate=rotate;
     this.rebond=rebond;
     this.major=major;
@@ -34,31 +34,44 @@ public class Ellipse extends Shape{
 
   public Position isInTheShape(Balle balle){
     //y=ax+b : Calculons a et b:
-    double a = (balle.getPos().getY()-balle.futur().getY())/(balle.getPos().getX()-balle.futur().getX());
-    double b = balle.getPos().getY()*balle.getV().getX()-balle.getV().getY()*balle.getPos().getX();
-
+    double tmp1 = -balle.getPos().getY()+balle.futur().getY();
+    double tmp2 = -balle.getPos().getX()+balle.futur().getX();
+    double a = tmp1/tmp2;
+    if(tmp2==0){
+      a=0;
+    }
+    double b = balle.getPos().getY()-a*balle.getPos().getX();
     double c = pos.getX();
     double d = pos.getY();
     double r = major/2;
     double q = minor/2;
 
     //ax²+bx+c
-    double z1 = Math.pow(q,2)+Math.pow(a,2)*Math.pow(r,2); //a
-    double z2 = 2*a*b*Math.pow(r,2)-2*c*Math.pow(q,2)-2*a*d*Math.pow(r,2); //b
-    double z3 = Math.pow(c,2)*Math.pow(q,2)+Math.pow(r,2)*(Math.pow(b,2)+Math.pow(d,2)-2*b*d-Math.pow(q,2)); //c
+    double z1 = Math.pow(q,2)+Math.pow(a*r,2); //a
+    double z2 = 2*(Math.pow(r,2)*a*(b-d)-c*Math.pow(q,2)); //b
+    double z3 = Math.pow(q*c,2)+Math.pow(r*b,2)+Math.pow(r*d,2)-Math.pow(r*q,2)-2*Math.pow(r,2)*b*d; //c
     double tmp = Math.pow(z2,2)-4*z1*z3; //delta
     if(tmp<0){
       return null;
     }else{ //les racines
-      double resx1 = (-z2-Math.sqrt(tmp))/2*z1; // le x du premier point d'intersection
+      double resx1 = (-z2-Math.sqrt(tmp))/(2*z1); // le x du premier point d'intersection
       double resy1 = a*resx1+b; //le y du premier point d'intersection
-      double resx2 = (-z2+Math.sqrt(tmp))/2*z1; // le x du deuxième point d'intersection
+      double resx2 = (-z2+Math.sqrt(tmp))/(2*z1); // le x du deuxième point d'intersection
       double resy2 = a*resx2+b; //le y du deuxième point d'intersection
       //on calcule les deux positions correspondantes:
       Position res1 = new Position(resx1,resy1);
       Position res2 = new Position(resx2,resy2);
       //on cherche lequel des deux points d'intersection est atteint en premier (dans le cas où delta(tmp) est nul, res1=res2)
-      return balle.getPos().isCloser(res1,res2);
+      Position resf = balle.getPos().isCloser(res1,res2);
+      if(this.isColliding(balle.futur())){
+        return resf;
+      }else{
+        return null;
+      }
     }
+  }
+  public boolean isColliding(Position tmp){
+    return tmp.getX()<= pos.getX()+major/2 && tmp.getX()>= pos.getX()-major/2 && tmp.getY()<= pos.getY()+minor/2 && tmp.getY()>= pos.getY()-minor/2;
+    //returns true uniquement si notre balle et sur/dans l'ellipse (la situation dans est évidemment impossible).
   }
 }

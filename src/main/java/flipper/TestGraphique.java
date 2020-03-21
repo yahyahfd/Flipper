@@ -38,7 +38,7 @@ public class TestGraphique extends Application{
     Polygon p =new Polygon();
     p.setFill(Color.GREEN);
     p.getPoints().addAll(q.getAllPosition());
-    Balle balle=new Balle(new Position(100,200),10,5);
+    Balle balle=new Balle(new Position(100,50),10,5);
     border=new Borders();
     border.addBorder(new Border(new Position(400,100),new Position(500,600),0.9));
     border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
@@ -54,11 +54,14 @@ public class TestGraphique extends Application{
     for(Border b:q1.turnIntoBorders()){
       border.addBorder(b);
     }
+    moteurEllipse e = new moteurEllipse(0,0.9,50,25,new Position(125,300));
+    Ellipse e2 = new Ellipse(125,300,50,25);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
     Pane pane=new Pane();
     pane.getChildren().add(circle);
-    pane.getChildren().add(p);
-    pane.getChildren().add(e1);
+    //pane.getChildren().add(p);
+    //pane.getChildren().add(e1);
+    pane.getChildren().add(e2);// décommmenter cette ligne pour voir l'ellipse
     for(Border b:border.getBorders()){
       pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
     }
@@ -67,7 +70,14 @@ public class TestGraphique extends Application{
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
         Border b=border.isOnALine(balle);
-        if(b!=null){
+        Position t1=e.isInTheShape(balle);
+        if(t1!=null){
+          Vecteur t2 = new Vecteur(t1.getX()-e.getPos().getX(),t1.getY()-e.getPos().getY());
+          Vecteur t3 = t2.vectNormUni();
+          Border t4 = new Border(new Position(t1.getX()-t3.getX(),t1.getY()-t3.getY()),new Position(t1.getX()+t3.getX(),t1.getY()+t3.getY()),e.getRebond());
+          pane.getChildren().add(new Line(t4.getPosX().getX(),t4.getPosX().getY(),t4.getPosY().getX(),t4.getPosY().getY())); // On trace les tangentes à chaque fois.
+          balle.setFutur(balle.collision(t4));
+        }else if(b!=null){
           pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5));
           balle.setFutur(balle.collision(b));
         }else {
