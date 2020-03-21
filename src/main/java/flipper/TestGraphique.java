@@ -1,6 +1,9 @@
 package flipper;
 import moteur_physique.*;
+import javafx.event.EventHandler;
 import javafx.application.Application;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Group;
@@ -23,6 +26,9 @@ import javafx.util.Duration;
 import javafx.scene.layout.Pane;
 public class TestGraphique extends Application{
   Borders border;
+  int a=0;
+  boolean flipLUP=false;
+  boolean flipRUP=false;
   public static void main(String[] args) {
     launch(args);
   }
@@ -58,12 +64,15 @@ public class TestGraphique extends Application{
     Ellipse e2 = new Ellipse(125,300,50,25);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
     Pane pane=new Pane();
+    Scene scene=new Scene(pane,1080,900);
     pane.getChildren().add(circle);
     //pane.getChildren().add(p);
     //pane.getChildren().add(e1);
     pane.getChildren().add(e2);// décommmenter cette ligne pour voir l'ellipse
     for(Border b:border.getBorders()){
-      pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
+      if(!(b instanceof Flip)){
+        pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
+      }
     }
 
     //Adding all the elements to the path
@@ -80,15 +89,41 @@ public class TestGraphique extends Application{
         }else if(b!=null){
           pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5));
           balle.setFutur(balle.collision(b));
-        }else {
+        }else if(s!=null){
+          balle.setFutur(balle.sliding(s));
+        }
+        else{
           balle.setFutur(balle.futur());
         }
+        if(flipLUP==true)f1.moveFlipUp();
+        else f1.moveFlipDown();
+        if(flipRUP==true)f2.moveFlipUp();
+        else f2.moveFlipDown();
+        lf.setEndX(f1.getPosY().getX());
+        lf.setEndY(f1.getPosY().getY());
+        rf.setEndX(f2.getPosY().getX());
+        rf.setEndY(f2.getPosY().getY());
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
       }
     }));
+    scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+      if(key.getCode()==KeyCode.LEFT) {
+        flipLUP=true;
+      }
+      if(key.getCode()==KeyCode.RIGHT) {
+        flipRUP=true;
+      }
+    });
+    scene.addEventHandler(KeyEvent.KEY_RELEASED, (key) -> {
+      if(key.getCode()==KeyCode.LEFT) {
+        flipLUP=false;
+      }
+      if(key.getCode()==KeyCode.RIGHT) {
+        flipRUP=false;
+      }
+    });
     timeline.setCycleCount(Timeline.INDEFINITE);
     timeline.play();
-    Scene scene=new Scene(pane,600,900);
     scene.setFill(Color.BROWN);
     primaryStage.setScene(scene);
     primaryStage.setTitle("TestGraphique");

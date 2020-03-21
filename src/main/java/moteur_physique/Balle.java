@@ -29,7 +29,7 @@ public class Balle{
     this.a=new Vecteur(0,0);
     this.t=16*0.01;
     a.setX(0);
-    a.setY(5);
+    a.setY(10);
   }
   public void gravity(){
     a.setY(g);
@@ -45,8 +45,31 @@ public class Balle{
     return new Position(x,y);
   }
   public Position collision(Border b){
-    double vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
-    double vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+    double vx;
+    double vy;
+    if(b instanceof Flip){
+      Flip tmp=(Flip)b;
+      vx=-v.scalaire(tmp.vitesse)*tmp.getRebond()*tmp.vitesse.getX()+v.scalaire(tmp.getUni())*tmp.getUni().getX()*tmp.getRebond();
+      vy=-v.scalaire(tmp.vitesse)*tmp.vitesse.getY()*tmp.getRebond()+v.scalaire(tmp.getUni())*tmp.getUni().getY()*tmp.getRebond();
+    }
+    else{
+      vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
+      vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+    }
+    double x=pos.getX()+vx*t;
+    double y=pos.getY()+vy*t;
+    return new Position(x,y);
+  }
+  public Position sliding(Border b){
+    double a=b.angle(new Vecteur(1,0));
+    double ax=Math.cos(a)*g;
+    double vx=(v.getX()+ax*t);
+    double ay=Math.sin(a)*g;
+    double vy=(v.getY()+ay*t);
+    if(b.horizontale()){
+      vx=v.getX()*b.getRebond();
+      vy=0;
+    }
     double x=pos.getX()+vx*t;
     double y=pos.getY()+vy*t;
     return new Position(x,y);
