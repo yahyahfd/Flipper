@@ -1,5 +1,5 @@
 package moteur_physique;
-public abstract class Shape{
+public abstract class moteurShape{
   protected double rebond;
   public double getRebond(){
     return rebond;

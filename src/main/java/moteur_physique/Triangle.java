@@ -1,5 +1,5 @@
 package moteur_physique;
-public class Triangle extends Shape{
+public class Triangle extends moteurShape{
   private Position posA;
   private Position posB;
   private Position posC;
@@ -20,5 +20,32 @@ public class Triangle extends Shape{
     Triangle bcp=new Triangle(rebond,posB,posC,pos);
     Triangle acp=new Triangle(rebond,posA,posC,pos);
     return almostEquals(abp.getArea()+bcp.getArea()+acp.getArea(),this.getArea());
+  }
+
+  public Border isInTheShape(Balle balle){
+    Border A = new Border(posA,posB,rebond);
+    Border B = new Border(posB,posC,rebond);
+    Border C = new Border(posC,posA,rebond);
+    boolean res1 = A.isOnTheLine(balle);
+    boolean res2 = B.isOnTheLine(balle);
+    boolean res3 = C.isOnTheLine(balle);
+    if(res1==true){
+      return A;
+    }
+    if(res2==true){
+      return B;
+    }
+    if(res3==true){
+      return C;
+    }
+    return null;
+  }
+
+  public Border[] turnIntoBorders(){
+    Border[] res = new Border[3];
+    res[0] = new Border(posA,posB,rebond);
+    res[1] = new Border(posB,posC,rebond);
+    res[2] = new Border(posC,posA,rebond);
+    return res;
   }
 }

@@ -1,4 +1,6 @@
 package moteur_physique;
+import java.util.ArrayList;
+
 public class Balle{
   private Position pos;
   public Position getPos(){
@@ -14,7 +16,7 @@ public class Balle{
   }
   private Vecteur v;
   public Vecteur getV(){
-    return v;
+    return this.v;
   }
   private Vecteur a;//correspond a l'acceleration, pour l'instant c'est seulement la gravite
   private double t;//intervalle de temps(equivalent a 60fps)
@@ -78,4 +80,14 @@ public class Balle{
     this.pos.setY(pos.getY());
     this.pos.setX(pos.getX());
   }
+
+  public ArrayList<Position> hitbox(int precision){
+  double angle = 2*Math.PI/precision;
+  ArrayList<Position> points = new ArrayList<Position>();
+  for(int i=1;i<precision;i++){
+    points.add(new Position(Math.cos(angle*i), Math.sin(angle*i)));
+  }
+  return points;
+}
+
 }

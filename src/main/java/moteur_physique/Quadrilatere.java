@@ -1,5 +1,5 @@
 package moteur_physique;
-public class Quadrilatere extends Shape{
+public class Quadrilatere extends moteurShape{
   //Nous utiliserons que des Quadrilatere inscriptible (les quatres points font partie d'un meme cercle)
   private Position posA;
   private Position posB;
@@ -66,5 +66,38 @@ public class Quadrilatere extends Shape{
       case(3):slope=(posA.getY()-posD.getY())/(posA.getX()-posD.getX());break;
     }
     return Math.toDegrees(Math.atan(slope));
+  }
+
+  public Border isInTheShape(Balle balle){
+    Border A = new Border(posA,posB,rebond);
+    Border B = new Border(posB,posC,rebond);
+    Border C = new Border(posC,posD,rebond);
+    Border D = new Border(posD,posA,rebond);
+    boolean res1 = A.isOnTheLine(balle);
+    boolean res2 = B.isOnTheLine(balle);
+    boolean res3 = C.isOnTheLine(balle);
+    boolean res4= D.isOnTheLine(balle);
+    if(res1==true){
+      return A;
+    }
+    if(res2==true){
+      return B;
+    }
+    if(res3==true){
+      return C;
+    }
+    if(res4==true){
+      return D;
+    }
+    return null;
+  }
+
+  public Border[] turnIntoBorders(){
+    Border[] res = new Border[4];
+    res[0] = new Border(posA,posB,rebond);
+    res[1] = new Border(posB,posC,rebond);
+    res[2] = new Border(posC,posD,rebond);
+    res[3] = new Border(posD,posA,rebond);
+    return res;
   }
 }
