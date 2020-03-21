@@ -25,6 +25,14 @@ public class Position {
 	public double distance(Position pos){
 		return Math.sqrt(Math.pow(pos.x-this.x,2)+Math.pow(pos.y-this.y,2));
 	}
+
+  public Position isCloser(Position a, Position b){
+		if(this.distance(a)<this.distance(b)){
+			return a;
+		}
+		return b;
+  }
+
 	public double[] getXY(){
 		double[] res={x,y};
 		return res;
