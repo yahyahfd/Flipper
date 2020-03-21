@@ -22,7 +22,9 @@ public class Vecteur{
     return x*v.x+y*v.y;
   }
   public double angle(Vecteur v){
-    return Math.atan(scalaire(v)/(this.norme()*v.norme()));
+    if(y<0){y=-y;x=-x;}
+    double a=Math.acos(scalaire(v)/(this.norme()*v.norme()));
+    return a;
   }
   public double norme(){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
@@ -35,6 +37,9 @@ public class Vecteur{
 
   public Vecteur vectNormUni(){
     return new Vecteur(-this.vectUnitaire().y,this.vectUnitaire().x);
+  }
+  public boolean colineaire(Vecteur v){
+    return v.getX()*vectUnitaire().getY()>=v.getY()*vectUnitaire().getX()-0.01&&v.getX()*vectUnitaire().getY()<=v.getY()*vectUnitaire().getX()+0.01;
   }
   public String toString(){
     return "Vecteur : ("+x+","+y+")";

@@ -13,8 +13,8 @@ public class Flip extends Border{
     double sign=1;
     if(originY.getX()<super.getPosX().getX())sign=-1*sign;
     if(super.getPosY().getY()>Math.sin(-0.785*sign)*(originY.getX()-super.getPosX().getX())+Math.cos(-0.785*sign)*(originY.getY()-super.getPosX().getY())+super.getPosX().getY()){
-      double x=Math.cos(-0.11*sign)*(super.getPosY().getX()-super.getPosX().getX())-Math.sin(-0.11*sign)*(super.getPosY().getY()-super.getPosX().getY());
-      double y=Math.sin(-0.11*sign)*(super.getPosY().getX()-super.getPosX().getX())+Math.cos(-0.11*sign)*(super.getPosY().getY()-super.getPosX().getY());
+      double x=Math.cos(-0.15*sign)*(super.getPosY().getX()-super.getPosX().getX())-Math.sin(-0.15*sign)*(super.getPosY().getY()-super.getPosX().getY());
+      double y=Math.sin(-0.15*sign)*(super.getPosY().getX()-super.getPosX().getX())+Math.cos(-0.15*sign)*(super.getPosY().getY()-super.getPosX().getY());
       x+=super.getPosX().getX();
       y+=super.getPosX().getY();
       super.getPosY().setX(x);

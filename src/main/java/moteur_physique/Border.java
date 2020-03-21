@@ -34,6 +34,9 @@ public class Border{//une bordure est considerer comme une ligne
   public double getRebond(){
     return rebond;
   }
+  public String toString(){
+    return posX.toString()+"\n"+posY.toString();
+  }
   public Border(Position posX,Position posY,double rebond){
     this.posX=posX;
     this.posY=posY;
@@ -53,6 +56,9 @@ public class Border{//une bordure est considerer comme une ligne
     double y=0;
     boolean bv=false;
     boolean bbv=false;
+    if(isSliding(balle)){
+      return null;
+    }
     if(posX.getY()==posY.getY()&&balle.futur().getY()==balle.getPos().getY()){//bordure parralele au mouvement donc aucune intersection
       return null;
     }
@@ -73,7 +79,7 @@ public class Border{//une bordure est considerer comme une ligne
       p=posX.getY()-(posX.getX()*a);//p=y-ax
     }
     //Balle
-     if(balle.futur().getY()==balle.getPos().getY()){//cas d'une balle avec mouvement horizontale
+    if(balle.futur().getY()==balle.getPos().getY()){//cas d'une balle avec mouvement horizontale
       aa=0;
       pp=balle.futur().getY();
     }
@@ -126,16 +132,21 @@ public class Border{//une bordure est considerer comme une ligne
     if(dx<0&&dy==0&&balle.getPos().getX()>=c.getX()&&c.getX()>=balle.futur().getX())return true;
     return false;
   }
-  public double angle(){
-    return this.unitaire.angle(new Vecteur(1,0));
+  public double angle(Vecteur v){
+    return this.unitaire.angle(v);
+  }
+  public boolean horizontale(){
+    return posX.getY()==posY.getY();
+  }
+  public boolean verticale(){
+    return posX.getX()==posY.getX();
   }
   public boolean isSliding(Balle balle){
-    boolean b0=(balle.getV().getX()<0.5&&balle.getV().getX()>-0.5&&balle.getV().getY()<0.5&&balle.getV().getX()>-0.5);
-    boolean b1=(balle.getV().getX()*unitaire.getY()>=balle.getV().getY()*unitaire.getX()-1&&balle.getV().getX()*unitaire.getY()<=balle.getV().getY()*unitaire.getX()+1);
+    boolean b0=(balle.getV().getX()<0.05&&balle.getV().getX()>-0.05&&balle.getV().getY()<0.05&&balle.getV().getX()>-0.05);//vitesse nul
+    boolean b1=(balle.getV().getX()*unitaire.getY()>=balle.getV().getY()*unitaire.getX()-1&&balle.getV().getX()*unitaire.getY()<=balle.getV().getY()*unitaire.getX()+0.5);//vitesse colineaire a la border
     if(b0||b1){
-      return balle.getPos().distance(this.posX)+balle.getPos().distance(this.posY)<=this.distance+0.05&&balle.getPos().distance(this.posX)+balle.getPos().distance(this.posY)>=this.distance-0.05;
+      return balle.getPos().distance(posX)+balle.getPos().distance(posY)<=distance+0.5&&balle.getPos().distance(posX)+balle.getPos().distance(posY)>=distance-0.5;//derniere verification qu'on est bien sur la border
     }
     return false;
   }
-
 }

@@ -59,12 +59,15 @@ public class Balle{
     return new Position(x,y);
   }
   public Position sliding(Border b){
-    double a=v.angle(b.getNorm());
-    double aa=Math.toRadians(45);
-    double ax=5*Math.sin(aa);
-    double ay=5*Math.cos(aa);
-    double vx=v.getX()+ax*t;
-    double vy=v.getY()+ay*t;
+    double a=b.angle(new Vecteur(1,0));
+    double ax=Math.cos(a)*g;
+    double vx=(v.getX()+ax*t);
+    double ay=Math.sin(a)*g;
+    double vy=(v.getY()+ay*t);
+    if(b.horizontale()){
+      vx=v.getX()*b.getRebond();
+      vy=0;
+    }
     double x=pos.getX()+vx*t;
     double y=pos.getY()+vy*t;
     return new Position(x,y);
