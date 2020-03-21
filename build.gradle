@@ -32,7 +32,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClassName = 'flipper.FlipperMap'
+    mainClassName = 'flipper.TestGraphique'
 }
 javafx {
     modules = [ 'javafx.controls','javafx.fxml','javafx.graphics','javafx.swing']

@@ -33,6 +33,8 @@ public class TestGraphique extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
+    Flip f1=new Flip(new Position(110,500),new Position(175,520),0.9);
+    Flip f2=new Flip(new Position(240,500),new Position(175,520),0.9);
     Quadrilatere q=new Quadrilatere(0.5,new Position(241,232),new Position(573,158),new Position(581,64),new Position(225,56));
     RandomShape r=new RandomShape(q);
     r.addCircle(15,3);
@@ -46,6 +48,8 @@ public class TestGraphique extends Application{
     p.getPoints().addAll(q.getAllPosition());
     Balle balle=new Balle(new Position(100,50),10,5);
     border=new Borders();
+    border.addBorder(f1);
+    border.addBorder(f2);
     border.addBorder(new Border(new Position(400,100),new Position(500,600),0.9));
     border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
     border.addBorder(new Border(new Position(110,550),new Position(150,500),0.9));
@@ -74,11 +78,15 @@ public class TestGraphique extends Application{
         pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
       }
     }
-
+    Line lf=new Line(f1.getPosX().getX(),f1.getPosX().getY(),f1.getPosY().getX(),f1.getPosY().getY());
+    Line rf=new Line(f2.getPosX().getX(),f2.getPosX().getY(),f2.getPosY().getX(),f2.getPosY().getY());
+    pane.getChildren().add(lf);
+    pane.getChildren().add(rf);
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
         Border b=border.isOnALine(balle);
+        Border s=border.isSliding(balle);
         Position t1=e.isInTheShape(balle);
         if(t1!=null){
           Vecteur t2 = new Vecteur(t1.getX()-e.getPos().getX(),t1.getY()-e.getPos().getY());
@@ -87,7 +95,7 @@ public class TestGraphique extends Application{
           pane.getChildren().add(new Line(t4.getPosX().getX(),t4.getPosX().getY(),t4.getPosY().getX(),t4.getPosY().getY())); // On trace les tangentes à chaque fois.
           balle.setFutur(balle.collision(t4));
         }else if(b!=null){
-          pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5));
+          pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5,Color.WHITE));
           balle.setFutur(balle.collision(b));
         }else if(s!=null){
           balle.setFutur(balle.sliding(s));
