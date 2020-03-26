@@ -47,6 +47,7 @@ public class Border{//une bordure est considerer comme une ligne
     if(rebond>=0&&rebond<=1)this.rebond=rebond;
     else this.rebond=0;
   }
+
   public Position intersection(Balle balle){
     double a=0;
     double p=0;
@@ -66,48 +67,28 @@ public class Border{//une bordure est considerer comme une ligne
       return null;
     }
     //Border
-    if(posX.getY()==posY.getY()){//cas d'une bordure horizontale
-      a=0;
-      p=posY.getY();
-    }
-    else if(posX.getX()==posY.getX()){//cas d'une bordure verticale
-      x=posX.getX();
-      bv=true;
-    }
-    else{
-      a=(posY.getY()-posX.getY())/(posY.getX()-posX.getX());//a=(yb-ya)/(xb-xa)
-      p=posX.getY()-(posX.getX()*a);//p=y-ax
-    }
+    double [] eqBorder=posX.equationDroite(posY);
     //Balle
-    if(balle.futur().getY()==balle.getPos().getY()){//cas d'une balle avec mouvement horizontale
-      aa=0;
-      pp=balle.futur().getY();
+    double[] eqBalle=balle.getPos().equationDroite(balle.futur());
+    if(eqBorder[2]==1){
+      x=posX.getX();
+      y=eqBalle[0]*x+eqBalle[1];//la border est verticale y=aa*x+pp
     }
-    else if(balle.futur().getX()==balle.getPos().getX()){//cas d'une balle avec mouvement verticale
+    else if(eqBalle[2]==1){
       x=balle.getPos().getX();
-      bbv=true;
+      y=eqBorder[0]*x+eqBorder[1];//la balle a un mouvement verticale y=a*x+pp
     }
+    else if(eqBorder[0]==eqBalle[0])return null;//deux droite parallelesa
     else{
-      aa=(balle.futur().getY()-balle.getPos().getY())/(balle.futur().getX()-balle.getPos().getX());
-      pp=balle.getPos().getY()-balle.getPos().getX()*aa;
-    }
-    if(bv==true){
-      y=aa*x+pp;//la border est verticale
-    }
-    else if(bbv==true){
-      y=a*x+p;//la balle a un mouvement verticale
-    }
-    else if(a==aa)return null;//deux droite paralleles
-    else{
-      x=(pp-p)/(a-aa);//cas normale
-      y=a*x+p;
+      x=(eqBalle[1]-eqBorder[1])/(eqBorder[0]-eqBalle[0]);//cas normale x=(pp-p)/(a-aa)
+      y=eqBorder[0]*x+eqBorder[1];
     }
     return new Position(x,y);
   }
   public boolean isOnTheSegment(Balle balle){//on regarde si le point d'intersection est sur le segment
     Position c=intersection(balle);
     if(c==null)return false;
-    return c.distance(this.posX)+c.distance(this.posY)<=this.distance+0.05&&c.distance(this.posX)+c.distance(this.posY)>=this.distance-0.05;
+    return c.distance(this.posX)+c.distance(this.posY)<=this.distance+5&&c.distance(this.posX)+c.distance(this.posY)>=this.distance-5;
   }
   public boolean isOnTheLine(Balle balle){
     if(!isOnTheSegment(balle))return false;
@@ -115,16 +96,16 @@ public class Border{//une bordure est considerer comme une ligne
     double dx=balle.futur().getX()-balle.getPos().getX();//positif si on descend
     double dy=balle.futur().getY()-balle.getPos().getY();//positif vers la droite
     if(dx>0&&dy>0&&balle.getPos().getX()<=c.getX()&&balle.getPos().getY()<c.getY()&&(c.getX()<=balle.futur().getX()||c.getY()<=balle.futur().getY())){
-      return true;
+      return true;//mouvement vers le bas et vers la droite
     }
     if(dx<0&&dy>0&&balle.getPos().getX()>=c.getX()&&balle.getPos().getY()<c.getY()&&(c.getX()>=balle.futur().getX()||c.getY()<=balle.futur().getY())){
-      return true;
+      return true;//mouvement vers le bas et vers la gauche
     }
     if(dx>0&&dy<0&&balle.getPos().getX()<=c.getX()&&balle.getPos().getY()>c.getY()&&(c.getX()<=balle.futur().getX()||c.getY()>=balle.futur().getY())){
-      return true;
+      return true;//mouvement vers le haut et vers la droite
     }
-    if(dx<0&&dy<0&&balle.getPos().getX()>c.getX()&&balle.getPos().getY()>=c.getY()&&(c.getX()>=balle.futur().getX()||c.getY()>=balle.futur().getY())){
-      return true;
+    if(dx<0&&dy<0&&balle.getPos().getX()>c.getX()&&balle.getPos().getY()>=c.getY()&&(c.getX()>=balle.futur().getX()-1||c.getY()>=balle.futur().getY())){
+      return true;//mouvement vers le haut et vers la gauche
     }
     if(dx==0&&dy>0&&balle.getPos().getY()<=c.getY()&&c.getY()<=balle.futur().getY())return true;
     if(dx==0&&dy<0&&balle.getPos().getY()>=c.getY()&&c.getY()>=balle.futur().getY())return true;
@@ -145,7 +126,7 @@ public class Border{//une bordure est considerer comme une ligne
     boolean b0=(balle.getV().getX()<0.05&&balle.getV().getX()>-0.05&&balle.getV().getY()<0.05&&balle.getV().getX()>-0.05);//vitesse nul
     boolean b1=(balle.getV().getX()*unitaire.getY()>=balle.getV().getY()*unitaire.getX()-1&&balle.getV().getX()*unitaire.getY()<=balle.getV().getY()*unitaire.getX()+0.5);//vitesse colineaire a la border
     if(b0||b1){
-      return balle.getPos().distance(posX)+balle.getPos().distance(posY)<=distance+0.5&&balle.getPos().distance(posX)+balle.getPos().distance(posY)>=distance-0.5;//derniere verification qu'on est bien sur la border
+      return balle.getPos().distance(posX)+balle.getPos().distance(posY)<=distance+1&&balle.getPos().distance(posX)+balle.getPos().distance(posY)>=distance-1;//derniere verification qu'on est bien sur la border
     }
     return false;
   }

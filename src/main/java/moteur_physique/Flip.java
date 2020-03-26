@@ -1,7 +1,20 @@
 package moteur_physique;
 public class Flip extends Border{
   private final Position originY;
-  Vecteur vitesse;
+  private boolean up=false;
+  public boolean getUp(){
+    return up;
+  }
+  public void setUp(boolean up){
+    this.up=up;
+  }
+  public Position getOriginY(){
+    return originY;
+  }
+  private Vecteur vitesse;
+  public Vecteur getV(){
+    return vitesse;
+  }
   public Flip(Position posX,Position posY,double rebond){//rebond entre 0 et 1
      super(posX,posY,rebond);
      originY=new Position(posY.getX(),posY.getY());
@@ -22,6 +35,7 @@ public class Flip extends Border{
       newUniNorm();
       vitesse.setX(super.getNorm().getX()*1.2);
       vitesse.setY(super.getNorm().getY()*1.2);
+      up=true;
     }
   }
   public void moveFlipDown(){
@@ -37,7 +51,27 @@ public class Flip extends Border{
       newUniNorm();
       vitesse.setX(super.getNorm().getX());
       vitesse.setY(super.getNorm().getY());
+      up=false;
     }
+  }
+  public boolean isAlwaysOnTop(Balle balle){//la balle ne passe pas miraculeusement en dessous du flip ce qui peux arriver lorsque les deux bouge
+    double[] eqFlip=super.getPosX().equationDroite(super.getPosY());
+    if(eqFlip[2]==1)return true;
+    if(balle.futur().getY()<eqFlip[0]*balle.futur().getX()+eqFlip[1]){
+      return true;
+    }
+    return false;
+  }
+  public boolean isOnTheLine(Balle balle){
+    if(!isOnTheSegment(balle))return false;
+    Position c=intersection(balle);
+    if(!isAlwaysOnTop(balle)){
+      if(balle.getSliding()==false){
+        balle.getPos().setX(c.getX());
+        balle.getPos().setY(c.getY());
+      }
+      return true;
+    }return false;
   }
   public void newUniNorm(){
     Vecteur u=new Vecteur(super.getPosY().getX()-super.getPosX().getX(),super.getPosY().getY()-super.getPosX().getY());

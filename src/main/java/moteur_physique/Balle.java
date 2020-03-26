@@ -2,6 +2,17 @@ package moteur_physique;
 import java.util.ArrayList;
 
 public class Balle{
+  private boolean sliding=false;
+  public boolean getSliding(){
+    return sliding;
+  }
+  public void setSliding(boolean b){
+    sliding=b;
+  }
+  private Position oldpos;
+  public Position getOldPos(){
+    return oldpos;
+  }
   private Position pos;
   public Position getPos(){
     return pos;
@@ -22,6 +33,7 @@ public class Balle{
   private double t;//intervalle de temps(equivalent a 60fps)
   private double g=10;//constante de gravité
   public Balle(Position pos,double r,double m){
+    oldpos=pos;
     this.pos=pos;
     this.r=r;
     this.m=m;
@@ -49,8 +61,8 @@ public class Balle{
     double vy;
     if(b instanceof Flip){
       Flip tmp=(Flip)b;
-      vx=-v.scalaire(tmp.vitesse)*tmp.getRebond()*tmp.vitesse.getX()+v.scalaire(tmp.getUni())*tmp.getUni().getX()*tmp.getRebond();
-      vy=-v.scalaire(tmp.vitesse)*tmp.vitesse.getY()*tmp.getRebond()+v.scalaire(tmp.getUni())*tmp.getUni().getY()*tmp.getRebond();
+      vx=-v.scalaire(tmp.getV())*tmp.getRebond()*tmp.getV().getX()+v.scalaire(tmp.getUni())*tmp.getUni().getX()*tmp.getRebond();
+      vy=-v.scalaire(tmp.getV())*tmp.getV().getY()*tmp.getRebond()+v.scalaire(tmp.getUni())*tmp.getUni().getY()*tmp.getRebond();
     }
     else{
       vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
@@ -62,25 +74,49 @@ public class Balle{
   }
   public Position sliding(Border b){
     double a=b.angle(new Vecteur(1,0));
-    double ax=Math.cos(a)*g;
-    double vx=(v.getX()+ax*t);
-    double ay=Math.sin(a)*g;
-    double vy=(v.getY()+ay*t);
+    double x;
+    double y;
+    double vx;
+    double vy;
+    vx=(v.getX()+Math.cos(a)*g*t);
+    vy=(v.getY()+Math.sin(a)*g*t);
     if(b.horizontale()){
       vx=v.getX()*b.getRebond();
       vy=0;
     }
-    double x=pos.getX()+vx*t;
-    double y=pos.getY()+vy*t;
+    x=pos.getX()+vx*t;
+    y=pos.getY()+vy*t;
+    if(b instanceof Flip)sliding=true;
+    else sliding=false;
     return new Position(x,y);
   }
   public void setFutur(Position pos){
+    if(pos==null)return;
+    oldpos=this.pos;
     this.v.setX((pos.getX()-this.pos.getX())/t);
     this.v.setY((pos.getY()-this.pos.getY())/t);
     this.pos.setY(pos.getY());
     this.pos.setX(pos.getX());
   }
-
+  public Position collisionFlip(Flip flip){
+    double vy;
+    double vx;
+    if(flip.getUp()==true){
+      if(flip.getV().getY()>0){
+        vy=-flip.getV().getY()*50+v.getY();
+        vx=-flip.getV().getX()*50+v.getX();
+      }else{
+        vy=flip.getV().getY()*50+v.getY();
+        vx=flip.getV().getX()*50+v.getX();
+      }
+    }
+    else{
+      return collision(flip);
+    }
+    double x=pos.getX()+vx*t;
+    double y=pos.getY()+vy*t;
+    return new Position(x,y);
+  }
   public ArrayList<Position> hitbox(int precision){
   double angle = 2*Math.PI/precision;
   ArrayList<Position> points = new ArrayList<Position>();
