@@ -13,6 +13,8 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.scene.shape.LineTo;
@@ -24,6 +26,7 @@ import javafx.event.EventHandler;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 public class TestGraphique extends Application{
   Borders border;
   int a=0;
@@ -47,6 +50,9 @@ public class TestGraphique extends Application{
     p.setFill(Color.GREEN);
     p.getPoints().addAll(q.getAllPosition());
     Balle balle=new Balle(new Position(100,50),10,5);
+    Text score = new Text(100,100,Integer.toString(balle.getScore()));
+    score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 32));
+    score.setFill(Color.BLACK);
     border=new Borders();
     border.addBorder(f1);
     border.addBorder(f2);
@@ -58,10 +64,12 @@ public class TestGraphique extends Application{
     border.addBorder(new Border(new Position(0,600),new Position(500,600),0.9));
     Triangle t1 = new Triangle(0.5,new Position(300,500),new Position(450,500),new Position(300,550));
     for(Border b:t1.turnIntoBorders()){
+      b.setScoringTrue();
       border.addBorder(b);
     }
     Quadrilatere q1 = new Quadrilatere(0.5, new Position(250,350), new Position(350,350), new Position(350,400), new Position(250,400));
     for(Border b:q1.turnIntoBorders()){
+      b.setScoringTrue();
       border.addBorder(b);
     }
     moteurEllipse e = new moteurEllipse(0,0.9,50,25,new Position(125,300));
@@ -70,6 +78,7 @@ public class TestGraphique extends Application{
     Pane pane=new Pane();
     Scene scene=new Scene(pane,1080,900);
     pane.getChildren().add(circle);
+    pane.getChildren().add(score);
     //pane.getChildren().add(p);
     //pane.getChildren().add(e1);
     pane.getChildren().add(e2);// décommmenter cette ligne pour voir l'ellipse
@@ -97,6 +106,10 @@ public class TestGraphique extends Application{
         }else if(b!=null){
           pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5,Color.WHITE));
           balle.setFutur(balle.collision(b));
+            if(b.getScoring()){
+              balle.addScore(100);
+              score.setText(Integer.toString(balle.getScore()));
+            }
         }else if(s!=null){
           balle.setFutur(balle.sliding(s));
         }
