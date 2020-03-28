@@ -1,22 +1,22 @@
 package moteur_physique;
 import java.util.*;
+import java.util.ArrayList;
 public class RandomShape extends moteurShape{
-  private Quadrilatere q;//une forme random a comme base un Quadrilatere
-  private ArrayList<moteurEllipse> e=new ArrayList<moteurEllipse>();//on aura des demis cercle a chaque extremite pour arrondire les bords, si on veux un bord droit le cercle est donc null
+  private Moteur_Polygone q;
+  private ArrayList<moteurEllipse> e=new ArrayList<moteurEllipse>();//on aura des demis cercle a chaque bordure pour arrondire les bords, si on veux un bord droit le cercle est donc null
   //Prenons un Quadrilatere ABCD le cercle d'indice 0 est celui entre AB etc
   public ArrayList<moteurEllipse> getE(){
     return e;
   }
-  public RandomShape(Quadrilatere q){
+  public RandomShape(Moteur_Polygone q){
     this.q=q;
-    e.add(null);
-    e.add(null);
-    e.add(null);
-    e.add(null);
+    for(Position pos:q.getPos()){
+      e.add(null);
+    }
   }
   public void addCircle(double d,int border){
-    if(border>3)return;
-    if(d<q.getBorderLength(border)){
+    if(border>q.getPos().size())return;
+    if(d<q.getBorderLength(border)){//major et minor axe inversée si d > taille de la border
       e.add(border,new moteurEllipse(q.getSlopeOfBorder(border),q.getRebond(),q.getBorderLength(border),d,q.getBorderCenter(border)));
     }
     else{
@@ -30,13 +30,6 @@ public class RandomShape extends moteurShape{
     }
     return q.getArea()+a;
   }
-  public boolean isInTheShape(Position pos){
-    if(q.isInTheShape(pos))return true;
-    for (moteurEllipse el :e ){
-      if(el.isInTheShape(pos))return true;
-    }
-    return false;
-  }
 
   public ArrayList<moteurEllipse> allEllipse(){
     ArrayList<moteurEllipse> res = new ArrayList<moteurEllipse>();
@@ -49,14 +42,29 @@ public class RandomShape extends moteurShape{
   }
 
   public Border isInTheShape(Balle balle){
-    for(moteurEllipse t : this.allEllipse()){
-      Position t1 = t.isInTheShape(balle);
-      if(t1!=null){
-        Vecteur t2 = new Vecteur(t1.getX()-t.getPos().getX(),t1.getY()-t.getPos().getY());
-        Vecteur t3 = t2.vectNormUni();
-        return new Border(new Position(t1.getX()-t3.getX(),t1.getY()-t3.getY()),new Position(t1.getX()+t3.getX(),t1.getY()+t3.getY()),q.getRebond());
+    ArrayList<Border> borders=new ArrayList<Border>();
+    double dist=-1;
+    for(moteurEllipse el:e){
+      if(el!=null){
+        Border be=el.isInTheShape(balle);
+        if(be!=null)borders.add(be);
       }
     }
-    return q.isInTheShape(balle);
+    Border be=q.isInTheShape(balle);
+    if(be!=null)borders.add(be);
+    Border b=null;
+    for(Border border : borders){
+      if(border.isOnTheLine(balle)==true){
+        if(dist==-1||dist>balle.getPos().distance(border.intersection(balle))){
+          dist=balle.getPos().distance(border.intersection(balle));
+          b=border;
+        }
+      }
+    }
+    return b;
+  }
+
+  public Border isSliding(Balle balle){
+    return q.isSliding(balle);
   }
 }
