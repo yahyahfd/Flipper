@@ -24,6 +24,9 @@ import javafx.event.EventHandler;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 public class TestGraphique extends Application{
   Borders border;
   int a=0;
@@ -33,6 +36,23 @@ public class TestGraphique extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
+    GridPane mainmenu = new GridPane();
+    Scene root = new Scene(mainmenu);
+    GridPane left = new GridPane();
+    GridPane right = new GridPane();
+    left.setStyle("-fx-background-color: #3d4855");
+    right.setStyle("-fx-background-color: #e79e6d");
+    Label wlc = new Label("WELCOME");
+    Label HS = new Label("HIGH SCORES");
+    wlc.setStyle("-fx-text-fill: white;");
+    wlc.setFont(new Font("Arial Black", 22));
+    HS.setStyle("-fx-text-fill: white;");
+    HS.setFont(new Font("Arial Black", 22));
+    mainmenu.add(left,0,0,1,3);
+    mainmenu.add(right,0,1,1,3);
+    left.add(wlc,1,0);
+    right.add(HS,1,0);
+
     Flip f1=new Flip(new Position(110,500),new Position(175,520),0.9);
     Flip f2=new Flip(new Position(240,500),new Position(175,520),0.9);
     Quadrilatere q=new Quadrilatere(0.5,new Position(241,232),new Position(573,158),new Position(581,64),new Position(225,56));
@@ -133,7 +153,7 @@ public class TestGraphique extends Application{
     timeline.setCycleCount(Timeline.INDEFINITE);
     timeline.play();
     scene.setFill(Color.BROWN);
-    primaryStage.setScene(scene);
+    primaryStage.setScene(root);
     primaryStage.setTitle("TestGraphique");
     primaryStage.show();
   }
