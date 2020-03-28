@@ -3,7 +3,7 @@ import moteur_physique.*;
 import java.util.ArrayList;
 public class Borders{
   public Borders(){}
-  private static ArrayList<Border> borders=new ArrayList<Border>();
+  private ArrayList<Border> borders=new ArrayList<Border>();
   public void addBorder(Border b){
     borders.add(b);
   }

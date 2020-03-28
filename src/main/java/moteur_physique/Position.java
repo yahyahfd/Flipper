@@ -37,6 +37,27 @@ public class Position {
 		double[] res={x,y};
 		return res;
 	}
+	/**
+	 * @param pos deuxieme position qu'on utilise
+	 * @return l'equation de la droite avec les 2 points l'appartenant
+	 */
+	public double[] equationDroite(Position pos){//le resultat est sous forme {y,a,x,p,bv}
+    double a=0;
+    double p=0;
+    int bv=0;//1 si droite verticale
+    if(this.getY()==pos.getY()){//cas d'une droite horizontale
+      a=0;
+      p=pos.getY();
+    }else if(this.getX()==pos.getX()){//cas d'une droite verticale
+      bv=1;
+      a=pos.getX();
+    }else{
+      a=(pos.getY()-this.getY())/(pos.getX()-this.getX());//a=(yb-ya)/(xb-xa)
+      p=this.getY()-(this.getX()*a);//p=y-ax
+    }
+    double[] res={a,p,bv};
+    return res;
+  }
 	public String toString(){
 		return "x: "+String.valueOf(x)+" y: "+String.valueOf(y);
 	}
