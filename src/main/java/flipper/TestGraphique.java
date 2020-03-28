@@ -25,8 +25,10 @@ import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.geometry.Insets;
 public class TestGraphique extends Application{
   Borders border;
   int a=0;
@@ -44,14 +46,34 @@ public class TestGraphique extends Application{
     right.setStyle("-fx-background-color: #e79e6d");
     Label wlc = new Label("WELCOME");
     Label HS = new Label("HIGH SCORES");
+    Label bot = new Label("flipper, by EKIP");
     wlc.setStyle("-fx-text-fill: white;");
     wlc.setFont(new Font("Arial Black", 22));
     HS.setStyle("-fx-text-fill: white;");
     HS.setFont(new Font("Arial Black", 22));
     mainmenu.add(left,0,0,1,3);
-    mainmenu.add(right,0,1,1,3);
+    mainmenu.add(right,1,0,1,3);
     left.add(wlc,1,0);
     right.add(HS,1,0);
+    left.setHgap(10);
+    left.setVgap(10);
+    left.setPadding(new Insets(10, 10, 10, 10));
+    right.setHgap(10);
+    right.setVgap(10);
+    right.setPadding(new Insets(10, 10, 10, 10));
+
+    //Buttons
+    Button btn1 = new Button("Play");
+    Button btn2 = new Button("Settings");
+    Button btn3 = new Button("Rules");
+    btn1.setMaxWidth(Double.MAX_VALUE);
+    btn2.setMaxWidth(Double.MAX_VALUE);
+    btn3.setMaxWidth(Double.MAX_VALUE);
+    VBox vbButtons = new VBox();
+    vbButtons.setSpacing(10);
+    vbButtons.setPadding(new Insets(0, 20, 10, 20));
+    vbButtons.getChildren().addAll(btn1,btn2,btn3);
+    left.add(vbButtons,1,1,1,3);
 
     Flip f1=new Flip(new Position(110,500),new Position(175,520),0.9);
     Flip f2=new Flip(new Position(240,500),new Position(175,520),0.9);
@@ -154,6 +176,11 @@ public class TestGraphique extends Application{
     timeline.play();
     scene.setFill(Color.BROWN);
     primaryStage.setScene(root);
+    btn1.setOnAction(new EventHandler<ActionEvent>() {
+      @Override public void handle(ActionEvent e) {
+          primaryStage.setScene(scene);
+      }
+    });
     primaryStage.setTitle("TestGraphique");
     primaryStage.show();
   }
