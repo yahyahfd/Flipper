@@ -18,6 +18,8 @@ import javafx.scene.shape.Path;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import javafx.scene.layout.Pane;
@@ -25,121 +27,111 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 public class FlipperMap extends Application{
   Borders border;
+  Shapes shape;
+  boolean flipLUP=false;
+  boolean flipRUP=false;
   public static void main(String[] args) {
     launch(args);
   }
   public void start(Stage primaryStage){
-    Quadrilatere q=new Quadrilatere(0.5,new Position(110,640),new Position(110,540),new Position(200,700),new Position(200,700));
+    Pane pane=new Pane();
+
+    //
+
+    Moteur_Polygone qq=new Moteur_Polygone(0.5);
+    qq.addPos(new Position(480,540));
+    qq.addPos(new Position(390,680));
+    qq.addPos(new Position(480,660));
+    RandomShape rr=new RandomShape(qq);
+
+    Moteur_Polygone q=new Moteur_Polygone(0.5);
+    q.addPos(new Position(110,640));
+    q.addPos(new Position(110,540));
+    q.addPos(new Position(200,700));
     RandomShape r=new RandomShape(q);
 
-    r.addCircle(15,2);
-    r.addCircle(15,1);
-    Ellipse e1=new Ellipse(r.getE().get(1).getPos().getX(),r.getE().get(1).getPos().getY(),r.getE().get(1).getMinor()/2,r.getE().get(1).getMajor()/2);
-    Rotate rotate=new Rotate(90+r.getE().get(1).getRotate(),r.getE().get(1).getPos().getX(),r.getE().get(1).getPos().getY());
-    e1.getTransforms().add(rotate);
-    e1.setFill(Color.GREEN);
-    Polygon p =new Polygon();
-    p.setFill(Color.GREEN);
-    p.getPoints().addAll(q.getAllPosition());
+    //
 
-    Quadrilatere q2=new Quadrilatere(0.5,new Position(250,150),new Position(350,150),new Position(300,225),new Position(300,225));
-    RandomShape r2=new RandomShape(q2);
-    r2.addCircle(30,1);
-    r2.addCircle(50,2);
-    r2.addCircle(50,3);
-    Ellipse e2=new Ellipse(r2.getE().get(1).getPos().getX(),r2.getE().get(1).getPos().getY(),r2.getE().get(1).getMinor()/2,r2.getE().get(1).getMajor()/2);
-    e2.getTransforms().add(rotate);
-    e2.setFill(Color.GREEN);
-    Polygon p2 =new Polygon();
-    p2.setFill(Color.GREEN);
-    p2.getPoints().addAll(q2.getAllPosition());
-
-    Quadrilatere q3=new Quadrilatere(0.5,new Position(100,300),new Position(139,300),new Position(139,450),new Position(100,450));
+    Moteur_Polygone q3=new Moteur_Polygone(0.5);
+    q3.addPos(new Position(100,325));
+    q3.addPos(new Position(139,325));
+    q3.addPos(new Position(139,425));
+    q3.addPos(new Position(100,425));
     RandomShape r3=new RandomShape(q3);
-    r3.addCircle(30,1);
+    r3.addCircle(50,0);
     r3.addCircle(50,2);
-    r3.addCircle(50,3);
-    Ellipse e3=new Ellipse(r3.getE().get(1).getPos().getX(),r3.getE().get(1).getPos().getY(),r3.getE().get(1).getMinor()/2,r3.getE().get(1).getMajor()/2);
-    e3.getTransforms().add(rotate);
-    e3.setFill(Color.GREEN);
-    Polygon p3 =new Polygon();
-    p3.setFill(Color.GREEN);
-    p3.getPoints().addAll(q3.getAllPosition());
 
-    Quadrilatere q4=new Quadrilatere(0.5,new Position(200,300),new Position(239,300),new Position(239,450),new Position(200,450));
+
+    Moteur_Polygone q4=new Moteur_Polygone(0.5);
+    q4.addPos(new Position(200,325));
+    q4.addPos(new Position(239,325));
+    q4.addPos(new Position(239,425));
+    q4.addPos(new Position(200,425));
     RandomShape r4=new RandomShape(q4);
-    r4.addCircle(30,1);
+    r4.addCircle(50,0);
     r4.addCircle(50,2);
-    r4.addCircle(50,3);
-    Ellipse e4=new Ellipse(r4.getE().get(1).getPos().getX(),r4.getE().get(1).getPos().getY(),r4.getE().get(1).getMinor()/2,r4.getE().get(1).getMajor()/2);
-    e4.getTransforms().add(rotate);
-    e4.setFill(Color.GREEN);
-    Polygon p4 =new Polygon();
-    p4.setFill(Color.GREEN);
-    p4.getPoints().addAll(q4.getAllPosition());
 
-    Quadrilatere q5=new Quadrilatere(0.5,new Position(350,300),new Position(389,300),new Position(389,450),new Position(350,450));
+    //
+
+    Moteur_Polygone q5=new Moteur_Polygone(0.5);
+    q5.addPos(new Position(350,325));
+    q5.addPos(new Position(389,325));
+    q5.addPos(new Position(389,425));
+    q5.addPos(new Position(350,425));
     RandomShape r5=new RandomShape(q5);
-    r5.addCircle(30,1);
+    r5.addCircle(50,0);
     r5.addCircle(50,2);
-    r5.addCircle(50,3);
-    Ellipse e5=new Ellipse(r5.getE().get(1).getPos().getX(),r5.getE().get(1).getPos().getY(),r5.getE().get(1).getMinor()/2,r5.getE().get(1).getMajor()/2);
-    e5.getTransforms().add(rotate);
-    e5.setFill(Color.GREEN);
-    Polygon p5 =new Polygon();
-    p5.setFill(Color.GREEN);
-    p5.getPoints().addAll(q5.getAllPosition());
 
-    Quadrilatere q6=new Quadrilatere(0.5,new Position(450,300),new Position(489,300),new Position(489,450),new Position(450,450));
+    //
+
+    Moteur_Polygone q6=new Moteur_Polygone(0.5);
+    q6.addPos(new Position(450,325));
+    q6.addPos(new Position(489,325));
+    q6.addPos(new Position(489,425));
+    q6.addPos(new Position(450,425));
     RandomShape r6=new RandomShape(q6);
-    r6.addCircle(30,1);
+    r6.addCircle(50,0);
     r6.addCircle(50,2);
-    r6.addCircle(50,3);
-    Ellipse e6=new Ellipse(r6.getE().get(1).getPos().getX(),r6.getE().get(1).getPos().getY(),r6.getE().get(1).getMinor()/2,r6.getE().get(1).getMajor()/2);
-    e6.getTransforms().add(rotate);
-    e6.setFill(Color.GREEN);
-    Polygon p6 =new Polygon();
-    p6.setFill(Color.GREEN);
-    p6.getPoints().addAll(q6.getAllPosition());
 
-    Quadrilatere q7=new Quadrilatere(0.5,new Position(100,100),new Position(150,50),new Position(200,100),new Position(150,150));
+    //
+
+    Moteur_Polygone q7=new Moteur_Polygone(0.5);
+    q7.addPos(new Position(100,100));
+    q7.addPos(new Position(150,50));
+    q7.addPos(new Position(200,100));
+    q7.addPos(new Position(150,150));
     RandomShape r7=new RandomShape(q7);
-    r7.addCircle(30,1);
-    r7.addCircle(50,2);
-    r7.addCircle(50,3);
-    Ellipse e7=new Ellipse(r7.getE().get(1).getPos().getX(),r7.getE().get(1).getPos().getY(),r7.getE().get(1).getMinor()/2,r7.getE().get(1).getMajor()/2);
-    e7.getTransforms().add(rotate);
-    e7.setFill(Color.GREEN);
-    Polygon p7 =new Polygon();
-    p7.setFill(Color.GREEN);
-    p7.getPoints().addAll(q7.getAllPosition());
-
-    Quadrilatere q8=new Quadrilatere(0.5,new Position(400,100),new Position(450,50),new Position(500,100),new Position(450,150));
+    //
+    Moteur_Polygone q8=new Moteur_Polygone(0.5);
+    q8.addPos(new Position(400,100));
+    q8.addPos(new Position(450,50));
+    q8.addPos(new Position(500,100));
+    q8.addPos(new Position(450,150));
     RandomShape r8=new RandomShape(q8);
-    r8.addCircle(30,1);
-    r8.addCircle(50,2);
-    r8.addCircle(50,3);
-    Ellipse e8=new Ellipse(r8.getE().get(1).getPos().getX(),r8.getE().get(1).getPos().getY(),r8.getE().get(1).getMinor()/2,r8.getE().get(1).getMajor()/2);
-    e8.getTransforms().add(rotate);
-    e8.setFill(Color.GREEN);
     Polygon p8 =new Polygon();
     p8.setFill(Color.GREEN);
     p8.getPoints().addAll(q8.getAllPosition());
 
-    Balle balle=new Balle(new Position(100,200),10,5);
+    Balle balle=new Balle(new Position(20,200),10,5);
+    Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
+
     border=new Borders();
-    border.addBorder(new Border(new Position(480,540),new Position(390,690),0.9));
-    border.addBorder(new Border(new Position(480,660),new Position(480,540),0.9));
-    border.addBorder(new Border(new Position(480,660),new Position(390,690),0.9));
+    border.addBorder(new Border(new Position(0,10),new Position(850,10),0.9));
     border.addBorder(new Border(new Position(20,680),new Position(220,750),0.9));
     border.addBorder(new Border(new Position(550,680),new Position(350,750),0.9));
-    border.addBorder(new Border(new Position(20,815),new Position(550,845),0.9));
     border.addBorder(new Border(new Position(550,300),new Position(550,810),0.9));
     border.addBorder(new Border(new Position(580,0),new Position(580,860),0.9));
     border.addBorder(new Border(new Position(20,0),new Position(20,860),0.9));
+    border.addBorder(new Border(new Position(20,815),new Position(550,845),0.9));
     border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
     border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
-    Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
+
+    Flip flipLeft=new Flip(new Position(215,750),new Position(270,760),0.5);
+    Flip flipRight=new Flip(new Position(355,750),new Position(300,760),0.5);
+    Line leftFlip=new Line(flipLeft.getPosX().getX(),flipLeft.getPosX().getY(),flipLeft.getPosY().getX(),flipLeft.getPosY().getY());
+    Line rightFlip=new Line(flipRight.getPosX().getX(),flipRight.getPosX().getY(),flipRight.getPosY().getX(),flipRight.getPosY().getY());
+    border.addBorder(flipLeft);
+    border.addBorder(flipRight);
 
     Image rect = new Image("file:rectangle_arrondi.png");
     Image triangle = new Image("file:triangle_bas.png");
@@ -189,17 +181,9 @@ public class FlipperMap extends Application{
     iv8.setImage(rond);
     iv8.setX(400);iv8.setY(50);
 
-    Pane pane=new Pane();
+    pane.getChildren().add(leftFlip);//flip gauche
+    pane.getChildren().add(rightFlip);//flip droite
     pane.getChildren().add(circle);
-    pane.getChildren().add(p); //triangle bas gauche
-    pane.getChildren().add(e1);
-    pane.getChildren().add(p2); //triangle haut
-    pane.getChildren().add(p3); //rectanle 1(en partant de la gauche)
-    pane.getChildren().add(p4); //rectangle 2
-    pane.getChildren().add(p5); //rectangle 3
-    pane.getChildren().add(p6); //rectangle 4
-    pane.getChildren().add(p7); //losange 1(qui est censé etre un rond)
-    pane.getChildren().add(p8); //losange
     pane.getChildren().add(iv); //image rect1
     pane.getChildren().add(iv2);
     pane.getChildren().add(iv3);
@@ -209,25 +193,77 @@ public class FlipperMap extends Application{
     pane.getChildren().add(iv7);
     pane.getChildren().add(iv8);
 
+    shape=new Shapes();
+    shape.addShape(r);
+    shape.addShape(rr);
+    shape.addShape(r3);
+    shape.addShape(r4);
+    shape.addShape(r5);
+    shape.addShape(r6);
+    shape.addShape(r7);
+    shape.addShape(r8);
     for(Border b:border.getBorders()){
-      pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
+      if(!(b instanceof Flip)){
+        pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
+      }
     }
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
         Border b=border.isOnALine(balle);
-        if(b!=null){
-          pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5));
+        Border s=border.isSliding(balle);
+        Border sh=shape.isOnALine(balle);
+        boolean  flipLeftuP=flipLeft.isOntheFlip(balle);
+        boolean  flipRightUp=flipRight.isOntheFlip(balle);
+        if(flipLUP==true)flipLeft.moveFlipUp();
+        else flipLeft.moveFlipDown();
+        if(flipRUP==true)flipRight.moveFlipUp();
+        else flipRight.moveFlipDown();
+        if(flipLeftuP==true){
+          balle.setFutur(balle.collisionFlip(flipLeft));
+        }
+        else if(flipRightUp==true){
+          balle.setFutur(balle.collisionFlip(flipRight));
+        }
+        else if(sh!=null&&b!=null){
+          balle.setFutur(balle.collision(sh.isCloser(b,balle)));
+        }else if(sh!=null){
+          balle.setFutur(balle.collision(sh));
+        }
+        else if(b!=null){
           balle.setFutur(balle.collision(b));
-        }else {
+        }
+        else if(s!=null){
+          balle.setFutur(balle.sliding(s));
+        }else{
           balle.setFutur(balle.futur());
         }
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
+        leftFlip.setEndX(flipLeft.getPosY().getX());
+        leftFlip.setEndY(flipLeft.getPosY().getY());
+        rightFlip.setEndX(flipRight.getPosY().getX());
+        rightFlip.setEndY(flipRight.getPosY().getY());
       }
     }));
+    Scene scene=new Scene(pane,600,900);
+    scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+      if(key.getCode()==KeyCode.LEFT) {
+        flipLUP=true;
+      }
+      if(key.getCode()==KeyCode.RIGHT) {
+        flipRUP=true;
+      }
+    });
+    scene.addEventHandler(KeyEvent.KEY_RELEASED, (key) -> {
+      if(key.getCode()==KeyCode.LEFT) {
+        flipLUP=false;
+      }
+      if(key.getCode()==KeyCode.RIGHT) {
+        flipRUP=false;
+      }
+    });
     timeline.setCycleCount(Timeline.INDEFINITE);
     timeline.play();
-    Scene scene=new Scene(pane,600,900);
     scene.setFill(Color.BROWN);
     primaryStage.setScene(scene);
     primaryStage.setTitle("Flipper");
