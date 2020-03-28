@@ -15,6 +15,8 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.scene.shape.LineTo;
@@ -35,6 +37,11 @@ public class TestGraphique extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
+    Joueur j1 = new Joueur("Joueur 1");
+    Text score = new Text(100,100,Integer.toString(j1.getScore()));
+    score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 32));
+    score.setFill(Color.BLACK);
+
     Flip f1=new Flip(new Position(500,400),new Position(0,450),0.5);
     // Flip f2=new Flip(new Position(240,500),new Position(145,520),0.5);
     Balle balle=new Balle(new Position(350,100),10,5);
@@ -64,6 +71,7 @@ public class TestGraphique extends Application{
     //pane.getChildren().add(p);e
     //pane.getChildren().add(e1);
     // pane.getChildren().add(e2);// décommmenter cette ligne pour voir l'ellipse
+    pane.getChildren().add(score);
     for(Border b:border.getBorders()){
       if(!(b instanceof Flip)){
         pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
@@ -106,6 +114,10 @@ public class TestGraphique extends Application{
          if(b!=null){
           pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),10,Color.GREEN));
           balle.setFutur(balle.collision(b));
+          if(b.getScoring()){
+              j1.addScore(b.getBorderScore());
+              score.setText(Integer.toString(j1.getScore()));
+          }
         }else if(s!=null){
           balle.setFutur(balle.sliding(s));
         }

@@ -10,6 +10,8 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.scene.shape.LineTo;
@@ -35,6 +37,11 @@ public class FlipperMap extends Application{
   }
   public void start(Stage primaryStage){
     Pane pane=new Pane();
+    Joueur j1 = new Joueur("Joueur 1");
+    Text score = new Text(35,875,j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+    score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 21));
+    score.setFill(Color.BLACK);
+
 
     //
 
@@ -48,7 +55,7 @@ public class FlipperMap extends Application{
     q.addPos(new Position(110,640));
     q.addPos(new Position(110,540));
     q.addPos(new Position(200,700));
-    RandomShape r=new RandomShape(q);
+    RandomShape r=new RandomShape(q,50);
 
     //
 
@@ -57,7 +64,7 @@ public class FlipperMap extends Application{
     q3.addPos(new Position(139,325));
     q3.addPos(new Position(139,425));
     q3.addPos(new Position(100,425));
-    RandomShape r3=new RandomShape(q3);
+    RandomShape r3=new RandomShape(q3,50);
     r3.addCircle(50,0);
     r3.addCircle(50,2);
 
@@ -67,7 +74,7 @@ public class FlipperMap extends Application{
     q4.addPos(new Position(239,325));
     q4.addPos(new Position(239,425));
     q4.addPos(new Position(200,425));
-    RandomShape r4=new RandomShape(q4);
+    RandomShape r4=new RandomShape(q4,50);
     r4.addCircle(50,0);
     r4.addCircle(50,2);
 
@@ -78,7 +85,7 @@ public class FlipperMap extends Application{
     q5.addPos(new Position(389,325));
     q5.addPos(new Position(389,425));
     q5.addPos(new Position(350,425));
-    RandomShape r5=new RandomShape(q5);
+    RandomShape r5=new RandomShape(q5,50);
     r5.addCircle(50,0);
     r5.addCircle(50,2);
 
@@ -192,6 +199,7 @@ public class FlipperMap extends Application{
     pane.getChildren().add(iv6);
     pane.getChildren().add(iv7);
     pane.getChildren().add(iv8);
+    pane.getChildren().add(score);
 
     shape=new Shapes();
     shape.addShape(r);
@@ -229,9 +237,17 @@ public class FlipperMap extends Application{
           balle.setFutur(balle.collision(sh.isCloser(b,balle)));
         }else if(sh!=null){
           balle.setFutur(balle.collision(sh));
+          j1.addScore(sh.getBorderScore());
+          score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+
         }
         else if(b!=null){
           balle.setFutur(balle.collision(b));
+          if(b.getScoring()){
+            j1.addScore(b.getBorderScore());
+            score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+          }
+
         }
         else if(s!=null){
           balle.setFutur(balle.sliding(s));
