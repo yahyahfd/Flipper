@@ -25,7 +25,7 @@ import javafx.util.Duration;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-public class Jeu extends Application{
+public class FlipperMap extends Application{
   Borders border;
   Shapes shape;
   boolean flipLUP=false;
