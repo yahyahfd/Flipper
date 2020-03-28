@@ -9,10 +9,6 @@ public class Balle{
   public void setSliding(boolean b){
     sliding=b;
   }
-  private Position oldpos;
-  public Position getOldPos(){
-    return oldpos;
-  }
   private Position pos;
   public Position getPos(){
     return pos;
@@ -33,7 +29,6 @@ public class Balle{
   private double t;//intervalle de temps(equivalent a 60fps)
   private double g=10;//constante de gravité
   public Balle(Position pos,double r,double m){
-    oldpos=pos;
     this.pos=pos;
     this.r=r;
     this.m=m;
@@ -86,13 +81,10 @@ public class Balle{
     }
     x=pos.getX()+vx*t;
     y=pos.getY()+vy*t;
-    if(b instanceof Flip)sliding=true;
-    else sliding=false;
     return new Position(x,y);
   }
   public void setFutur(Position pos){
     if(pos==null)return;
-    oldpos=this.pos;
     this.v.setX((pos.getX()-this.pos.getX())/t);
     this.v.setY((pos.getY()-this.pos.getY())/t);
     this.pos.setY(pos.getY());
@@ -103,11 +95,11 @@ public class Balle{
     double vx;
     if(flip.getUp()==true){
       if(flip.getV().getY()>0){
-        vy=-flip.getV().getY()*50+v.getY();
-        vx=-flip.getV().getX()*50+v.getX();
+        vy=-flip.getV().getY()*150+v.getY();
+        vx=-flip.getV().getX()*150+v.getX();
       }else{
-        vy=flip.getV().getY()*50+v.getY();
-        vx=flip.getV().getX()*50+v.getX();
+        vy=flip.getV().getY()*150+v.getY();
+        vx=flip.getV().getX()*150+v.getX();
       }
     }
     else{

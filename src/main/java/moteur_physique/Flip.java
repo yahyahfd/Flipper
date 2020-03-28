@@ -21,11 +21,11 @@ public class Flip extends Border{
      vitesse=new Vecteur(super.getNorm().getX(),super.getNorm().getY());
   }
   public void moveFlipUp(){//seul le bout de la bordure change de place et donc crée un effet de mouvement circulaire
-    double a=45;
-    a=Math.toRadians(45);
+    double a=30;
+    a=Math.toRadians(30);
     double sign=1;
     if(originY.getX()<super.getPosX().getX())sign=-1*sign;
-    if(super.getPosY().getY()>Math.sin(-0.785*sign)*(originY.getX()-super.getPosX().getX())+Math.cos(-0.785*sign)*(originY.getY()-super.getPosX().getY())+super.getPosX().getY()){
+    if(super.getPosY().getY()>Math.sin(-a*sign)*(originY.getX()-super.getPosX().getX())+Math.cos(-a*sign)*(originY.getY()-super.getPosX().getY())+super.getPosX().getY()){
       double x=Math.cos(-0.15*sign)*(super.getPosY().getX()-super.getPosX().getX())-Math.sin(-0.15*sign)*(super.getPosY().getY()-super.getPosX().getY());
       double y=Math.sin(-0.15*sign)*(super.getPosY().getX()-super.getPosX().getX())+Math.cos(-0.15*sign)*(super.getPosY().getY()-super.getPosX().getY());
       x+=super.getPosX().getX();
@@ -62,7 +62,7 @@ public class Flip extends Border{
     }
     return false;
   }
-  public boolean isOnTheLine(Balle balle){
+  public boolean isOntheFlip(Balle balle){
     if(!isOnTheSegment(balle))return false;
     Position c=intersection(balle);
     if(!isAlwaysOnTop(balle)){

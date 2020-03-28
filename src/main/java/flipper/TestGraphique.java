@@ -37,17 +37,6 @@ public class TestGraphique extends Application{
   public void start(Stage primaryStage){
     Flip f1=new Flip(new Position(500,400),new Position(0,450),0.5);
     // Flip f2=new Flip(new Position(240,500),new Position(145,520),0.5);
-    Quadrilatere q=new Quadrilatere(0.5,new Position(241,232),new Position(573,158),new Position(581,64),new Position(225,56));
-    RandomShape r=new RandomShape(q);
-    r.addCircle(15,3);
-    r.addCircle(40,1);
-    Ellipse e1=new Ellipse(r.getE().get(1).getPos().getX(),r.getE().get(1).getPos().getY(),r.getE().get(1).getMinor()/2,r.getE().get(1).getMajor()/2);
-    Rotate rotate=new Rotate(90+r.getE().get(1).getRotate(),r.getE().get(1).getPos().getX(),r.getE().get(1).getPos().getY());
-    e1.getTransforms().add(rotate);
-    e1.setFill(Color.GREEN);
-    Polygon p =new Polygon();
-    p.setFill(Color.GREEN);
-    p.getPoints().addAll(q.getAllPosition());
     Balle balle=new Balle(new Position(350,100),10,5);
     border=new Borders();
     border.addBorder(f1);
@@ -97,8 +86,8 @@ public class TestGraphique extends Application{
         // }
         Border b=border.isOnALine(balle);
         Border s=border.isSliding(balle);
-        boolean   c1=f1.isOnTheLine(balle);
-        Position t1=e.isInTheShape(balle);
+        // boolean   c1=f1.isOnTheLine(balle);
+        // Position t1=e.isInTheShape(balle);
         if(flipLUP==true){
           f1.moveFlipUp();
         }
@@ -111,10 +100,10 @@ public class TestGraphique extends Application{
         //   Border t4 = new Border(new Position(t1.getX()-t3.getX(),t1.getY()-t3.getY()),new Position(t1.getX()+t3.getX(),t1.getY()+t3.getY()),e.getRebond());
         //   pane.getChildren().add(new Line(t4.getPosX().getX(),t4.getPosX().getY(),t4.getPosY().getX(),t4.getPosY().getY())); // On trace les tangentes à chaque fois.
         //   balle.setFutur(balle.collision(t4));
-        if(c1==true){
-          balle.setFutur(balle.collisionFlip(f1));
-        }
-        else if(b!=null){
+        // if(c1==true){
+        //   balle.setFutur(balle.collisionFlip(f1));
+        // }
+         if(b!=null){
           pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),10,Color.GREEN));
           balle.setFutur(balle.collision(b));
         }else if(s!=null){

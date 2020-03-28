@@ -32,7 +32,7 @@ public class moteurEllipse extends moteurShape{
     //true si plus petit que 1
   }
 
-  public Position isInTheShape(Balle balle){
+  public Position intersection(Balle balle){
     //y=ax+b : Calculons a et b:
     double tmp1 = -balle.getPos().getY()+balle.futur().getY();
     double tmp2 = -balle.getPos().getX()+balle.futur().getX();
@@ -69,6 +69,17 @@ public class moteurEllipse extends moteurShape{
         return null;
       }
     }
+  }
+  public Border isSliding(Balle balle){
+    return null;
+  }
+  public Border isInTheShape(Balle balle){
+    Position p=intersection(balle);
+    if(p==null)return null;
+    Vecteur t2 = new Vecteur(p.getX()-pos.getX(),p.getY()-pos.getY());
+    Vecteur t3 = t2.vectNormUni();
+    Border t4 = new Border(new Position(p.getX()-t3.getX(),p.getY()-t3.getY()),new Position(p.getX()+t3.getX(),p.getY()+t3.getY()),rebond);
+    return t4;
   }
   public boolean isColliding(Position tmp){
     return tmp.getX()<= pos.getX()+major/2 && tmp.getX()>= pos.getX()-major/2 && tmp.getY()<= pos.getY()+minor/2 && tmp.getY()>= pos.getY()-minor/2;

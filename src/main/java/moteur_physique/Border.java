@@ -88,7 +88,7 @@ public class Border{//une bordure est considerer comme une ligne
   public boolean isOnTheSegment(Balle balle){//on regarde si le point d'intersection est sur le segment
     Position c=intersection(balle);
     if(c==null)return false;
-    return c.distance(this.posX)+c.distance(this.posY)<=this.distance+5&&c.distance(this.posX)+c.distance(this.posY)>=this.distance-5;
+    return c.distance(this.posX)+c.distance(this.posY)<=this.distance+1&&c.distance(this.posX)+c.distance(this.posY)>=this.distance-1;
   }
   public boolean isOnTheLine(Balle balle){
     if(!isOnTheSegment(balle))return false;
@@ -129,5 +129,11 @@ public class Border{//une bordure est considerer comme une ligne
       return balle.getPos().distance(posX)+balle.getPos().distance(posY)<=distance+1&&balle.getPos().distance(posX)+balle.getPos().distance(posY)>=distance-1;//derniere verification qu'on est bien sur la border
     }
     return false;
+  }
+  public Border isCloser(Border border,Balle balle){
+    if(this.intersection(balle).distance(balle.getPos())<border.intersection(balle).distance(balle.getPos())){
+      return this;
+    }
+    return border;
   }
 }
