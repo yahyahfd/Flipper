@@ -18,13 +18,7 @@ public class Balle{
   public Vecteur getV(){
     return this.v;
   }
-  private int score;
-  public int getScore(){
-    return this.score;
-  }
-  public void addScore(int s){
-    this.score += s;
-  }
+
   private Vecteur a;//correspond a l'acceleration, pour l'instant c'est seulement la gravite
   private double t;//intervalle de temps(equivalent a 60fps)
   private double g=10;//constante de gravité
@@ -35,7 +29,6 @@ public class Balle{
     this.v=new Vecteur(0,0);
     this.a=new Vecteur(0,0);
     this.t=16*0.01;
-    this.score=0;
     a.setX(0);
     a.setY(10);
   }

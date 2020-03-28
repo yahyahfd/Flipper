@@ -36,6 +36,7 @@ public class TestGraphique extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
+    Joueur j1 = new Joueur("Joueur 1");
     Flip f1=new Flip(new Position(110,500),new Position(175,520),0.9);
     Flip f2=new Flip(new Position(240,500),new Position(175,520),0.9);
     Quadrilatere q=new Quadrilatere(0.5,new Position(241,232),new Position(573,158),new Position(581,64),new Position(225,56));
@@ -50,7 +51,7 @@ public class TestGraphique extends Application{
     p.setFill(Color.GREEN);
     p.getPoints().addAll(q.getAllPosition());
     Balle balle=new Balle(new Position(100,50),10,5);
-    Text score = new Text(100,100,Integer.toString(balle.getScore()));
+    Text score = new Text(100,100,Integer.toString(j1.getScore()));
     score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 32));
     score.setFill(Color.BLACK);
     border=new Borders();
@@ -65,11 +66,13 @@ public class TestGraphique extends Application{
     Triangle t1 = new Triangle(0.5,new Position(300,500),new Position(450,500),new Position(300,550));
     for(Border b:t1.turnIntoBorders()){
       b.setScoringTrue();
+      b.setBorderScore(200);
       border.addBorder(b);
     }
     Quadrilatere q1 = new Quadrilatere(0.5, new Position(250,350), new Position(350,350), new Position(350,400), new Position(250,400));
     for(Border b:q1.turnIntoBorders()){
       b.setScoringTrue();
+      b.setBorderScore(100);
       border.addBorder(b);
     }
     moteurEllipse e = new moteurEllipse(0,0.9,50,25,new Position(125,300));
@@ -107,8 +110,8 @@ public class TestGraphique extends Application{
           pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5,Color.WHITE));
           balle.setFutur(balle.collision(b));
             if(b.getScoring()){
-              balle.addScore(100);
-              score.setText(Integer.toString(balle.getScore()));
+              j1.addScore(b.getBorderScore());
+              score.setText(Integer.toString(j1.getScore()));
             }
         }else if(s!=null){
           balle.setFutur(balle.sliding(s));

@@ -44,6 +44,13 @@ public class Border{//une bordure est considerer comme une ligne
   public boolean getScoring(){
     return this.scoring;
   }
+  private int borderscore;
+  public int getBorderScore(){
+    return this.borderscore;
+  }
+  public void setBorderScore(int bs){
+    this.borderscore = bs;
+  }
   public Border(Position posX,Position posY,double rebond){
     this.posX=posX;
     this.posY=posY;
@@ -54,6 +61,7 @@ public class Border{//une bordure est considerer comme une ligne
     if(rebond>=0&&rebond<=1)this.rebond=rebond;
     else this.rebond=0;
     this.scoring = false;
+    this.borderscore = 0;
   }
   public Position intersection(Balle balle){
     double a=0;

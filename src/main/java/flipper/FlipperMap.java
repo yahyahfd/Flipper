@@ -10,6 +10,8 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.scene.shape.LineTo;
@@ -29,6 +31,11 @@ public class FlipperMap extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
+    Joueur j1 = new Joueur("Joueur 1");
+    Text score = new Text(35,875,j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+    score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 21));
+    score.setFill(Color.BLACK);
+
     Quadrilatere q=new Quadrilatere(0.5,new Position(110,640),new Position(110,540),new Position(200,700),new Position(200,700));
     RandomShape r=new RandomShape(q);
 
@@ -129,7 +136,10 @@ public class FlipperMap extends Application{
     Balle balle=new Balle(new Position(100,200),10,5);
     border=new Borders();
     border.addBorder(new Border(new Position(480,540),new Position(390,690),0.9));
-    border.addBorder(new Border(new Position(480,660),new Position(480,540),0.9));
+    Border boo = new Border(new Position(480,660),new Position(480,540),0.9);
+    boo.setScoringTrue();
+    boo.setBorderScore(150);
+    border.addBorder(boo);
     border.addBorder(new Border(new Position(480,660),new Position(390,690),0.9));
     border.addBorder(new Border(new Position(20,680),new Position(220,750),0.9));
     border.addBorder(new Border(new Position(550,680),new Position(350,750),0.9));
@@ -208,6 +218,7 @@ public class FlipperMap extends Application{
     pane.getChildren().add(iv6);
     pane.getChildren().add(iv7);
     pane.getChildren().add(iv8);
+    pane.getChildren().add(score);
 
     for(Border b:border.getBorders()){
       pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
@@ -219,6 +230,10 @@ public class FlipperMap extends Application{
         if(b!=null){
           pane.getChildren().add(new Circle(b.intersection(balle).getX(),b.intersection(balle).getY(),5));
           balle.setFutur(balle.collision(b));
+          if(b.getScoring()){
+            j1.addScore(b.getBorderScore());
+            score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+          }
         }else {
           balle.setFutur(balle.futur());
         }
