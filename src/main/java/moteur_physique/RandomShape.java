@@ -16,19 +16,13 @@ public class RandomShape extends moteurShape{
     this.shapeScore = bs;
   }
   public RandomShape(Moteur_Polygone q){
-    this.shapeScore = 0;
     this.q=q;
+    this.shapeScore = q.getPolyScore();
     for(Position pos:q.getPos()){
       e.add(null);
     }
   }
-  public RandomShape(Moteur_Polygone q,int sco){
-    this.shapeScore = sco;
-    this.q=q;
-    for(Position pos:q.getPos()){
-      e.add(null);
-    }
-  }
+
   public void addCircle(double d,int border){
     if(border>q.getPos().size())return;
     if(d<q.getBorderLength(border)){//major et minor axe inversée si d > taille de la border
