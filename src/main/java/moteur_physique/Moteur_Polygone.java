@@ -9,12 +9,21 @@ public class Moteur_Polygone extends moteurShape{
   public ArrayList<Position> getPos(){
     return pos;
   }
-  public Moteur_Polygone(double rebond, ArrayList<Position> pos){
+  private int polyScore;
+  public int getPolyScore(){
+    return this.polyScore;
+  }
+  public void setPolyScore(int bs){
+    this.polyScore = bs;
+  }
+  public Moteur_Polygone(double rebond, ArrayList<Position> pos,int pscore){
     this.rebond=rebond;
     this.pos=pos;
+    this.polyScore = pscore;
   }
-  public Moteur_Polygone(double rebond){
+  public Moteur_Polygone(double rebond,int pscore){
     this.rebond=rebond;
+    this.polyScore=pscore;
   }
   public Border isInTheShape(Balle balle){
     ArrayList<Border> borders=new ArrayList<Border>();
@@ -29,6 +38,8 @@ public class Moteur_Polygone extends moteurShape{
         if(dist==-1||dist>balle.getPos().distance(border.intersection(balle))){
           dist=balle.getPos().distance(border.intersection(balle));
           b=border;
+          b.setScoringTrue();
+          b.setBorderScore(this.getPolyScore());
         }
       }
     }

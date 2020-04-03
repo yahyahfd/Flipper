@@ -8,12 +8,21 @@ public class RandomShape extends moteurShape{
   public ArrayList<moteurEllipse> getE(){
     return e;
   }
+  private int shapeScore;
+  public int getShapeScore(){
+    return this.shapeScore;
+  }
+  public void setShapeScore(int bs){
+    this.shapeScore = bs;
+  }
   public RandomShape(Moteur_Polygone q){
     this.q=q;
+    this.shapeScore = q.getPolyScore();
     for(Position pos:q.getPos()){
       e.add(null);
     }
   }
+
   public void addCircle(double d,int border){
     if(border>q.getPos().size())return;
     if(d<q.getBorderLength(border)){//major et minor axe inversée si d > taille de la border
@@ -58,6 +67,9 @@ public class RandomShape extends moteurShape{
         if(dist==-1||dist>balle.getPos().distance(border.intersection(balle))){
           dist=balle.getPos().distance(border.intersection(balle));
           b=border;
+          b.setScoringTrue();
+          b.setBorderScore(this.getShapeScore());
+
         }
       }
     }

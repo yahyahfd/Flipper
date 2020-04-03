@@ -17,12 +17,28 @@ public class moteurEllipse extends moteurShape{
   public double getRotate(){
     return rotate;
   }
+  private int ellScore;
+  public int getEllScore(){
+    return this.ellScore;
+  }
+  public void setEllScore(int bs){
+    this.ellScore = bs;
+  }
   public moteurEllipse(double rotate,double rebond,double major,double minor,Position pos){
     this.rotate=rotate;
     this.rebond=rebond;
     this.major=major;
     this.minor=minor;
     this.pos=pos;
+  }
+
+  public moteurEllipse(double rotate,double rebond,double major,double minor,Position pos,int esco){
+    this.rotate=rotate;
+    this.rebond=rebond;
+    this.major=major;
+    this.minor=minor;
+    this.pos=pos;
+    this.ellScore=esco;
   }
   public double getArea(){
     return (major/2)*(minor/2)*3;
@@ -79,6 +95,8 @@ public class moteurEllipse extends moteurShape{
     Vecteur t2 = new Vecteur(p.getX()-pos.getX(),p.getY()-pos.getY());
     Vecteur t3 = t2.vectNormUni();
     Border t4 = new Border(new Position(p.getX()-t3.getX(),p.getY()-t3.getY()),new Position(p.getX()+t3.getX(),p.getY()+t3.getY()),rebond);
+    t4.setScoringTrue();
+    t4.setBorderScore(this.getEllScore());
     return t4;
   }
   public boolean isColliding(Position tmp){

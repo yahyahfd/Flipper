@@ -10,6 +10,8 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.scene.shape.LineTo;
@@ -35,16 +37,21 @@ public class FlipperMap extends Application{
   }
   public void start(Stage primaryStage){
     Pane pane=new Pane();
+    Joueur j1 = new Joueur("Joueur 1");
+    Text score = new Text(35,875,j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+    score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 21));
+    score.setFill(Color.BLACK);
+
 
     //
 
-    Moteur_Polygone qq=new Moteur_Polygone(0.5);
+    Moteur_Polygone qq=new Moteur_Polygone(0.5,0);
     qq.addPos(new Position(480,540));
     qq.addPos(new Position(390,680));
     qq.addPos(new Position(480,660));
     RandomShape rr=new RandomShape(qq);
 
-    Moteur_Polygone q=new Moteur_Polygone(0.5);
+    Moteur_Polygone q=new Moteur_Polygone(0.5,50);
     q.addPos(new Position(110,640));
     q.addPos(new Position(110,540));
     q.addPos(new Position(200,700));
@@ -52,7 +59,7 @@ public class FlipperMap extends Application{
 
     //
 
-    Moteur_Polygone q3=new Moteur_Polygone(0.5);
+    Moteur_Polygone q3=new Moteur_Polygone(0.5,50);
     q3.addPos(new Position(100,325));
     q3.addPos(new Position(139,325));
     q3.addPos(new Position(139,425));
@@ -62,7 +69,7 @@ public class FlipperMap extends Application{
     r3.addCircle(50,2);
 
 
-    Moteur_Polygone q4=new Moteur_Polygone(0.5);
+    Moteur_Polygone q4=new Moteur_Polygone(0.5,50);
     q4.addPos(new Position(200,325));
     q4.addPos(new Position(239,325));
     q4.addPos(new Position(239,425));
@@ -73,7 +80,7 @@ public class FlipperMap extends Application{
 
     //
 
-    Moteur_Polygone q5=new Moteur_Polygone(0.5);
+    Moteur_Polygone q5=new Moteur_Polygone(0.5,50);
     q5.addPos(new Position(350,325));
     q5.addPos(new Position(389,325));
     q5.addPos(new Position(389,425));
@@ -84,7 +91,7 @@ public class FlipperMap extends Application{
 
     //
 
-    Moteur_Polygone q6=new Moteur_Polygone(0.5);
+    Moteur_Polygone q6=new Moteur_Polygone(0.5,50);
     q6.addPos(new Position(450,325));
     q6.addPos(new Position(489,325));
     q6.addPos(new Position(489,425));
@@ -95,14 +102,14 @@ public class FlipperMap extends Application{
 
     //
 
-    Moteur_Polygone q7=new Moteur_Polygone(0.5);
+    Moteur_Polygone q7=new Moteur_Polygone(0.5,0);
     q7.addPos(new Position(100,100));
     q7.addPos(new Position(150,50));
     q7.addPos(new Position(200,100));
     q7.addPos(new Position(150,150));
     RandomShape r7=new RandomShape(q7);
     //
-    Moteur_Polygone q8=new Moteur_Polygone(0.5);
+    Moteur_Polygone q8=new Moteur_Polygone(0.5,0);
     q8.addPos(new Position(400,100));
     q8.addPos(new Position(450,50));
     q8.addPos(new Position(500,100));
@@ -192,6 +199,7 @@ public class FlipperMap extends Application{
     pane.getChildren().add(iv6);
     pane.getChildren().add(iv7);
     pane.getChildren().add(iv8);
+    pane.getChildren().add(score);
 
     shape=new Shapes();
     shape.addShape(r);
@@ -229,9 +237,17 @@ public class FlipperMap extends Application{
           balle.setFutur(balle.collision(sh.isCloser(b,balle)));
         }else if(sh!=null){
           balle.setFutur(balle.collision(sh));
+          j1.addScore(sh.getBorderScore());
+          score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+
         }
         else if(b!=null){
           balle.setFutur(balle.collision(b));
+          if(b.getScoring()){
+            j1.addScore(b.getBorderScore());
+            score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+          }
+
         }
         else if(s!=null){
           balle.setFutur(balle.sliding(s));
