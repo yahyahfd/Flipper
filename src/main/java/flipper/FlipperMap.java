@@ -25,8 +25,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.geometry.*;
+import javafx.scene.layout.RowConstraints;
 public class FlipperMap extends Application{
   Borders border;
   Shapes shape;
@@ -36,6 +44,77 @@ public class FlipperMap extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
+    /**menu principal*/
+    GridPane mainmen = new GridPane();
+    //on resize les colonnes
+    ColumnConstraints col1 = new ColumnConstraints();
+    ColumnConstraints col2 = new ColumnConstraints();
+    RowConstraints row1 = new RowConstraints();
+    row1.setPercentHeight(100);
+    col1.setPercentWidth(30);
+    col2.setPercentWidth(70);
+    mainmen.getColumnConstraints().addAll(col1,col2);
+    mainmen.getRowConstraints().addAll(row1);
+    //on se charge d'abord du panneau de gauche avec les boutons "play" etc
+    GridPane leftgp = new GridPane();
+    RowConstraints row2 = new RowConstraints();
+    RowConstraints row3 = new RowConstraints();
+    RowConstraints row4 = new RowConstraints();
+    ColumnConstraints column1 = new ColumnConstraints();
+    column1.setPercentWidth(100);
+    leftgp.getColumnConstraints().add(column1);
+    row2.setPercentHeight(15);
+    row3.setPercentHeight(70);
+    row4.setPercentHeight(15);
+    leftgp.getRowConstraints().addAll(row2,row3,row4);
+    leftgp.setStyle("-fx-background-color: #3d4855");
+    Label wlc = new Label("WELCOME");
+    wlc.setStyle("-fx-text-fill: white;");
+    wlc.setFont(new Font("Arial Black", 22));
+    leftgp.add(wlc,0,0);
+    Label botl = new Label("flipper, by EKIP  ");
+    leftgp.add(botl,0,2);
+    //Buttons
+    Button btnn1 = new Button("Play");
+    Button btnn2 = new Button("Settings");
+    Button btnn3 = new Button("Rules");
+    VBox vbButtons = new VBox(10);
+    vbButtons.setPrefWidth(150);
+    btnn1.setMinWidth(vbButtons.getPrefWidth());
+    btnn2.setMinWidth(vbButtons.getPrefWidth());
+    btnn3.setMinWidth(vbButtons.getPrefWidth());
+    vbButtons.getChildren().addAll(btnn1,btnn2,btnn3);
+    leftgp.add(vbButtons,0,1);
+    leftgp.setHalignment(wlc,HPos.CENTER);
+    vbButtons.setAlignment(Pos.CENTER);
+    leftgp.setHalignment(botl,HPos.RIGHT);
+    // puis de la partie droite avec les meilleurs scores (pour l'instant vide)
+    GridPane rightgp = new GridPane();
+    RowConstraints row5 = new RowConstraints();
+    RowConstraints row6 = new RowConstraints();
+    ColumnConstraints column2 = new ColumnConstraints();
+    column2.setPercentWidth(100);
+    rightgp.getColumnConstraints().add(column2);
+    row5.setPercentHeight(15);
+    row6.setPercentHeight(85);
+    rightgp.getRowConstraints().addAll(row5,row6);
+    rightgp.setStyle("-fx-background-color: #e79e6d");
+    Label HS = new Label("HIGH SCORES");
+    HS.setStyle("-fx-text-fill: white;");
+    HS.setFont(new Font("Arial Black", 22));
+    rightgp.add(HS,0,0);
+    leftgp.setHalignment(HS,HPos.CENTER);
+    //on ajoute maintenant ces deux parties au menu principal
+    mainmen.add(leftgp,0,0,1,3);
+    mainmen.add(rightgp,1,0,1,3);
+
+    //On crée maintenant la scène affichée qui regroupe tout ça
+    Scene scene1 = new Scene(mainmen,1000,400);
+
+    primaryStage.setScene(scene1);
+    primaryStage.setTitle("Flipper");
+    primaryStage.show();
+    /**JEU*/
     Pane pane=new Pane();
     Joueur j1 = new Joueur("Joueur 1");
     Text score = new Text(35,875,j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
@@ -261,8 +340,9 @@ public class FlipperMap extends Application{
         rightFlip.setEndY(flipRight.getPosY().getY());
       }
     }));
-    Scene scene=new Scene(pane,600,900);
-    scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+    Scene scene2=new Scene(pane,600,900);
+    scene2.setFill(Color.BROWN);
+    scene2.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
       if(key.getCode()==KeyCode.LEFT) {
         flipLUP=true;
       }
@@ -270,7 +350,7 @@ public class FlipperMap extends Application{
         flipRUP=true;
       }
     });
-    scene.addEventHandler(KeyEvent.KEY_RELEASED, (key) -> {
+    scene2.addEventHandler(KeyEvent.KEY_RELEASED, (key) -> {
       if(key.getCode()==KeyCode.LEFT) {
         flipLUP=false;
       }
@@ -278,12 +358,13 @@ public class FlipperMap extends Application{
         flipRUP=false;
       }
     });
-    timeline.setCycleCount(Timeline.INDEFINITE);
-    timeline.play();
-    scene.setFill(Color.BROWN);
-    primaryStage.setScene(scene);
-    primaryStage.setTitle("Flipper");
-    primaryStage.show();
+    btnn1.setOnAction(new EventHandler<ActionEvent>() {
+      @Override public void handle(ActionEvent e) {
+        primaryStage.setScene(scene2);
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+      }
+    });
   }
 
 }
