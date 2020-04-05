@@ -54,15 +54,8 @@ public class Balle{
   public Position collision(Border b){
     double vx;
     double vy;
-    if(b instanceof Flip){
-      Flip tmp=(Flip)b;
-      vx=-v.scalaire(tmp.getV())*tmp.getRebond()*tmp.getV().getX()+v.scalaire(tmp.getUni())*tmp.getUni().getX()*tmp.getRebond();
-      vy=-v.scalaire(tmp.getV())*tmp.getV().getY()*tmp.getRebond()+v.scalaire(tmp.getUni())*tmp.getUni().getY()*tmp.getRebond();
-    }
-    else{
-      vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
-      vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
-    }
+    vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+    vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
     double x=pos.getX()+vx*t;
     double y=pos.getY()+vy*t;
     return new Position(x,y);
@@ -75,6 +68,31 @@ public class Balle{
     double vy;
     vx=(v.getX()+Math.cos(a)*g*t);
     vy=(v.getY()+Math.sin(a)*g*t);
+    if(b.horizontale()&&!b.isOnTop(this)){
+      vy=v.getY()+this.a.getY()*t;
+    }
+    if(b.horizontale()){
+      vx=v.getX()*b.getRebond();
+      vy=0;
+    }
+    pos.setY(b.stayOnTop(this,pos.getY()));
+    x=pos.getX()+vx*t;
+    y=pos.getY()+vy*t;
+    return new Position(x,y);
+  }
+  public Position slidingColliding(Border b,Border c){
+    double a=b.angle(new Vecteur(1,0));
+    double x;
+    double y;
+    double vx;
+    double vy;
+    vx=(v.getX()+Math.cos(a)*g*t);
+    vy=(v.getY()+Math.sin(a)*g*t);
+    vx=-vx*c.getRebond();
+    vy=-vy*c.getRebond();
+    if(b.horizontale()&&!b.isOnTop(this)){
+      vy=v.getY()+this.a.getY()*t;
+    }
     if(b.horizontale()){
       vx=v.getX()*b.getRebond();
       vy=0;
@@ -91,23 +109,17 @@ public class Balle{
     this.pos.setX(pos.getX());
   }
   public Position collisionFlip(Flip flip){
-    double vy;
-    double vx;
     if(flip.getUp()==true){
-      if(flip.getV().getY()>0){
-        vy=-flip.getV().getY()*150+v.getY();
-        vx=-flip.getV().getX()*150+v.getX();
-      }else{
-        vy=flip.getV().getY()*150+v.getY();
-        vx=flip.getV().getX()*150+v.getX();
-      }
-    }
-    else{
-      return collision(flip);
-    }
-    double x=pos.getX()+vx*t;
-    double y=pos.getY()+vy*t;
-    return new Position(x,y);
+
+      double vy;
+      double vx;
+      vx=flip.getV(this).getX()+v.getX();
+      vy=flip.getV(this).getY()+v.getY();
+      double x=pos.getX()+vx*t;
+      double y=pos.getY()+vy*t;
+      return new Position(x,y);
+    }else
+     return null;
   }
   public ArrayList<Position> hitbox(int precision){
   double angle = 2*Math.PI/precision;

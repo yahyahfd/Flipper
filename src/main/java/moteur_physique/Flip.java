@@ -2,6 +2,7 @@ package moteur_physique;
 public class Flip extends Border{
   private final Position originY;
   private boolean up=false;
+  private double vitesseRadians=0;//On prend just w, R sera pris en compte que lors de la collision
   public boolean getUp(){
     return up;
   }
@@ -11,20 +12,29 @@ public class Flip extends Border{
   public Position getOriginY(){
     return originY;
   }
-  private Vecteur vitesse;
-  public Vecteur getV(){
-    return vitesse;
+  public Vecteur getV(Balle balle){
+    double nx=super.getNorm().getX();
+    double ny=super.getNorm().getY();
+    if(super.getNorm().getY()>0){
+      nx=-nx;
+      ny=-ny;
+    }
+    Position c;
+    if(isSliding(balle))c=balle.getPos();
+    else c=super.intersection(balle);
+    double vx=(vitesseRadians/0.17)*super.getPosX().distance(c)*nx;
+    double vy=(vitesseRadians/0.17)*super.getPosX().distance(c)*ny;
+    return new Vecteur(vx,vy);
   }
   public Flip(Position posX,Position posY,double rebond){//rebond entre 0 et 1
      super(posX,posY,rebond);
      originY=new Position(posY.getX(),posY.getY());
-     vitesse=new Vecteur(super.getNorm().getX(),super.getNorm().getY());
   }
   public void moveFlipUp(){//seul le bout de la bordure change de place et donc crée un effet de mouvement circulaire
     double a=30;
     a=Math.toRadians(30);
     double sign=1;
-    if(originY.getX()<super.getPosX().getX())sign=-1*sign;
+    if(originY.getX()<super.getPosX().getX())sign=-1*sign;//sign determine le sens de rotation du flip determiner par la position du pivot posX
     if(super.getPosY().getY()>Math.sin(-a*sign)*(originY.getX()-super.getPosX().getX())+Math.cos(-a*sign)*(originY.getY()-super.getPosX().getY())+super.getPosX().getY()){
       double x=Math.cos(-0.15*sign)*(super.getPosY().getX()-super.getPosX().getX())-Math.sin(-0.15*sign)*(super.getPosY().getY()-super.getPosX().getY());
       double y=Math.sin(-0.15*sign)*(super.getPosY().getX()-super.getPosX().getX())+Math.cos(-0.15*sign)*(super.getPosY().getY()-super.getPosX().getY());
@@ -33,9 +43,10 @@ public class Flip extends Border{
       super.getPosY().setX(x);
       super.getPosY().setY(y);
       newUniNorm();
-      vitesse.setX(super.getNorm().getX()*1.2);
-      vitesse.setY(super.getNorm().getY()*1.2);
+      vitesseRadians+=0.15;
       up=true;
+    }else{
+      up=false;
     }
   }
   public void moveFlipDown(){
@@ -49,29 +60,49 @@ public class Flip extends Border{
       super.getPosY().setX(x);
       super.getPosY().setY(y);
       newUniNorm();
-      vitesse.setX(super.getNorm().getX());
-      vitesse.setY(super.getNorm().getY());
+      vitesseRadians=0;
       up=false;
     }
   }
-  public boolean isAlwaysOnTop(Balle balle){//la balle ne passe pas miraculeusement en dessous du flip ce qui peux arriver lorsque les deux bouge
+  public boolean isOnTop(Balle balle){
     double[] eqFlip=super.getPosX().equationDroite(super.getPosY());
-    if(eqFlip[2]==1)return true;
-    if(balle.futur().getY()<eqFlip[0]*balle.futur().getX()+eqFlip[1]){
+    if(eqFlip[2]==1)return true;//barre verticale, c'est normalement jamais le cas mais on sait jamais
+    if(!isBeetwen(balle))return false;
+    if(balle.getPos().getY()<=eqFlip[0]*balle.getPos().getX()+eqFlip[1]){//on verifie si on est au dessus de la balle
       return true;
     }
     return false;
   }
-  public boolean isOntheFlip(Balle balle){
-    if(!isOnTheSegment(balle))return false;
-    Position c=intersection(balle);
-    if(!isAlwaysOnTop(balle)){
-      if(balle.getSliding()==false){
-        balle.getPos().setX(c.getX());
-        balle.getPos().setY(c.getY());
-      }
+  public boolean willBeOnTop(Balle balle){
+    double[] eqFlip=super.getPosX().equationDroite(super.getPosY());
+    if(eqFlip[2]==1)return true;//barre verticale, c'est normalement jamais le cas mais on sait jamais
+    if(!isBeetwen(balle))return false;
+    if(balle.futur().getY()<=eqFlip[0]*balle.futur().getX()+eqFlip[1]){//on verifie si on est au dessus de la balle
       return true;
-    }return false;
+    }
+    return false;
+  }
+  public boolean isBeetwen(Balle balle){
+    if(originY.getX()>super.getPosX().getX()){
+      if(balle.getPos().getX()>super.getPosY().getX()||balle.getPos().getX()<super.getPosX().getX())return false;
+    }else{
+      if(balle.getPos().getX()<super.getPosY().getX()||balle.getPos().getX()>super.getPosX().getX())return false;
+    }
+    return true;
+  }
+  public boolean isUnder(Balle balle){
+    double[] eqFlip=super.getPosX().equationDroite(super.getPosY());
+    if(balle.getPos().getY()>eqFlip[0]*balle.getPos().getX()+eqFlip[1]){//on verifie si on est au dessus de la balle
+      return true;
+    }
+    return false;
+  }
+  public boolean willBeUnder(Balle balle){
+      double[] eqFlip=super.getPosX().equationDroite(super.getPosY());
+      if(balle.futur().getY()>eqFlip[0]*balle.futur().getX()+eqFlip[1]){//on verifie si on est au dessus de la balle
+        return true;
+      }
+      return false;
   }
   public void newUniNorm(){
     Vecteur u=new Vecteur(super.getPosY().getX()-super.getPosX().getX(),super.getPosY().getY()-super.getPosX().getY());

@@ -44,11 +44,12 @@ public class TestGraphique extends Application{
 
     Flip f1=new Flip(new Position(500,400),new Position(0,450),0.5);
     // Flip f2=new Flip(new Position(240,500),new Position(145,520),0.5);
-    Balle balle=new Balle(new Position(350,100),10,5);
+    Balle balle=new Balle(new Position(401,100),10,5);
     border=new Borders();
     border.addBorder(f1);
     // border.addBorder(f2);
-    border.addBorder(new Border(new Position(400,0),new Position(400,900),0.9));
+    border.addBorder(new Border(new Position(10,0),new Position(10,600),0.9));
+    border.addBorder(new Border(new Position(400,600),new Position(900,400),0.9));
     // border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
     // border.addBorder(new Border(new Position(110,550),new Position(150,500),0.9));
     // border.addBorder(new Border(new Position(350,500),new Position(400,450),0.9));
@@ -96,39 +97,33 @@ public class TestGraphique extends Application{
         Border s=border.isSliding(balle);
         // boolean   c1=f1.isOnTheLine(balle);
         // Position t1=e.isInTheShape(balle);
+        boolean collision=false;
         if(flipLUP==true){
+          boolean u=f1.isOnTop(balle)||s==f1;
           f1.moveFlipUp();
+          if(u&&(f1.willBeUnder(balle)||f1.isUnder(balle))){
+            balle.setFutur(balle.collisionFlip(f1));
+            collision=true;
+          }
         }
         else{
           f1.moveFlipDown();
         }
-        // if(t1!=null){
-        //   Vecteur t2 = new Vecteur(t1.getX()-e.getPos().getX(),t1.getY()-e.getPos().getY());
-        //   Vecteur t3 = t2.vectNormUni();
-        //   Border t4 = new Border(new Position(t1.getX()-t3.getX(),t1.getY()-t3.getY()),new Position(t1.getX()+t3.getX(),t1.getY()+t3.getY()),e.getRebond());
-        //   pane.getChildren().add(new Line(t4.getPosX().getX(),t4.getPosX().getY(),t4.getPosY().getX(),t4.getPosY().getY())); // On trace les tangentes à chaque fois.
-        //   balle.setFutur(balle.collision(t4));
-        // if(c1==true){
-        //   balle.setFutur(balle.collisionFlip(f1));
-        // }
-         if(b!=null){
-          pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),10,Color.GREEN));
+        if(b!=null&&s!=null){
+          balle.setFutur(balle.slidingColliding(s,b));
+        }
+        else  if(b!=null){
           balle.setFutur(balle.collision(b));
-          if(b.getScoring()){
-              j1.addScore(b.getBorderScore());
-              score.setText(Integer.toString(j1.getScore()));
-          }
         }else if(s!=null){
           balle.setFutur(balle.sliding(s));
         }
         else{
           balle.setFutur(balle.futur());
         }
+        pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),2,Color.WHITE));
+
         lf.setEndX(f1.getPosY().getX());
         lf.setEndY(f1.getPosY().getY());
-        // rf.setEndX(f2.getPosY().getX());
-        // rf.setEndY(f2.getPosY().getY());
-        // pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.WHITE));
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
       }
     }));

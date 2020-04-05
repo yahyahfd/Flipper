@@ -198,7 +198,7 @@ public class FlipperMap extends Application{
     p8.setFill(Color.GREEN);
     p8.getPoints().addAll(q8.getAllPosition());
 
-    Balle balle=new Balle(new Position(20,200),10,5);
+    Balle balle=new Balle(new Position(30,200),4,5);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
 
     border=new Borders();
@@ -212,8 +212,8 @@ public class FlipperMap extends Application{
     border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
     border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
 
-    Flip flipLeft=new Flip(new Position(215,750),new Position(270,760),0.5);
-    Flip flipRight=new Flip(new Position(355,750),new Position(300,760),0.5);
+    Flip flipLeft=new Flip(new Position(220,750),new Position(283,760),0.5);
+    Flip flipRight=new Flip(new Position(350,750),new Position(287,760),0.5);
     Line leftFlip=new Line(flipLeft.getPosX().getX(),flipLeft.getPosX().getY(),flipLeft.getPosY().getX(),flipLeft.getPosY().getY());
     Line rightFlip=new Line(flipRight.getPosX().getX(),flipRight.getPosX().getY(),flipRight.getPosY().getX(),flipRight.getPosY().getY());
     border.addBorder(flipLeft);
@@ -297,23 +297,38 @@ public class FlipperMap extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        Border b=border.isOnALine(balle);
         Border s=border.isSliding(balle);
-        Border sh=shape.isOnALine(balle);
-        boolean  flipLeftuP=flipLeft.isOntheFlip(balle);
-        boolean  flipRightUp=flipRight.isOntheFlip(balle);
-        if(flipLUP==true)flipLeft.moveFlipUp();
+        boolean collision=false;
+        if(flipLUP==true){
+          boolean u=flipLeft.isOnTop(balle)||s==flipLeft;
+          flipLeft.moveFlipUp();
+          if(u&&(flipLeft.willBeUnder(balle)||flipLeft.isUnder(balle))){
+            balle.setFutur(balle.collisionFlip(flipLeft));
+            collision=true;
+          }
+        }
         else flipLeft.moveFlipDown();
-        if(flipRUP==true)flipRight.moveFlipUp();
+
+        if(flipRUP==true){
+          boolean u=flipRight.isOnTop(balle)||s==flipRight;
+          flipRight.moveFlipUp();
+          if(u&&(flipRight.willBeUnder(balle)||flipRight.isUnder(balle))){
+            balle.setFutur(balle.collisionFlip(flipRight));
+            collision=true;
+          }
+        }
         else flipRight.moveFlipDown();
-        if(flipLeftuP==true){
-          balle.setFutur(balle.collisionFlip(flipLeft));
-        }
-        else if(flipRightUp==true){
-          balle.setFutur(balle.collisionFlip(flipRight));
-        }
-        else if(sh!=null&&b!=null){
+        s=border.isSliding(balle);
+        Border b=border.isOnALine(balle);
+        Border sh=shape.isOnALine(balle);
+        if(sh!=null&&b!=null){
           balle.setFutur(balle.collision(sh.isCloser(b,balle)));
+        }else if(b!=null&&s!=null){
+          if(b.isSuccessive(s))
+            balle.setFutur(balle.sliding(b));
+          else
+            balle.setFutur(balle.slidingColliding(s,b));
+
         }else if(sh!=null){
           balle.setFutur(balle.collision(sh));
           j1.addScore(sh.getBorderScore());
@@ -326,13 +341,15 @@ public class FlipperMap extends Application{
             j1.addScore(b.getBorderScore());
             score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
           }
-
         }
         else if(s!=null){
           balle.setFutur(balle.sliding(s));
         }else{
-          balle.setFutur(balle.futur());
+          if(collision==false){
+            balle.setFutur(balle.futur());
+          }
         }
+        pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.BLACK));
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
         leftFlip.setEndX(flipLeft.getPosY().getX());
         leftFlip.setEndY(flipLeft.getPosY().getY());
