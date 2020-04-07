@@ -298,13 +298,14 @@ public class FlipperMap extends Application{
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
         Border s=border.isSliding(balle);
+        Border b=border.isOnALine(balle);
+        Border sh=shape.isOnALine(balle);
         boolean collision=false;
         if(flipLUP==true){
           boolean u=flipLeft.isOnTop(balle)||s==flipLeft;
           flipLeft.moveFlipUp();
           if(u&&(flipLeft.willBeUnder(balle)||flipLeft.isUnder(balle))){
             balle.setFutur(balle.collisionFlip(flipLeft));
-            collision=true;
           }
         }
         else flipLeft.moveFlipDown();
@@ -314,13 +315,11 @@ public class FlipperMap extends Application{
           flipRight.moveFlipUp();
           if(u&&(flipRight.willBeUnder(balle)||flipRight.isUnder(balle))){
             balle.setFutur(balle.collisionFlip(flipRight));
-            collision=true;
+
           }
         }
         else flipRight.moveFlipDown();
         s=border.isSliding(balle);
-        Border b=border.isOnALine(balle);
-        Border sh=shape.isOnALine(balle);
         if(sh!=null&&b!=null){
           balle.setFutur(balle.collision(sh.isCloser(b,balle)));
         }else if(b!=null&&s!=null){
@@ -328,7 +327,6 @@ public class FlipperMap extends Application{
             balle.setFutur(balle.sliding(b));
           else
             balle.setFutur(balle.slidingColliding(s,b));
-
         }else if(sh!=null){
           balle.setFutur(balle.collision(sh));
           j1.addScore(sh.getBorderScore());
@@ -345,11 +343,8 @@ public class FlipperMap extends Application{
         else if(s!=null){
           balle.setFutur(balle.sliding(s));
         }else{
-          if(collision==false){
             balle.setFutur(balle.futur());
-          }
         }
-        pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.BLACK));
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
         leftFlip.setEndX(flipLeft.getPosY().getX());
         leftFlip.setEndY(flipLeft.getPosY().getY());

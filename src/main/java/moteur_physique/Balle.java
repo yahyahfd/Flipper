@@ -110,11 +110,11 @@ public class Balle{
   }
   public Position collisionFlip(Flip flip){
     if(flip.getUp()==true){
-
       double vy;
       double vx;
       vx=flip.getV(this).getX()+v.getX();
       vy=flip.getV(this).getY()+v.getY();
+      if(vy*t>-10)vy=-58;
       double x=pos.getX()+vx*t;
       double y=pos.getY()+vy*t;
       return new Position(x,y);
