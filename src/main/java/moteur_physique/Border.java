@@ -66,14 +66,12 @@ public void setBorderScore(int bs){
   }
 
   public Position intersection(Balle balle){
-    double a=0;
+    double a=0;//equation de droite de la border y=ax+p
     double p=0;
-    double aa=0;
+    double aa=0;//equation de droite du mouvement de la balle y=aax+pp
     double pp=0;
     double x=0;
     double y=0;
-    boolean bv=false;
-    boolean bbv=false;
     if(isSliding(balle)){
       return null;
     }
@@ -105,7 +103,7 @@ public void setBorderScore(int bs){
   public boolean isOnTheSegment(Balle balle){//on regarde si le point d'intersection est sur le segment
     Position c=intersection(balle);
     if(c==null)return false;
-    return c.distance(this.posX)+c.distance(this.posY)<=this.distance+1&&c.distance(this.posX)+c.distance(this.posY)>=this.distance-1;
+    return c.distance(this.posX)+c.distance(this.posY)<=this.distance+0.1&&c.distance(this.posX)+c.distance(this.posY)>=this.distance-0.1;
   }
   public boolean isOnTheLine(Balle balle){
     if(!isOnTheSegment(balle))return false;
@@ -140,9 +138,9 @@ public void setBorderScore(int bs){
     return posX.getX()==posY.getX();
   }
   public boolean isSliding(Balle balle){
-    boolean b0=(balle.getV().getX()<0.05&&balle.getV().getX()>-0.05&&balle.getV().getY()<0.05&&balle.getV().getX()>-0.05);//vitesse nul
-    boolean b1=(balle.getV().getX()*unitaire.getY()>=balle.getV().getY()*unitaire.getX()-1&&balle.getV().getX()*unitaire.getY()<=balle.getV().getY()*unitaire.getX()+0.5);//vitesse colineaire a la border
-    if(b0||b1){
+    if(verticale())return false;
+    boolean b1=(balle.getV().getX()*unitaire.getY()-balle.getV().getY()*unitaire.getX()>-1&&balle.getV().getX()*unitaire.getY()-balle.getV().getY()*unitaire.getX()<1);//vitesse colineaire a la border
+    if(b1&&isOnTop(balle)){
       return balle.getPos().distance(posX)+balle.getPos().distance(posY)<=distance+1&&balle.getPos().distance(posX)+balle.getPos().distance(posY)>=distance-1;//derniere verification qu'on est bien sur la border
     }
     return false;
@@ -152,5 +150,21 @@ public void setBorderScore(int bs){
       return this;
     }
     return border;
+  }
+  public boolean isOnTop(Balle balle){
+    double[] eqFlip=getPosX().equationDroite(getPosY());
+    if(eqFlip[2]==1)return true;//barre verticale,on renvoie true quoi qu'il arrive
+    if(balle.getPos().getY()<eqFlip[0]*balle.getPos().getX()+eqFlip[1]){//on verifie si on est au dessus de la balle
+      return true;
+    }
+    return false;
+  }
+  public double stayOnTop(Balle balle,double y){
+    double[] eqFlip=getPosX().equationDroite(getPosY());
+    y=(eqFlip[0]*balle.getPos().getX()+eqFlip[1]-1);
+    return y;
+  }
+  public boolean isSuccessive(Border b){
+    return posX.isEqual(b.posX)||posX.isEqual(b.posY)||posY.isEqual(b.posY);
   }
 }

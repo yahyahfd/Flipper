@@ -58,6 +58,9 @@ public class Position {
     double[] res={a,p,bv};
     return res;
   }
+	public boolean isEqual(Position pos){
+		return x==pos.x&&y==pos.y;
+	}
 	public String toString(){
 		return "x: "+String.valueOf(x)+" y: "+String.valueOf(y);
 	}
