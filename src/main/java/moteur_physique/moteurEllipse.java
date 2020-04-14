@@ -52,10 +52,10 @@ public class moteurEllipse extends moteurShape{
     //y=ax+b : Calculons a et b:
     double tmp1 = -balle.getPos().getY()+balle.futur().getY();
     double tmp2 = -balle.getPos().getX()+balle.futur().getX();
-    double a = tmp1/tmp2;
+    double a;
     if(tmp2==0){
       a=0;
-    }
+    }else a = tmp1/tmp2;
     double b = balle.getPos().getY()-a*balle.getPos().getX();
     double c = pos.getX();
     double d = pos.getY();

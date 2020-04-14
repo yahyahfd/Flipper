@@ -40,6 +40,7 @@ public class FlipperMap extends Application{
   Shapes shape;
   boolean flipLUP=false;
   boolean flipRUP=false;
+  boolean launchUp=false;
   public static void main(String[] args) {
     launch(args);
   }
@@ -180,42 +181,48 @@ public class FlipperMap extends Application{
     r6.addCircle(50,2);
 
     //
-
-    Moteur_Polygone q7=new Moteur_Polygone(0.5,0);
-    q7.addPos(new Position(100,100));
-    q7.addPos(new Position(150,50));
-    q7.addPos(new Position(200,100));
-    q7.addPos(new Position(150,150));
-    RandomShape r7=new RandomShape(q7);
+    moteurEllipse r7=new moteurEllipse(0,50,50,0.9,new Position(150,100),50);
     //
-    Moteur_Polygone q8=new Moteur_Polygone(0.5,0);
-    q8.addPos(new Position(400,100));
-    q8.addPos(new Position(450,50));
-    q8.addPos(new Position(500,100));
-    q8.addPos(new Position(450,150));
-    RandomShape r8=new RandomShape(q8);
-    Polygon p8 =new Polygon();
-    p8.setFill(Color.GREEN);
-    p8.getPoints().addAll(q8.getAllPosition());
+    moteurEllipse r8=new moteurEllipse(0,50,50,0.9,new Position(450,100),50);
 
-    Balle balle=new Balle(new Position(30,200),4,5);
+    Balle balle=new Balle(new Position(570,778),4,5);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
 
     border=new Borders();
-    border.addBorder(new Border(new Position(0,10),new Position(850,10),0.9));
+    border.addBorder(new Border(new Position(153,10),new Position(447,10),0.9));
     border.addBorder(new Border(new Position(20,680),new Position(220,750),0.9));
     border.addBorder(new Border(new Position(550,680),new Position(350,750),0.9));
-    border.addBorder(new Border(new Position(550,300),new Position(550,810),0.9));
-    border.addBorder(new Border(new Position(580,0),new Position(580,860),0.9));
-    border.addBorder(new Border(new Position(20,0),new Position(20,860),0.9));
+    border.addBorder(new Border(new Position(550,135),new Position(550,810),0.9));
+    border.addBorder(new Border(new Position(580,135),new Position(580,860),0.9));
+    border.addBorder(new Border(new Position(20,135),new Position(20,860),0.9));
     border.addBorder(new Border(new Position(20,815),new Position(550,845),0.9));
     border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
     border.addBorder(new Border(new Position(0,850),new Position(590,850),0.9));
 
-    Flip flipLeft=new Flip(new Position(220,750),new Position(283,760),0.5);
-    Flip flipRight=new Flip(new Position(350,750),new Position(287,760),0.5);
+    ////Arc en haut a droite////
+    border.addBorder(new Border(new Position(580,135),new Position(576,110),0.9));
+    border.addBorder(new Border(new Position(576,110),new Position(569,86),0.9));
+    border.addBorder(new Border(new Position(569,86),new Position(557,66),0.9));
+    border.addBorder(new Border(new Position(557,66),new Position(540,46),0.9));
+    border.addBorder(new Border(new Position(540,46),new Position(518,30),0.9));
+    border.addBorder(new Border(new Position(518,30),new Position(496,21),0.9));
+    border.addBorder(new Border(new Position(496,21),new Position(447,10),0.9));
+
+    ////Arc en haut a gauche////
+    border.addBorder(new Border(new Position(20,135),new Position(24,110),0.9));
+    border.addBorder(new Border(new Position(24,110),new Position(31,86),0.9));
+    border.addBorder(new Border(new Position(31,86),new Position(43,66),0.9));
+    border.addBorder(new Border(new Position(43,66),new Position(60,46),0.9));
+    border.addBorder(new Border(new Position(60,46),new Position(82,30),0.9));
+    border.addBorder(new Border(new Position(82,30),new Position(104,21),0.9));
+    border.addBorder(new Border(new Position(104,21),new Position(153,10),0.9));
+
+    Flip flipLeft=new Flip(new Position(220,750),new Position(283,760),0.9);
+    Flip flipRight=new Flip(new Position(350,750),new Position(287,760),0.9);
     Line leftFlip=new Line(flipLeft.getPosX().getX(),flipLeft.getPosX().getY(),flipLeft.getPosY().getX(),flipLeft.getPosY().getY());
     Line rightFlip=new Line(flipRight.getPosX().getX(),flipRight.getPosX().getY(),flipRight.getPosY().getX(),flipRight.getPosY().getY());
+    Launcher launcher=new Launcher(new Position(550,780),new Position(580,780),0.9);
+    Line lineLauncher=new Line(launcher.getPosX().getX(),launcher.getPosX().getY(),launcher.getPosY().getX(),launcher.getPosY().getY());
     border.addBorder(flipLeft);
     border.addBorder(flipRight);
 
@@ -267,6 +274,7 @@ public class FlipperMap extends Application{
     iv8.setImage(rond);
     iv8.setX(400);iv8.setY(50);
 
+    pane.getChildren().add(lineLauncher);//flip gauche
     pane.getChildren().add(leftFlip);//flip gauche
     pane.getChildren().add(rightFlip);//flip droite
     pane.getChildren().add(circle);
@@ -297,10 +305,29 @@ public class FlipperMap extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
+        boolean collisionLauncher=false;
+        /////////Mouvement du launcher/////////
+        if(launchUp==true){
+          boolean u=launcher.isOnTop(balle);
+          launcher.moveLauncherUp();
+          if(u){
+            balle.setFutur(balle.collisionLauncher(launcher));
+            collisionLauncher=true;
+          }else collisionLauncher=false;
+        }else{
+          boolean u=launcher.isOnTop(balle);
+          launcher.moveLauncherDown();
+          if(u){
+            balle.setFutur(balle.collisionLauncher(launcher));
+            collisionLauncher=true;
+          }else collisionLauncher=false;
+        }
+
         Border s=border.isSliding(balle);
         Border b=border.isOnALine(balle);
         Border sh=shape.isOnALine(balle);
         boolean collision=false;
+        /////////Mouvement des flipper/////////
         if(flipLUP==true){
           boolean u=flipLeft.isOnTop(balle)||s==flipLeft;
           flipLeft.moveFlipUp();
@@ -315,39 +342,46 @@ public class FlipperMap extends Application{
           flipRight.moveFlipUp();
           if(u&&(flipRight.willBeUnder(balle)||flipRight.isUnder(balle))){
             balle.setFutur(balle.collisionFlip(flipRight));
-
           }
         }
         else flipRight.moveFlipDown();
-        s=border.isSliding(balle);
-        if(sh!=null&&b!=null){
-          balle.setFutur(balle.collision(sh.isCloser(b,balle)));
-        }else if(b!=null&&s!=null){
-          if(b.isSuccessive(s))
-            balle.setFutur(balle.sliding(b));
-          else
-            balle.setFutur(balle.slidingColliding(s,b));
-        }else if(sh!=null){
-          balle.setFutur(balle.collision(sh));
-          j1.addScore(sh.getBorderScore());
-          score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
 
-        }
-        else if(b!=null){
-          balle.setFutur(balle.collision(b));
-          if(b.getScoring()){
-            j1.addScore(b.getBorderScore());
+        /////////Collision/////////
+        if(collisionLauncher==false){
+          if(sh!=null&&b!=null){
+            balle.setFutur(balle.collision(sh.isCloser(b,balle)));
+          }else if(b!=null&&s!=null){
+            if(b.isSuccessive(s))
+            balle.setFutur(balle.sliding(b));
+            else
+            balle.setFutur(balle.slidingColliding(s,b));
+          }else if(sh!=null){
+            balle.setFutur(balle.collision(sh));
+            j1.addScore(sh.getBorderScore());
             score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+
+          }
+          else if(b!=null){
+            balle.setFutur(balle.collision(b));
+            if(b.getScoring()){
+              j1.addScore(b.getBorderScore());
+              score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+            }
+          }
+          else if(s!=null){
+            balle.setFutur(balle.sliding(s));
+          }else{
+            balle.setFutur(balle.futur());
           }
         }
-        else if(s!=null){
-          balle.setFutur(balle.sliding(s));
-        }else{
-            balle.setFutur(balle.futur());
-        }
+
+        /////////Actualisation des Position/////////
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
+        pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.BLACK));
         leftFlip.setEndX(flipLeft.getPosY().getX());
         leftFlip.setEndY(flipLeft.getPosY().getY());
+        lineLauncher.setStartY(launcher.getPosX().getY());
+        lineLauncher.setEndY(launcher.getPosY().getY());
         rightFlip.setEndX(flipRight.getPosY().getX());
         rightFlip.setEndY(flipRight.getPosY().getY());
       }
@@ -361,6 +395,9 @@ public class FlipperMap extends Application{
       if(key.getCode()==KeyCode.RIGHT) {
         flipRUP=true;
       }
+      if(key.getCode()==KeyCode.SPACE) {
+        launchUp=true;
+      }
     });
     scene2.addEventHandler(KeyEvent.KEY_RELEASED, (key) -> {
       if(key.getCode()==KeyCode.LEFT) {
@@ -368,6 +405,9 @@ public class FlipperMap extends Application{
       }
       if(key.getCode()==KeyCode.RIGHT) {
         flipRUP=false;
+      }
+      if(key.getCode()==KeyCode.SPACE) {
+        launchUp=false;
       }
     });
     btnn1.setOnAction(new EventHandler<ActionEvent>() {
