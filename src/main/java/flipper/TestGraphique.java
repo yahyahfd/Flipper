@@ -63,16 +63,20 @@ public class TestGraphique extends Application{
     // for(Border b:q1.turnIntoBorders()){
     //   border.addBorder(b);
     // }
-    moteurEllipse e = new moteurEllipse(0,0.9,50,25,new Position(125,300));
-    Ellipse e2 = new Ellipse(125,300,50,25);
+    moteurEllipse r7=new moteurEllipse(0,50,50,0.9,new Position(150,100),50);
+    Ellipse e2 = new Ellipse(150,100,50,50);
+    e2.setStrokeWidth(3);
+    e2.setFill(Color.BROWN);
+    e2.setStroke(Color.BLACK);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
     Pane pane=new Pane();
     Scene scene=new Scene(pane,1080,900);
-    pane.getChildren().add(circle);
     //pane.getChildren().add(p);e
     //pane.getChildren().add(e1);
     // pane.getChildren().add(e2);// décommmenter cette ligne pour voir l'ellipse
     pane.getChildren().add(score);
+    pane.getChildren().add(e2);
+    pane.getChildren().add(circle);
     for(Border b:border.getBorders()){
       if(!(b instanceof Flip)){
         pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
@@ -80,50 +84,19 @@ public class TestGraphique extends Application{
     }
     Line lf=new Line(f1.getPosX().getX(),f1.getPosX().getY(),f1.getPosY().getX(),f1.getPosY().getY());
     // Line rf=new Line(f2.getPosX().getX(),f2.getPosX().getY(),f2.getPosY().getX(),f2.getPosY().getY());
-    pane.getChildren().add(lf);
+    // pane.getChildren().add(lf);
     // pane.getChildren().add(rf);
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        // if(flipRUP==true){
-        //   f2.moveFlipUp();
-        //   f2.isOnTheFlip(balle,true);
-        // }
-        // else{
-        //   f2.moveFlipDown();
-        //   f2.isOnTheFlip(balle,false);
-        // }
-        Border b=border.isOnALine(balle);
-        Border s=border.isSliding(balle);
-        // boolean   c1=f1.isOnTheLine(balle);
-        // Position t1=e.isInTheShape(balle);
-        boolean collision=false;
-        if(flipLUP==true){
-          boolean u=f1.isOnTop(balle)||s==f1;
-          f1.moveFlipUp();
-          if(u&&(f1.willBeUnder(balle)||f1.isUnder(balle))){
-            balle.setFutur(balle.collisionFlip(f1));
-            collision=true;
-          }
-        }
-        else{
-          f1.moveFlipDown();
-        }
-        if(b!=null&&s!=null){
-          balle.setFutur(balle.slidingColliding(s,b));
-        }
-        else  if(b!=null){
-          balle.setFutur(balle.collision(b));
-        }else if(s!=null){
-          balle.setFutur(balle.sliding(s));
-        }
-        else{
+        Border s=r7.isInTheShape(balle);
+        if(s!=null){
+          System.out.println("test");
+            pane.getChildren().add(new Line(s.getPosX().getX(),s.getPosX().getY(),s.getPosY().getX(),s.getPosY().getY()));
+          balle.setFutur(balle.collision(s));
+        }else{
           balle.setFutur(balle.futur());
         }
-        pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),2,Color.WHITE));
-
-        lf.setEndX(f1.getPosY().getX());
-        lf.setEndY(f1.getPosY().getY());
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
       }
     }));

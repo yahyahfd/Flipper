@@ -66,8 +66,8 @@ public class Balle{
     double y;
     double vx;
     double vy;
-    vx=(v.getX()+Math.cos(a)*g*t);
-    vy=(v.getY()+Math.sin(a)*g*t);
+    vx=(v.getX()+Math.cos(a)*g*t)*b.getRebond();
+    vy=(v.getY()+Math.sin(a)*g*t)*b.getRebond();
     if(b.horizontale()&&!b.isOnTop(this)){
       vy=v.getY()+this.a.getY()*t;
     }
@@ -75,7 +75,7 @@ public class Balle{
       vx=v.getX()*b.getRebond();
       vy=0;
     }
-    pos.setY(b.stayOnTop(this,pos.getY()));
+    pos.setY(b.stayOnTop(this,pos.getY()));//si le calcul de l'angle est un peu different de la réelle courbure de la droite la balle passe par dessous la bordure
     x=pos.getX()+vx*t;
     y=pos.getY()+vy*t;
     return new Position(x,y);
@@ -120,6 +120,19 @@ public class Balle{
       return new Position(x,y);
     }else
      return null;
+  }
+  public Position collisionLauncher(Launcher launcher){
+    if(launcher.getTop()==true){
+      double vy=launcher.getVitesse();
+      double y=pos.getY()+vy*t;
+      return new Position(pos.getX(),y);
+    }
+    else if(launcher.getDown()==false&&launcher.getMoving()==true){
+      return new Position(pos.getX(),pos.getY()-20);//suit le mouvement du launcher;
+    }else if(launcher.getDown()==true&&launcher.getMoving()==true){
+      return new Position(pos.getX(),pos.getY()+10);
+    }
+    return null;
   }
   public ArrayList<Position> hitbox(int precision){
   double angle = 2*Math.PI/precision;
