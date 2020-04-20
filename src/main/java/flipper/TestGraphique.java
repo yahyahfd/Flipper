@@ -49,7 +49,7 @@ public class TestGraphique extends Application{
     border.addBorder(f1);
     // border.addBorder(f2);
     border.addBorder(new Border(new Position(10,0),new Position(10,600),0.9));
-    border.addBorder(new Border(new Position(400,600),new Position(900,400),0.9));
+    border.addBorder(new Border(new Position(200,400),new Position(900,400),0.9));
     // border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
     // border.addBorder(new Border(new Position(110,550),new Position(150,500),0.9));
     // border.addBorder(new Border(new Position(350,500),new Position(400,450),0.9));
@@ -89,11 +89,11 @@ public class TestGraphique extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
+        Border b=border.isOnALine(balle);
         Border s=r7.isInTheShape(balle);
-        if(s!=null){
+        if(b!=null){
           System.out.println("test");
-            pane.getChildren().add(new Line(s.getPosX().getX(),s.getPosX().getY(),s.getPosY().getX(),s.getPosY().getY()));
-          balle.setFutur(balle.collision(s));
+          balle.setFutur(balle.collision(b));
         }else{
           balle.setFutur(balle.futur());
         }

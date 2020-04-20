@@ -36,7 +36,7 @@ public class Balle{
     this.a=new Vecteur(0,0);
     this.t=16*0.01;
     a.setX(0);
-    a.setY(10);
+    a.setY(8);
   }
   public void gravity(){
     a.setY(g);
@@ -134,13 +134,4 @@ public class Balle{
     }
     return null;
   }
-  public ArrayList<Position> hitbox(int precision){
-  double angle = 2*Math.PI/precision;
-  ArrayList<Position> points = new ArrayList<Position>();
-  for(int i=1;i<precision;i++){
-    points.add(new Position(Math.cos(angle*i), Math.sin(angle*i)));
-  }
-  return points;
-}
-
 }

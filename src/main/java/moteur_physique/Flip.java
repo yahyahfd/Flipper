@@ -21,7 +21,7 @@ public class Flip extends Border{
     }
     Position c;
     if(isSliding(balle))c=balle.getPos();
-    else c=super.intersection(balle);
+    else c=balle.getPos().closestToPoint(super.getPosX(),super.getPosY());
     double vx=(vitesseRadians/0.16)*super.getPosX().distance(c)*nx;
     double vy=(vitesseRadians/0.16)*super.getPosX().distance(c)*ny;
     return new Vecteur(vx,vy);

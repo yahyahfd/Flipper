@@ -63,9 +63,9 @@ public class RandomShape extends moteurShape{
     if(be!=null)borders.add(be);
     Border b=null;
     for(Border border : borders){
-      if(border.isOnTheLine(balle)==true){
-        if(dist==-1||dist>balle.getPos().distance(border.intersection(balle))){
-          dist=balle.getPos().distance(border.intersection(balle));
+      if(border.collision(balle)==true){
+        if(dist==-1||dist>border.distance(balle)){
+          dist=border.distance(balle);
           b=border;
           b.setScoringTrue();
           b.setBorderScore(this.getShapeScore());
