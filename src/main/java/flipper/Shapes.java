@@ -15,8 +15,8 @@ public class Shapes{
     Border b=null;
     for(moteurShape shape : this.shapes){
       if(shape.isInTheShape(balle)!=null){
-        if(dist==-1||dist>balle.getPos().distance(shape.isInTheShape(balle).intersection(balle))){
-          dist=balle.getPos().distance(shape.isInTheShape(balle).intersection(balle));
+        if(dist==-1||dist>=shape.isInTheShape(balle).distance(balle)){
+          dist=shape.isInTheShape(balle).distance(balle);
           b=shape.isInTheShape(balle);
         }
       }

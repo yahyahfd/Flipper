@@ -185,7 +185,7 @@ public class FlipperMap extends Application{
     //
     moteurEllipse r8=new moteurEllipse(0,50,50,0.9,new Position(450,100),50);
 
-    Balle balle=new Balle(new Position(570,778),4,5);
+    Balle balle=new Balle(new Position(100,100),10,5);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
 
     border=new Borders();
@@ -348,19 +348,21 @@ public class FlipperMap extends Application{
 
         /////////Collision/////////
         if(collisionLauncher==false){
-          if(sh!=null&&b!=null){
-            balle.setFutur(balle.collision(sh.isCloser(b,balle)));
-          }else if(b!=null&&s!=null){
+          // if(sh!=null&&b!=null){
+          //   balle.setFutur(balle.collision(sh.isCloser(b,balle)));
+          // }
+          if(b!=null&&s!=null){
             if(b.isSuccessive(s))
             balle.setFutur(balle.sliding(b));
             else
             balle.setFutur(balle.slidingColliding(s,b));
-          }else if(sh!=null){
-            balle.setFutur(balle.collision(sh));
-            j1.addScore(sh.getBorderScore());
-            score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
-
           }
+          // else if(sh!=null){
+          //   balle.setFutur(balle.collision(sh));
+          //   j1.addScore(sh.getBorderScore());
+          //   score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+          //
+          // }
           else if(b!=null){
             balle.setFutur(balle.collision(b));
             if(b.getScoring()){
@@ -377,7 +379,6 @@ public class FlipperMap extends Application{
 
         /////////Actualisation des Position/////////
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
-        pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.BLACK));
         leftFlip.setEndX(flipLeft.getPosY().getX());
         leftFlip.setEndY(flipLeft.getPosY().getY());
         lineLauncher.setStartY(launcher.getPosX().getY());

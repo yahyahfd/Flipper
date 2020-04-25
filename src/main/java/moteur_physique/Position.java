@@ -64,4 +64,31 @@ public class Position {
 	public String toString(){
 		return "x: "+String.valueOf(x)+" y: "+String.valueOf(y);
 	}
+
+	public Position closestToPoint(Position posX,Position posY){//prend un segment [posX posY] et trouve le point le plus proche sur segment du troisieme point
+		double lx1=posX.getX();
+		double ly1=posX.getY();
+		double lx2=posY.getX();
+		double ly2=posY.getY();
+		double x0=this.getX();
+		double y0=this.getY();
+		double A1 = ly2 - ly1;
+		double B1 = lx1 - lx2;
+		double C1 = (ly2 - ly1)*lx1 + (lx1 - lx2)*ly1;
+		double C2 = -B1*x0 + A1*y0;
+		double det = A1*A1 - -B1*B1;
+		double cx = 0;
+		double cy = 0;
+		if(det != 0){
+			cx =((A1*C1 - B1*C2)/det);
+			cy =((A1*C2 - -B1*C1)/det);
+		}else{
+			cx = x0;
+			cy = y0;
+		}
+		return new Position(cx, cy);
+	}
+	public boolean isOnTheLine(Position posX,Position posY){//verifie si this est sur le segment [posX,posY]
+    return this.distance(posX)+this.distance(posY)<=posX.distance(posY)+1&&this.distance(posX)+this.distance(posY)>=posX.distance(posY)-1;
+  }
 }

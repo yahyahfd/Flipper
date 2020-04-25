@@ -1,4 +1,5 @@
 package moteur_physique;
+import java.util.ArrayList;
 public class Border{//une bordure est considerer comme une ligne
   private Position posX;
   public Position getPosX(){
@@ -100,34 +101,25 @@ public void setBorderScore(int bs){
     }
     return new Position(x,y);
   }
-  public boolean isOnTheSegment(Balle balle){//on regarde si le point d'intersection est sur le segment
-    Position c=intersection(balle);
-    if(c==null)return false;
-    return c.distance(this.posX)+c.distance(this.posY)<=this.distance+0.1&&c.distance(this.posX)+c.distance(this.posY)>=this.distance-0.1;
+  public boolean collision(Balle balle){// Regardez https://ericleong.me/research/circle-line/#moving-circle-and-static-line-segment pour comprendre
+    Position a=intersection(balle);
+    Position b=balle.futur().closestToPoint(posX,posY);
+    Position c=posX.closestToPoint(balle.getPos(),balle.futur());
+    Position d=posY.closestToPoint(balle.getPos(),balle.futur());
+    boolean b1=false;
+    if(a!=null)b1=a.isOnTheLine(posX,posY)&&a.isOnTheLine(balle.getPos(),balle.futur());
+    boolean b2=b.distance(balle.futur())<=balle.getR()&&b.isOnTheLine(posX,posY);
+    boolean b3=c.distance(posX)<=balle.getR()&&c.isOnTheLine(balle.getPos(),balle.futur());
+    boolean b4=d.distance(posY)<=balle.getR()&&d.isOnTheLine(balle.getPos(),balle.futur());
+    if(!b1&&!b2&&!b3&&!b4)return false;//les 4 conditions precedentes sont necessaire pour avoir une collision
+    return true;
   }
-  public boolean isOnTheLine(Balle balle){
-    if(!isOnTheSegment(balle))return false;
-    Position c=intersection(balle);
-    double dx=balle.futur().getX()-balle.getPos().getX();//positif si on descend
-    double dy=balle.futur().getY()-balle.getPos().getY();//positif vers la droite
-    if(dx>0&&dy>0&&balle.getPos().getX()<=c.getX()&&balle.getPos().getY()<c.getY()&&(c.getX()<=balle.futur().getX()||c.getY()<=balle.futur().getY())){
-      return true;//mouvement vers le bas et vers la droite
-    }
-    if(dx<0&&dy>0&&balle.getPos().getX()>=c.getX()&&balle.getPos().getY()<c.getY()&&(c.getX()>=balle.futur().getX()||c.getY()<=balle.futur().getY())){
-      return true;//mouvement vers le bas et vers la gauche
-    }
-    if(dx>0&&dy<0&&balle.getPos().getX()<=c.getX()&&balle.getPos().getY()>c.getY()&&(c.getX()<=balle.futur().getX()||c.getY()>=balle.futur().getY())){
-      return true;//mouvement vers le haut et vers la droite
-    }
-    if(dx<0&&dy<0&&balle.getPos().getX()>c.getX()&&balle.getPos().getY()>=c.getY()&&(c.getX()>=balle.futur().getX()-1||c.getY()>=balle.futur().getY())){
-      return true;//mouvement vers le haut et vers la gauche
-    }
-    if(dx==0&&dy>0&&balle.getPos().getY()<=c.getY()&&c.getY()<=balle.futur().getY())return true;
-    if(dx==0&&dy<0&&balle.getPos().getY()>=c.getY()&&c.getY()>=balle.futur().getY())return true;
-    if(dx>0&&dy==0&&balle.getPos().getX()<=c.getX()&&c.getX()<=balle.futur().getX())return true;
-    if(dx<0&&dy==0&&balle.getPos().getX()>=c.getX()&&c.getX()>=balle.futur().getX())return true;
-    return false;
+
+  public double distance(Balle balle){
+    return balle.getPos().distance(balle.getPos().closestToPoint(posX,posY));//retourne la distance entre la balle et le point le plus proche de la balle appartenant au segment
   }
+
+
   public double angle(Vecteur v){
     return this.unitaire.angle(v);
   }
@@ -146,9 +138,7 @@ public void setBorderScore(int bs){
     return false;
   }
   public Border isCloser(Border border,Balle balle){
-    if(this.intersection(balle).distance(balle.getPos())<border.intersection(balle).distance(balle.getPos())){
-      return this;
-    }
+    if(distance(balle)<border.distance(balle))return this;
     return border;
   }
   public boolean isOnTop(Balle balle){
