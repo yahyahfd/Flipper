@@ -160,14 +160,14 @@ public class FlipperMap extends Application{
 
     //
 
-    Moteur_Polygone q5=new Moteur_Polygone(0.5,50);
-    q5.addPos(new Position(350,325));
+    Moteur_Polygone q5=new Moteur_Polygone(0.5,50);//polygone
+    q5.addPos(new Position(350,325));//on ajoute chaque bordure
     q5.addPos(new Position(389,325));
     q5.addPos(new Position(389,425));
-    q5.addPos(new Position(350,425));
+    q5.addPos(new Position(350,425));//ici on ajoute 4 bordure pour créer un Quadrilatere
     RandomShape r5=new RandomShape(q5);
-    r5.addCircle(50,0);
-    r5.addCircle(50,2);
+    r5.addCircle(50,0);//on ajoute une ellipse avec une "courbure" 50 a la premiere bordure
+    r5.addCircle(50,2);//on ajoute une ellipse avec une "courbure" 50 a la troisieme bordure
 
     //
 
@@ -305,8 +305,11 @@ public class FlipperMap extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        boolean collisionLauncher=false;
+        Border s=border.isSliding(balle);
+        Border b=border.isOnALine(balle);
+        Border sh=shape.isOnALine(balle);
         /////////Mouvement du launcher/////////
+        boolean collisionLauncher=false;
         if(launchUp==true){
           boolean u=launcher.isOnTop(balle);
           launcher.moveLauncherUp();
@@ -323,47 +326,37 @@ public class FlipperMap extends Application{
           }else collisionLauncher=false;
         }
 
-        Border s=border.isSliding(balle);
-        Border b=border.isOnALine(balle);
-        Border sh=shape.isOnALine(balle);
-        boolean collision=false;
         /////////Mouvement des flipper/////////
+        boolean collision=false;
         if(flipLUP==true){
-          boolean u=flipLeft.isOnTop(balle)||s==flipLeft;
           flipLeft.moveFlipUp();
-          if(u&&(flipLeft.willBeUnder(balle)||flipLeft.isUnder(balle))){
-            balle.setFutur(balle.collisionFlip(flipLeft));
-          }
         }
         else flipLeft.moveFlipDown();
 
         if(flipRUP==true){
-          boolean u=flipRight.isOnTop(balle)||s==flipRight;
           flipRight.moveFlipUp();
-          if(u&&(flipRight.willBeUnder(balle)||flipRight.isUnder(balle))){
-            balle.setFutur(balle.collisionFlip(flipRight));
-          }
         }
         else flipRight.moveFlipDown();
 
         /////////Collision/////////
         if(collisionLauncher==false){
-          // if(sh!=null&&b!=null){
-          //   balle.setFutur(balle.collision(sh.isCloser(b,balle)));
-          // }
-          if(b!=null&&s!=null){
+          if(sh!=null&&b!=null){
+            balle.setFutur(balle.collision(sh.isCloser(b,balle)));
+          }
+          else if(b!=null&&s!=null){
             if(b.isSuccessive(s))
             balle.setFutur(balle.sliding(b));
             else
             balle.setFutur(balle.slidingColliding(s,b));
           }
-          // else if(sh!=null){
-          //   balle.setFutur(balle.collision(sh));
-          //   j1.addScore(sh.getBorderScore());
-          //   score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
-          //
-          // }
+          else if(sh!=null){
+            balle.setFutur(balle.collision(sh));
+            j1.addScore(sh.getBorderScore());
+            score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+
+          }
           else if(b!=null){
+            pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.RED));
             balle.setFutur(balle.collision(b));
             if(b.getScoring()){
               j1.addScore(b.getBorderScore());

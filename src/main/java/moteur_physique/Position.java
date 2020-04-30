@@ -89,6 +89,6 @@ public class Position {
 		return new Position(cx, cy);
 	}
 	public boolean isOnTheLine(Position posX,Position posY){//verifie si this est sur le segment [posX,posY]
-    return this.distance(posX)+this.distance(posY)<=posX.distance(posY)+1&&this.distance(posX)+this.distance(posY)>=posX.distance(posY)-1;
+    return this.distance(posX)+this.distance(posY)<=posX.distance(posY)+0.1&&this.distance(posX)+this.distance(posY)>=posX.distance(posY)-0.1;
   }
 }

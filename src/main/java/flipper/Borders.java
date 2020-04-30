@@ -23,19 +23,6 @@ public class Borders{
     }
     return b;
   }
-  public Border isOnALine2(Balle balle){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
-    double dist=-1;
-    Border b=null;
-    for(Border border : this.borders){
-      if(border.collision(balle)==true){
-        if(dist==-1||dist>border.distance(balle)){
-          dist=border.distance(balle);
-          b=border;
-        }
-      }
-    }
-    return b;
-  }
   public Border isSliding(Balle balle){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
     for(Border border : this.borders){
       if(border.isSliding(balle)==true){

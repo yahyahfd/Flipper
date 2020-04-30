@@ -36,7 +36,7 @@ public class Balle{
     this.a=new Vecteur(0,0);
     this.t=16*0.01;
     a.setX(0);
-    a.setY(8);
+    a.setY(10);
   }
   public void gravity(){
     a.setY(g);
@@ -54,12 +54,24 @@ public class Balle{
   public Position collision(Border b){
     double vx;
     double vy;
+    if(b instanceof Flip){
+      Flip flip=(Flip)b;
+      if(flip.getUp()==true){
+        vx=flip.getV(this).getX()*2+v.getX();
+        vy=flip.getV(this).getY()*2+v.getY();
+        if(vy>-58)vy=-58;//vitesse mininum
+        double x=pos.getX()+vx*t;
+        double y=pos.getY()+vy*t;
+        return new Position(x,y);
+      }
+    }
     vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
     vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
     double x=pos.getX()+vx*t;
     double y=pos.getY()+vy*t;
     return new Position(x,y);
   }
+
   public Position sliding(Border b){
     double a=b.angle(new Vecteur(1,0));
     double x;
@@ -75,7 +87,7 @@ public class Balle{
       vx=v.getX()*b.getRebond();
       vy=0;
     }
-    pos.setY(b.stayOnTop(this,pos.getY()));//si le calcul de l'angle est un peu different de la réelle courbure de la droite la balle passe par dessous la bordure
+    pos.setY(b.stayOnTop(this));//si le calcul de l'angle est un peu different de la réelle courbure de la droite la balle passe par dessous la bordure
     x=pos.getX()+vx*t;
     y=pos.getY()+vy*t;
     return new Position(x,y);
@@ -112,14 +124,13 @@ public class Balle{
     if(flip.getUp()==true){
       double vy;
       double vx;
-      vx=flip.getV(this).getX()+v.getX();
-      vy=flip.getV(this).getY()+v.getY();
-      if(vy*t>-10)vy=-58;
+      vx=flip.getV(this).getX()*2+v.getX();
+      vy=flip.getV(this).getY()*2+v.getY();
+      if(vy>-58)vy=-58;//vitesse mininum
       double x=pos.getX()+vx*t;
       double y=pos.getY()+vy*t;
       return new Position(x,y);
-    }else
-     return null;
+    }else return null;
   }
   public Position collisionLauncher(Launcher launcher){
     if(launcher.getTop()==true){
