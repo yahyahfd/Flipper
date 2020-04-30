@@ -111,14 +111,11 @@ public void setBorderScore(int bs){
     boolean b2=b.distance(balle.futur())<=balle.getR()&&b.isOnTheLine(posX,posY);
     boolean b3=c.distance(posX)<=balle.getR()&&c.isOnTheLine(balle.getPos(),balle.futur());
     boolean b4=d.distance(posY)<=balle.getR()&&d.isOnTheLine(balle.getPos(),balle.futur());
-    if(!b1&&!b2&&!b3&&!b4)return false;//les 4 conditions precedentes sont necessaire pour avoir une collision
-    return true;
+    return b1||b2||b3||b4;//si une des conditions est bonne alors il y a collision
   }
-
   public double distance(Balle balle){
     return balle.getPos().distance(balle.getPos().closestToPoint(posX,posY));//retourne la distance entre la balle et le point le plus proche de la balle appartenant au segment
   }
-
 
   public double angle(Vecteur v){
     return this.unitaire.angle(v);
@@ -149,9 +146,9 @@ public void setBorderScore(int bs){
     }
     return false;
   }
-  public double stayOnTop(Balle balle,double y){
+  public double stayOnTop(Balle balle){
     double[] eqFlip=getPosX().equationDroite(getPosY());
-    y=(eqFlip[0]*balle.getPos().getX()+eqFlip[1]-1);
+    double y=(eqFlip[0]*(balle.getPos().getX())-(balle.getR()*2)+eqFlip[1]);//la balle  glisse et se met bien au dessus de l'axe
     return y;
   }
   public boolean isSuccessive(Border b){
