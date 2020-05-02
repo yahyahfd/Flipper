@@ -37,6 +37,7 @@ import javafx.geometry.*;
 import javafx.scene.layout.RowConstraints;
 public class FlipperMap extends Application{
   Borders border;
+  
   Shapes shape;
   boolean flipLUP=false;
   boolean flipRUP=false;
