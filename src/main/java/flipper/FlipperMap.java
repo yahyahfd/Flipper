@@ -247,14 +247,17 @@ public class FlipperMap extends Application{
     border.addBorder(new Border(new Position(82,30),new Position(104,21),0.9));
     border.addBorder(new Border(new Position(104,21),new Position(153,10),0.9));
 
-    Flip flipLeft=new Flip(new Position(220,750),new Position(283,760),0.9);
-    Flip flipRight=new Flip(new Position(350,750),new Position(287,760),0.9);
+    Flip flipLeft=new Flip(new Position(220,750),new Position(275,760),0.9);
+    Flip flipRight=new Flip(new Position(350,750),new Position(294,760),0.9);
     Line leftFlip=new Line(flipLeft.getPosX().getX(),flipLeft.getPosX().getY(),flipLeft.getPosY().getX(),flipLeft.getPosY().getY());
     Line rightFlip=new Line(flipRight.getPosX().getX(),flipRight.getPosX().getY(),flipRight.getPosY().getX(),flipRight.getPosY().getY());
     Launcher launcher=new Launcher(new Position(550,780),new Position(580,780),0.9);
     Line lineLauncher=new Line(launcher.getPosX().getX(),launcher.getPosX().getY(),launcher.getPosY().getX(),launcher.getPosY().getY());
     border.addBorder(flipLeft);
     border.addBorder(flipRight);
+    leftFlip.setStrokeWidth(5);
+    rightFlip.setStrokeWidth(5);
+    lineLauncher.setStrokeWidth(5);
 
     Image rect = new Image("file:rectangle_arrondi.png");
     Image triangle = new Image("file:triangle_bas.png");
@@ -329,12 +332,19 @@ public class FlipperMap extends Application{
     shape.addShape(r8);
     for(Border b:border.getBorders()){
       if(!(b instanceof Flip)){
-        pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
+        Line l=new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY());
+        l.setStrokeWidth(5);
+        pane.getChildren().add(l);
       }
     }
     Media sound = new Media(new File("adamjeu.wav").toURI().toString());
     mediaPlayer = new MediaPlayer(sound);
-    mediaPlayer.setAutoPlay(true);
+    mediaPlayer.setOnEndOfMedia(new Runnable(){
+      public void run() {
+       mediaPlayer.seek(Duration.ZERO);
+      }
+    });
+    mediaPlayer.play();
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
