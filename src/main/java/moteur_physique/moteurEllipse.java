@@ -43,48 +43,56 @@ public class moteurEllipse extends moteurShape{
   public double getArea(){
     return (major/2)*(minor/2)*3;
   }
-  public boolean isInTheShape(Position p){
-    return Math.pow(p.getX()-pos.getX(),2)/Math.pow(major/2,2)+Math.pow(p.getY()-pos.getY(),2)/Math.pow(minor/2,2)<=1;
-    //true si plus petit que 1
-  }
-
-  public Position intersection(Balle balle){
-    //y=ax+b : Calculons a et b:
-    double tmp1 = -balle.getPos().getY()+balle.futur().getY();
-    double tmp2 = -balle.getPos().getX()+balle.futur().getX();
-    double a;
-    if(tmp2==0){
-      a=0;
-    }else a = tmp1/tmp2;
-    double b = balle.getPos().getY()-a*balle.getPos().getX();
-    double c = pos.getX();
-    double d = pos.getY();
-    double r = major/2;
-    double q = minor/2;
-
-    //ax²+bx+c
-    double z1 = Math.pow(q,2)+Math.pow(a*r,2); //a
-    double z2 = 2*(Math.pow(r,2)*a*(b-d)-c*Math.pow(q,2)); //b
-    double z3 = Math.pow(q*c,2)+Math.pow(r*b,2)+Math.pow(r*d,2)-Math.pow(r*q,2)-2*Math.pow(r,2)*b*d; //c
-    double tmp = Math.pow(z2,2)-4*z1*z3; //delta
-    if(tmp<0){
-      return null;
-    }else{ //les racines
-      double resx1 = (-z2-Math.sqrt(tmp))/(2*z1); // le x du premier point d'intersection
-      double resy1 = a*resx1+b; //le y du premier point d'intersection
-      double resx2 = (-z2+Math.sqrt(tmp))/(2*z1); // le x du deuxième point d'intersection
-      double resy2 = a*resx2+b; //le y du deuxième point d'intersection
-      //on calcule les deux positions correspondantes:
-      Position res1 = new Position(resx1,resy1);
-      Position res2 = new Position(resx2,resy2);
-      //on cherche lequel des deux points d'intersection est atteint en premier (dans le cas où delta(tmp) est nul, res1=res2)
-      Position resf = balle.getPos().isCloser(res1,res2);
-      if(this.isColliding(balle.futur())){
-        return resf;
-      }else{
-        return null;
-      }
+  public Position intersection(Balle balle){//calcul decris sur https://www.analyzemath.com/Calculators/find_points_of_intersection_of_ellipse_and_line_calculator.html
+    //y=mx+p
+    //(x−h)²/a²+(y-k)²/b²=1
+    double[] eqBalle=balle.getPos().equationDroite(balle.futur());
+    double[] eqEllipse=equationEllipse();
+    double a=eqEllipse[0];
+    double b=eqEllipse[1];
+    double h=eqEllipse[2];
+    double k=eqEllipse[3];
+    double m=eqBalle[0];
+    double p=eqBalle[1];
+    if(eqBalle[2]==0){//cas droite non vertical
+      double aa=Math.pow(b,2)+(Math.pow(a,2)*Math.pow(m,2));
+      double bb=(-2*h*Math.pow(b,2))+(2*m*Math.pow(a,2)*p)-(2*m*Math.pow(a,2)*k);
+      double cc=(Math.pow(b,2)*Math.pow(h,2))+(Math.pow(a,2)*Math.pow(k,2))+(Math.pow(a,2)*Math.pow(p,2))-(2*Math.pow(a,2)*p*k)-(Math.pow(a,2)*Math.pow(b,2));
+      double delta=Math.pow(bb,2)-4*aa*cc;
+      if(delta<0)return null;
+      double x1=(-bb-Math.sqrt(delta))/(2*aa);
+      double x2=(-bb+Math.sqrt(delta))/(2*aa);
+      double y1=m*x1+p;
+      double y2=m*x2+p;
+      Position px=new Position(x1,y1);
+      Position py=new Position(x2,y2);
+      return balle.getPos().isCloser(new Position(x1,y1),new Position(x2,y2));
+    }else{//cas droite verticale
+      double x=balle.getPos().getX(); //on a deja le x et donc on peut le remplacer dans l'equation de l'ellipse
+      //(x−h)²/a²+(y-k)²/b²=1
+      //(y-k)²/b²=b-(x−h)²/a²
+      //(y-k)²=b²-(b²(x−h)²)/a²
+      //y²-2yk+k²-b²-(b²(x−h)²)/a²=0
+      //aa=1
+      //bb=-2k
+      //cc=k²-b²-(b²(x−h)²)/a²
+      double aa=1;
+      double bb=-2*k;
+      double cc=Math.pow(k,2)-((Math.pow(b,2)-(Math.pow(b,2)*(Math.pow(x-h,2))/Math.pow(a,2))));
+      double delta=Math.pow(bb,2)-4*aa*cc;
+      if(delta<0)return null;
+      double y1=(-bb-Math.sqrt(delta))/(2*aa);
+      double y2=(-bb+Math.sqrt(delta))/(2*aa);
+      return balle.getPos().isCloser(new Position(x,y1),new Position(x,y2));
     }
+  }
+  public double[] equationEllipse(){
+    double[] eq=new double[4];//{a,b,h,k} (x−h)²/a²+(y-k)²/b²=1
+    eq[0]=major;
+    eq[1]=minor;
+    eq[2]=pos.getX();
+    eq[3]=pos.getY();
+    return eq;
   }
   public Border isSliding(Balle balle){
     return null;
@@ -94,10 +102,15 @@ public class moteurEllipse extends moteurShape{
     if(p==null)return null;
     Vecteur t2 = new Vecteur(p.getX()-pos.getX(),p.getY()-pos.getY());
     Vecteur t3 = t2.vectNormUni();
-    Border t4 = new Border(new Position(p.getX()-t3.getX(),p.getY()-t3.getY()),new Position(p.getX()+t3.getX(),p.getY()+t3.getY()),rebond);
+    double x1=p.getX()-(t3.getX()*major);
+    double x2=p.getX()+(t3.getX()*major);
+    double y1=p.getY()-(t3.getY()*minor);
+    double y2=p.getY()+(t3.getY()*minor);
+    Border t4 = new Border(new Position(x1,y1),new Position(x2,y2),rebond);
     t4.setScoringTrue();
     t4.setBorderScore(this.getEllScore());
-    return t4;
+    if(t4.collision(balle)==true)return t4;//si notre balle entre en collision avec la tengante alors elle entre forcement en collision avec l'ellipse
+    return null;
   }
   public boolean isColliding(Position tmp){
     return tmp.getX()<= pos.getX()+major/2 && tmp.getX()>= pos.getX()-major/2 && tmp.getY()<= pos.getY()+minor/2 && tmp.getY()>= pos.getY()-minor/2;

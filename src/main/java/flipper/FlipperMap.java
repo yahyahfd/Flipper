@@ -181,11 +181,13 @@ public class FlipperMap extends Application{
     r6.addCircle(50,2);
 
     //
-    moteurEllipse r7=new moteurEllipse(0,50,50,0.9,new Position(150,100),50);
+    moteurEllipse r7=new moteurEllipse(0,0.9,50,50,new Position(150,100),50);
+    pane.getChildren().add(new Ellipse(150,100,50,50));
     //
-    moteurEllipse r8=new moteurEllipse(0,50,50,0.9,new Position(450,100),50);
+    moteurEllipse r8=new moteurEllipse(0,0.9,50,50,new Position(450,100),50);
+    pane.getChildren().add(new Ellipse(450,100,50,50));
 
-    Balle balle=new Balle(new Position(100,100),10,5);
+    Balle balle=new Balle(new Position(40,100),10,5);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
 
     border=new Borders();
@@ -340,20 +342,16 @@ public class FlipperMap extends Application{
 
         /////////Collision/////////
         if(collisionLauncher==false){
-          if(sh!=null&&b!=null){
-            balle.setFutur(balle.collision(sh.isCloser(b,balle)));
+          if(sh!=null){
+            balle.setFutur(balle.collision(sh));
+            j1.addScore(sh.getBorderScore());
+            score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
           }
           else if(b!=null&&s!=null){
             if(b.isSuccessive(s))
             balle.setFutur(balle.sliding(b));
             else
             balle.setFutur(balle.slidingColliding(s,b));
-          }
-          else if(sh!=null){
-            balle.setFutur(balle.collision(sh));
-            j1.addScore(sh.getBorderScore());
-            score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
-
           }
           else if(b!=null){
             pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.RED));
