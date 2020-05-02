@@ -1,5 +1,7 @@
 package flipper;
+import java.io.File;
 import moteur_physique.*;
+import javafx.scene.layout.BackgroundImage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -36,6 +38,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.geometry.*;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.TextField;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 public class FlipperMap extends Application{
   Borders border;
 
@@ -43,6 +47,7 @@ public class FlipperMap extends Application{
   boolean flipLUP=false;
   boolean flipRUP=false;
   boolean launchUp=false;
+  MediaPlayer mediaPlayer;
   public static void main(String[] args) {
     launch(args);
   }
@@ -327,6 +332,9 @@ public class FlipperMap extends Application{
         pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
       }
     }
+    Media sound = new Media(new File("adamjeu.wav").toURI().toString());
+    mediaPlayer = new MediaPlayer(sound);
+    mediaPlayer.setAutoPlay(true);
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
@@ -377,7 +385,6 @@ public class FlipperMap extends Application{
             balle.setFutur(balle.slidingColliding(s,b));
           }
           else if(b!=null){
-            pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.RED));
             balle.setFutur(balle.collision(b));
             if(b.getScoring()){
               j1.addScore(b.getBorderScore());
@@ -402,6 +409,8 @@ public class FlipperMap extends Application{
       }
     }));
     Scene scene2=new Scene(pane,600,900);
+    pane.setId("pane");
+    scene2.getStylesheets().addAll("file:style.css");
     scene2.setFill(Color.BROWN);
     scene2.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
       if(key.getCode()==KeyCode.LEFT) {

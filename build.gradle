@@ -42,6 +42,6 @@ application {
     mainClassName = 'flipper.FlipperMap'
 }
 javafx {
-    modules = [ 'javafx.controls','javafx.fxml','javafx.graphics','javafx.swing']
+    modules = [ 'javafx.media','javafx.controls','javafx.fxml','javafx.graphics','javafx.swing']
     version = "13"
 }
