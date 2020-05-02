@@ -38,7 +38,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.TextField;
 public class FlipperMap extends Application{
   Borders border;
-  
+
   Shapes shape;
   boolean flipLUP=false;
   boolean flipRUP=false;
@@ -376,14 +376,6 @@ public class FlipperMap extends Application{
             else
             balle.setFutur(balle.slidingColliding(s,b));
           }
-<<<<<<< src/main/java/flipper/FlipperMap.java
-=======
-          else if(sh!=null){
-            balle.setFutur(balle.collision(sh));
-            j1.addScore(sh.getBorderScore());
-            score.setText("SCORE : "+Integer.toString(j1.getScore()));
-          }
->>>>>>> src/main/java/flipper/FlipperMap.java
           else if(b!=null){
             pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.RED));
             balle.setFutur(balle.collision(b));
