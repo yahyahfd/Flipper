@@ -44,13 +44,13 @@ public class TestGraphique extends Application{
 
     Flip f1=new Flip(new Position(500,400),new Position(0,450),0.5);
     // Flip f2=new Flip(new Position(240,500),new Position(145,520),0.5);
-    Balle balle=new Balle(new Position(401,100),10,5);
+    Balle balle=new Balle(new Position(315,200),10,5);
     border=new Borders();
     border.addBorder(f1);
     // border.addBorder(f2);
-    border.addBorder(new Border(new Position(10,0),new Position(10,600),0.9));
-    border.addBorder(new Border(new Position(200,400),new Position(900,400),0.9));
-    // border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
+    // border.addBorder(new Border(new Position(10,0),new Position(10,600),0.9));
+    // border.addBorder(new Border(new Position(200,400),new Position(900,400),0.9));
+    // // border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
     // border.addBorder(new Border(new Position(110,550),new Position(150,500),0.9));
     // border.addBorder(new Border(new Position(350,500),new Position(400,450),0.9));
     // border.addBorder(new Border(new Position(50,100),new Position(100,600),0.9));
@@ -63,8 +63,8 @@ public class TestGraphique extends Application{
     // for(Border b:q1.turnIntoBorders()){
     //   border.addBorder(b);
     // }
-    moteurEllipse r7=new moteurEllipse(0,50,50,0.9,new Position(150,100),50);
-    Ellipse e2 = new Ellipse(150,100,50,50);
+    moteurEllipse r7=new moteurEllipse(0,0.9,50,50,new Position(300,300),50);
+    Ellipse e2 = new Ellipse(300,300,50,50);
     e2.setStrokeWidth(3);
     e2.setFill(Color.BROWN);
     e2.setStroke(Color.BLACK);
@@ -91,12 +91,14 @@ public class TestGraphique extends Application{
       public void handle(ActionEvent t){
         Border b=border.isOnALine(balle);
         Border s=r7.isInTheShape(balle);
-        if(b!=null){
-          System.out.println("test");
-          balle.setFutur(balle.collision(b));
+        if(s!=null){
+          pane.getChildren().add(new Line(s.getPosX().getX(),s.getPosX().getY(),s.getPosY().getX(),s.getPosY().getY()));
+          balle.setFutur(balle.collision(s));
         }else{
           balle.setFutur(balle.futur());
         }
+        Position p=r7.intersection(balle);
+        if(p!=null)pane.getChildren().add(new Circle(p.getX(),p.getY(),5,Color.WHITE));
         circle.relocate(balle.getPos().getX(),balle.getPos().getY());
       }
     }));
