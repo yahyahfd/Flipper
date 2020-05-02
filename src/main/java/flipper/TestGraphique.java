@@ -37,7 +37,7 @@ public class TestGraphique extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
-    Joueur j1 = new Joueur("Joueur 1");
+    Joueur j1 = new Joueur(); 
     Text score = new Text(100,100,Integer.toString(j1.getScore()));
     score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 32));
     score.setFill(Color.BLACK);

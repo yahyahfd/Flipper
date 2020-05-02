@@ -12,8 +12,16 @@ public class Joueur{
     this.score += s;
   }
 
-  public Joueur(String ps){
-    this.pseudo = ps;
+  public Joueur(){
     this.score = 0;
+    this.pseudo = "Guest";
+  }
+
+  public void setPseudo(String n){
+    this.pseudo=n;
+  }
+
+  public void setScore(int s){
+    this.score=s;
   }
 }

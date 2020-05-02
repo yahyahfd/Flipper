@@ -35,6 +35,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.geometry.*;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.TextField;
 public class FlipperMap extends Application{
   Borders border;
   
@@ -46,6 +47,7 @@ public class FlipperMap extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
+    Leaderboard.load();
     /**menu principal*/
     GridPane mainmen = new GridPane();
     //on resize les colonnes
@@ -76,21 +78,26 @@ public class FlipperMap extends Application{
     leftgp.add(wlc,0,0);
     Label botl = new Label("flipper, by EKIP  ");
     leftgp.add(botl,0,2);
+    //Username
+    Label pl0 = new Label("Play as: ");
+    pl0.setStyle("-fx-text-fill: white;");
+    TextField pl1 = new TextField("Guest");
     //Buttons
-    Button btnn1 = new Button("Play");
+    Button btnn1 = new Button("Start");
     Button btnn2 = new Button("Settings");
     Button btnn3 = new Button("Rules");
     VBox vbButtons = new VBox(10);
     vbButtons.setPrefWidth(150);
+    pl1.setMaxWidth(vbButtons.getPrefWidth());
     btnn1.setMinWidth(vbButtons.getPrefWidth());
     btnn2.setMinWidth(vbButtons.getPrefWidth());
     btnn3.setMinWidth(vbButtons.getPrefWidth());
-    vbButtons.getChildren().addAll(btnn1,btnn2,btnn3);
+    vbButtons.getChildren().addAll(pl0,pl1,btnn1,btnn2,btnn3);
     leftgp.add(vbButtons,0,1);
     leftgp.setHalignment(wlc,HPos.CENTER);
     vbButtons.setAlignment(Pos.CENTER);
     leftgp.setHalignment(botl,HPos.RIGHT);
-    // puis de la partie droite avec les meilleurs scores (pour l'instant vide)
+    // puis de la partie droite avec les meilleurs scores
     GridPane rightgp = new GridPane();
     RowConstraints row5 = new RowConstraints();
     RowConstraints row6 = new RowConstraints();
@@ -105,7 +112,22 @@ public class FlipperMap extends Application{
     HS.setStyle("-fx-text-fill: white;");
     HS.setFont(new Font("Arial Black", 22));
     rightgp.add(HS,0,0);
-    leftgp.setHalignment(HS,HPos.CENTER);
+    rightgp.setHalignment(HS,HPos.CENTER);
+    //Highscores
+    GridPane aScore = new GridPane();
+    for (int i = 0; i < 10; i++) {
+      RowConstraints rConstraint = new RowConstraints();
+      rConstraint.setPercentHeight(10);
+      aScore.getRowConstraints().add(rConstraint);
+    }
+    ColumnConstraints columna1 = new ColumnConstraints();
+    columna1.setPercentWidth(100);
+    aScore.getColumnConstraints().add(columna1);
+    for(int i=0;i<Leaderboard.players.size();i++){
+      Label tmp = new Label(Leaderboard.players.get(i).getPseudo()+" "+Leaderboard.players.get(i).getScore());
+      aScore.add(tmp,0,i);
+    }
+    rightgp.add(aScore,0,1);
     //on ajoute maintenant ces deux parties au menu principal
     mainmen.add(leftgp,0,0,1,3);
     mainmen.add(rightgp,1,0,1,3);
@@ -118,8 +140,8 @@ public class FlipperMap extends Application{
     primaryStage.show();
     /**JEU*/
     Pane pane=new Pane();
-    Joueur j1 = new Joueur("Joueur 1");
-    Text score = new Text(35,875,j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+    Joueur j1 = new Joueur();
+    Text score = new Text(35,875,Integer.toString(j1.getScore()));
     score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 21));
     score.setFill(Color.BLACK);
 
@@ -354,12 +376,20 @@ public class FlipperMap extends Application{
             else
             balle.setFutur(balle.slidingColliding(s,b));
           }
+<<<<<<< src/main/java/flipper/FlipperMap.java
+=======
+          else if(sh!=null){
+            balle.setFutur(balle.collision(sh));
+            j1.addScore(sh.getBorderScore());
+            score.setText("SCORE : "+Integer.toString(j1.getScore()));
+          }
+>>>>>>> src/main/java/flipper/FlipperMap.java
           else if(b!=null){
             pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.RED));
             balle.setFutur(balle.collision(b));
             if(b.getScoring()){
               j1.addScore(b.getBorderScore());
-              score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
+              score.setText("SCORE : "+Integer.toString(j1.getScore()));
             }
           }
           else if(s!=null){
@@ -405,6 +435,7 @@ public class FlipperMap extends Application{
     });
     btnn1.setOnAction(new EventHandler<ActionEvent>() {
       @Override public void handle(ActionEvent e) {
+        j1.setPseudo(pl1.getText());
         primaryStage.setScene(scene2);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
