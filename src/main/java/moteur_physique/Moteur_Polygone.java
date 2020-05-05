@@ -72,12 +72,16 @@ public class Moteur_Polygone extends moteurShape{
     return d;
   }
 
-  public double getSlopeOfBorder(int border){
+  public double getAngleOfBorder(int border){
     if(border>pos.size()-1)return 2;//-1<=slope<=1 donc 2 veux simplement dire pas possible
     if(border==pos.size()-1){
-      return (pos.get(0).getY()-pos.get(border).getY())/(pos.get(0).getX()-pos.get(border).getX());
+      double dx=pos.get(0).getX()-pos.get(border).getX();
+      double dy=pos.get(0).getY()-pos.get(border).getY();
+      return Math.atan(dy/dx);
     }
-    return (pos.get(border+1).getY()-pos.get(border).getY())/(pos.get(border+1).getX()-pos.get(border).getX());
+    double dx=pos.get(border+1).getX()-pos.get(border).getX();
+    double dy=pos.get(border+1).getY()-pos.get(border).getY();
+    return Math.atan(dy/dx);
   }
   public Position getBorderCenter(int border){
     if(border>pos.size()-1)return null;
