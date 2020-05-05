@@ -129,8 +129,7 @@ public void setBorderScore(int bs){
   public boolean isSliding(Balle balle){
     if(verticale())return false;
     boolean b1=(balle.getV().getX()*unitaire.getY()-balle.getV().getY()*unitaire.getX()>-1&&balle.getV().getX()*unitaire.getY()-balle.getV().getY()*unitaire.getX()<1);//vitesse colineaire a la border
-    boolean b0=Math.abs(balle.getV().getX())<1&&Math.abs(balle.getV().getY())<1;
-    if((b0||b1)&&isOnTop(balle)){
+    if(b1&&isOnTop(balle)){
       return balle.getPos().distance(posX)+balle.getPos().distance(posY)<=distance+1&&balle.getPos().distance(posX)+balle.getPos().distance(posY)>=distance-1;//derniere verification qu'on est bien sur la border
     }
     return false;

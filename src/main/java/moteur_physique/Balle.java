@@ -51,79 +51,27 @@ public class Balle{
     double y=pos.getY()+vy*t;
     return new Position(x,y);
   }
-  public Position collision2(Border b){
+  public Position collision(Border b){
     double vx;
     double vy;
-    Position p2=pointOfCollision(b);
-    Position pc=p2.closestToPoint(b.getPosX(),b.getPosY());
-    this.pos=pointOfCollision(b);//on bouge la balle jusqu'au point de collision puis applique dessus sa nouvelle vitesse
     if(b instanceof Flip){
       Flip flip=(Flip)b;
       if(flip.getUp()==true){
-        vx=flip.getV(this).getX()+v.getX();
-        vy=flip.getV(this).getY()+v.getY();
+        vx=flip.getV(this).getX()*2+v.getX();
+        vy=flip.getV(this).getY()*2+v.getY();
         if(vy>-58)vy=-58;//vitesse mininum
         double x=pos.getX()+vx*t;
         double y=pos.getY()+vy*t;
         return new Position(x,y);
       }
     }
-    vx=-v.vectUnitaire().scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()*v.norme()+v.norme()*v.vectUnitaire().scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
-    vy=-v.vectUnitaire().scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()*v.norme()+v.norme()*v.vectUnitaire().scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+    vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+    vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
     double x=pos.getX()+vx*t;
     double y=pos.getY()+vy*t;
     return new Position(x,y);
   }
-  public Position collision(Border b){//Mix entre formule donné par le prof et https://ericleong.me/research/circle-line/
-    if(b instanceof Flip){
-      Flip flip=(Flip)b;
-      if(flip.getUp()==true){
-        double vx=flip.getV(this).getX()+v.getX();
-        double vy=flip.getV(this).getY()+v.getY();
-        double x=pos.getX()+vx*t;
-        double y=pos.getY()+vy*t;
-        return new Position(x,y);
-      }
-    }
-    Position p1=pos.closestToPoint(b.getPosX(),b.getPosY());
-    Position p2=pointOfCollision(b);
-    Position pc=p2.closestToPoint(b.getPosX(),b.getPosY());
-    this.pos=p2;//on met la balle au point de collision pour eviter les bug graphique
-    if(pc.isOnTheLine(b.getPosX(),b.getPosY())){//si on est dans le cas ou la balle ne touche pas les bout de la border alors on applique la formule du prof
-      double vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
-      double vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
-      double x=pos.getX()+vx*t;
-      double y=pos.getY()+vy*t;
-      return new Position(x,y);
-    }
-    else{//dans ce cas on applique la formule du site
-      Position endpoint;
-      endpoint=p2.isCloser(b.getPosX(),b.getPosY());
-      double rx=p2.getX()-endpoint.getX();
-      double ry=p2.getY()-endpoint.getY();
-      Vecteur r=new Vecteur(rx,ry);//vecteur directeur de la nouvelle vitesse
-      double vx=v.norme()*r.vectUnitaire().getX()*b.getRebond();
-      double vy=v.norme()*r.vectUnitaire().getY()*b.getRebond();
-      double x=pos.getX()+vx*t;
-      double y=pos.getY()+vy*t;
-      return new Position(x,y);
-    }
-  }
-  public Position pointOfCollision(Border b){
-    //d1=distance(pos,closestPoint)
-    //d2=distance(futur(),closestPoint)
-    //r=d1 + (d2-d1) * t
-    //tf=(r - d1) / (d2-d1)   0<tf<1
-    //pointOfCollision=pos+v*tf*t
-    double d1=pos.distance(pos.closestToPoint(b.getPosX(),b.getPosY()));
-    double d2=futur().distance(futur().closestToPoint(b.getPosX(),b.getPosY()));
-    double tf=(r-d1)/(d2-d1);//on fait -0.1 pour arriver un dixieme de seconde avant l'evenement
-    double vx=v.getX()+a.getX()*t;
-    double vy=v.getY()+a.getY()*t;
-    double x=pos.getX()+vx*t*tf;
-    double y=pos.getY()+vy*t*tf;
-    return new Position(x,y);
-  }
+
   public Position sliding(Border b){
     double a=b.angle(new Vecteur(1,0));
     double x;
