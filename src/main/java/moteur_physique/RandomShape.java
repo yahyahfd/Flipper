@@ -3,10 +3,9 @@ import java.util.*;
 import java.util.ArrayList;
 public class RandomShape extends moteurShape{
   private Moteur_Polygone q;
-  private ArrayList<moteurEllipse> e=new ArrayList<moteurEllipse>();//on aura des demis cercle a chaque bordure pour arrondire les bords, si on veux un bord droit le cercle est donc null
-  //Prenons un Quadrilatere ABCD le cercle d'indice 0 est celui entre AB etc
-  public ArrayList<moteurEllipse> getE(){
-    return e;
+  private ArrayList<Moteur_Polygone_Inscribed> roundedBorder=new ArrayList<Moteur_Polygone_Inscribed>();//on aura des demis cercle a chaque bordure pour arrondire les bords, si on veux un bord droit le cercle est donc null
+  public ArrayList<Moteur_Polygone_Inscribed> getRoundedBorder(){
+    return roundedBorder;
   }
   private int shapeScore;
   public int getShapeScore(){
@@ -17,45 +16,29 @@ public class RandomShape extends moteurShape{
   }
   public RandomShape(Moteur_Polygone q){
     this.q=q;
-    this.shapeScore = q.getPolyScore();
+    this.shapeScore=q.getPolyScore();
     for(Position pos:q.getPos()){
-      e.add(null);
+      roundedBorder.add(null);
     }
   }
 
-  public void addCircle(double d,int border){
+  public void addRoundedBorder(double d,int border){
     if(border>q.getPos().size())return;
-    if(d<q.getBorderLength(border)){//major et minor axe inversée si d > taille de la border
-      e.add(border,new moteurEllipse(q.getSlopeOfBorder(border),q.getRebond(),q.getBorderLength(border),d,q.getBorderCenter(border)));
-    }
-    else{
-      e.add(border,new moteurEllipse(q.getSlopeOfBorder(border),q.getRebond(),d,q.getBorderLength(border),q.getBorderCenter(border)));
-    }
+    roundedBorder.add(border,new Moteur_Polygone_Inscribed(q,border,20,q.getBorderLength(border)/2,d));
   }
   public double getArea(){
     double a=0;
-    for (moteurEllipse el:e) {
+    for (Moteur_Polygone_Inscribed el:roundedBorder) {
       a+=el.getArea()/2;
     }
     return q.getArea()+a;
   }
-
-  public ArrayList<moteurEllipse> allEllipse(){
-    ArrayList<moteurEllipse> res = new ArrayList<moteurEllipse>();
-    for(moteurEllipse t : e){
-      if(t!=null){
-        res.add(t);
-      }
-    }
-    return res;
-  }
-
   public Border isInTheShape(Balle balle){
     ArrayList<Border> borders=new ArrayList<Border>();
     double dist=-1;
-    for(moteurEllipse el:e){
-      if(el!=null){
-        Border be=el.isInTheShape(balle);
+    for(Moteur_Polygone_Inscribed p:roundedBorder){
+      if(p!=null){
+        Border be=p.isInTheShape(balle);
         if(be!=null)borders.add(be);
       }
     }

@@ -37,19 +37,19 @@ public class TestGraphique extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
-    Joueur j1 = new Joueur(); 
+    Joueur j1 = new Joueur();
     Text score = new Text(100,100,Integer.toString(j1.getScore()));
     score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 32));
     score.setFill(Color.BLACK);
 
     Flip f1=new Flip(new Position(500,400),new Position(0,450),0.5);
     // Flip f2=new Flip(new Position(240,500),new Position(145,520),0.5);
-    Balle balle=new Balle(new Position(315,200),10,5);
+    Balle balle=new Balle(new Position(50,0),10,5);
     border=new Borders();
-    border.addBorder(f1);
+    // border.addBorder(f1);
     // border.addBorder(f2);
-    // border.addBorder(new Border(new Position(10,0),new Position(10,600),0.9));
-    // border.addBorder(new Border(new Position(200,400),new Position(900,400),0.9));
+    border.addBorder(new Border(new Position(0,0),new Position(900,900),0.9));
+    // border.addBorder(new Border(new Position(400,0),new Position(400,900),0.9));
     // // border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
     // border.addBorder(new Border(new Position(110,550),new Position(150,500),0.9));
     // border.addBorder(new Border(new Position(350,500),new Position(400,450),0.9));
@@ -63,7 +63,6 @@ public class TestGraphique extends Application{
     // for(Border b:q1.turnIntoBorders()){
     //   border.addBorder(b);
     // }
-    moteurEllipse r7=new moteurEllipse(0,0.9,50,50,new Position(300,300),50);
     Ellipse e2 = new Ellipse(300,300,50,50);
     e2.setStrokeWidth(3);
     e2.setFill(Color.BROWN);
@@ -89,17 +88,23 @@ public class TestGraphique extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        Border b=border.isOnALine(balle);
-        Border s=r7.isInTheShape(balle);
-        if(s!=null){
-          pane.getChildren().add(new Line(s.getPosX().getX(),s.getPosX().getY(),s.getPosY().getX(),s.getPosY().getY()));
+        Border s=border.isOnALine(balle);
+        Border ss=border.isSliding(balle);
+        if(ss!=null){
+          // pane.getChildren().add(new Line(s.getPosX().getX(),s.getPosX().getY(),s.getPosY().getX(),s.getPosY().getY()));
+          // Position p2=balle.pointOfCollision(s);
+          // Position pc=p2.closestToPoint(s.getPosX(),s.getPosY());
+          // System.out.println(pc);
+          // pane.getChildren().add(new Circle(p2.getX(),p2.getY(),3,Color.WHITE));
+          // pane.getChildren().add(new Circle(pc.getX(),pc.getY(),3,Color.GREEN));
+          balle.setFutur(balle.sliding(ss));
+        }else if(s!=null){
           balle.setFutur(balle.collision(s));
         }else{
           balle.setFutur(balle.futur());
         }
-        Position p=r7.intersection(balle);
-        if(p!=null)pane.getChildren().add(new Circle(p.getX(),p.getY(),5,Color.WHITE));
-        circle.relocate(balle.getPos().getX(),balle.getPos().getY());
+        circle.setCenterX(balle.getPos().getX());
+        circle.setCenterY(balle.getPos().getY());
       }
     }));
     scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
