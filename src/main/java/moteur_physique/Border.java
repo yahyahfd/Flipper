@@ -73,9 +73,6 @@ public void setBorderScore(int bs){
     double pp=0;
     double x=0;
     double y=0;
-    if(isSliding(balle)){
-      return null;
-    }
     if(posX.getY()==posY.getY()&&balle.futur().getY()==balle.getPos().getY()){//bordure parralele au mouvement donc aucune intersection
       return null;
     }
@@ -129,8 +126,9 @@ public void setBorderScore(int bs){
   public boolean isSliding(Balle balle){
     if(verticale())return false;
     boolean b1=(balle.getV().getX()*unitaire.getY()-balle.getV().getY()*unitaire.getX()>-1&&balle.getV().getX()*unitaire.getY()-balle.getV().getY()*unitaire.getX()<1);//vitesse colineaire a la border
-    if(b1&&isOnTop(balle)){
-      return balle.getPos().distance(posX)+balle.getPos().distance(posY)<=distance+1&&balle.getPos().distance(posX)+balle.getPos().distance(posY)>=distance-1;//derniere verification qu'on est bien sur la border
+    boolean b0=Math.abs(balle.getV().getX())<1&&Math.abs(balle.getV().getY())<1;
+    if((b1)&&isOnTop(balle)){
+      return collision(balle);//derniere verification qu'on est bien sur la border
     }
     return false;
   }

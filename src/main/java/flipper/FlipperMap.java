@@ -1,5 +1,7 @@
 package flipper;
+import java.io.File;
 import moteur_physique.*;
+import javafx.scene.layout.BackgroundImage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -37,9 +39,7 @@ import javafx.geometry.*;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.TextField;
 public class FlipperMap extends Application{
-  Borders border;
-
-  Shapes shape;
+  ShapeBorder shapeBorder;
   boolean flipLUP=false;
   boolean flipRUP=false;
   boolean launchUp=false;
@@ -47,6 +47,8 @@ public class FlipperMap extends Application{
     launch(args);
   }
   public void start(Stage primaryStage){
+    Borders border=new Borders();
+    Shapes shape=new Shapes();
     Leaderboard.load();
     /**menu principal*/
     GridPane mainmen = new GridPane();
@@ -153,13 +155,19 @@ public class FlipperMap extends Application{
     qq.addPos(new Position(390,680));
     qq.addPos(new Position(480,660));
     RandomShape rr=new RandomShape(qq);
+    Polygon pp=new Polygon();
+    pp.getPoints().addAll(qq.getAllPosition());
+    pane.getChildren().add(pp);
+    //
 
     Moteur_Polygone q=new Moteur_Polygone(0.5,50);
     q.addPos(new Position(110,640));
     q.addPos(new Position(110,540));
     q.addPos(new Position(200,700));
     RandomShape r=new RandomShape(q);
-
+    Polygon p=new Polygon();
+    p.getPoints().addAll(q.getAllPosition());
+    pane.getChildren().add(p);
     //
 
     Moteur_Polygone q3=new Moteur_Polygone(0.5,50);
@@ -168,9 +176,10 @@ public class FlipperMap extends Application{
     q3.addPos(new Position(139,425));
     q3.addPos(new Position(100,425));
     RandomShape r3=new RandomShape(q3);
-    r3.addCircle(50,0);
-    r3.addCircle(50,2);
+    r3.addRoundedBorder(25,0);
+    r3.addRoundedBorder(25,2);
 
+    //
 
     Moteur_Polygone q4=new Moteur_Polygone(0.5,50);
     q4.addPos(new Position(200,325));
@@ -178,8 +187,8 @@ public class FlipperMap extends Application{
     q4.addPos(new Position(239,425));
     q4.addPos(new Position(200,425));
     RandomShape r4=new RandomShape(q4);
-    r4.addCircle(50,0);
-    r4.addCircle(50,2);
+    r4.addRoundedBorder(25,0);
+    r4.addRoundedBorder(25,2);
 
     //
 
@@ -189,8 +198,8 @@ public class FlipperMap extends Application{
     q5.addPos(new Position(389,425));
     q5.addPos(new Position(350,425));//ici on ajoute 4 bordure pour créer un Quadrilatere
     RandomShape r5=new RandomShape(q5);
-    r5.addCircle(50,0);//on ajoute une ellipse avec une "courbure" 50 a la premiere bordure
-    r5.addCircle(50,2);//on ajoute une ellipse avec une "courbure" 50 a la troisieme bordure
+    r5.addRoundedBorder(25,0);//on ajoute une "ellipse" avec une "courbure" 50 a la premiere bordure
+    r5.addRoundedBorder(25,2);//on ajoute une "ellipse" avec une "courbure" 50 a la troisieme bordure
 
     //
 
@@ -200,18 +209,20 @@ public class FlipperMap extends Application{
     q6.addPos(new Position(489,425));
     q6.addPos(new Position(450,425));
     RandomShape r6=new RandomShape(q6);
-    r6.addCircle(50,0);
-    r6.addCircle(50,2);
+    r6.addRoundedBorder(25,0);
+    r6.addRoundedBorder(25,2);
 
     //
-    moteurEllipse r7=new moteurEllipse(0,0.9,50,50,new Position(150,100),50);
-    pane.getChildren().add(new Ellipse(150,100,50,50));
+
+    Moteur_Polygone_Inscribed r7=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(150,100),50,50);
+
     //
-    moteurEllipse r8=new moteurEllipse(0,0.9,50,50,new Position(450,100),50);
-    pane.getChildren().add(new Ellipse(450,100,50,50));
+
+    Moteur_Polygone_Inscribed r8=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(450,100),50,50);
 
     Balle balle=new Balle(new Position(40,100),10,5);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
+
 
     border=new Borders();
     border.addBorder(new Border(new Position(153,10),new Position(447,10),0.9));
@@ -242,14 +253,17 @@ public class FlipperMap extends Application{
     border.addBorder(new Border(new Position(82,30),new Position(104,21),0.9));
     border.addBorder(new Border(new Position(104,21),new Position(153,10),0.9));
 
-    Flip flipLeft=new Flip(new Position(220,750),new Position(283,760),0.9);
-    Flip flipRight=new Flip(new Position(350,750),new Position(287,760),0.9);
+    Flip flipLeft=new Flip(new Position(220,750),new Position(275,760),0.9);
+    Flip flipRight=new Flip(new Position(350,750),new Position(294,760),0.9);
     Line leftFlip=new Line(flipLeft.getPosX().getX(),flipLeft.getPosX().getY(),flipLeft.getPosY().getX(),flipLeft.getPosY().getY());
     Line rightFlip=new Line(flipRight.getPosX().getX(),flipRight.getPosX().getY(),flipRight.getPosY().getX(),flipRight.getPosY().getY());
     Launcher launcher=new Launcher(new Position(550,780),new Position(580,780),0.9);
     Line lineLauncher=new Line(launcher.getPosX().getX(),launcher.getPosX().getY(),launcher.getPosY().getX(),launcher.getPosY().getY());
     border.addBorder(flipLeft);
     border.addBorder(flipRight);
+    leftFlip.setStrokeWidth(5);
+    rightFlip.setStrokeWidth(5);
+    lineLauncher.setStrokeWidth(5);
 
     Image rect = new Image("file:rectangle_arrondi.png");
     Image triangle = new Image("file:triangle_bas.png");
@@ -307,8 +321,8 @@ public class FlipperMap extends Application{
     pane.getChildren().add(iv2);
     pane.getChildren().add(iv3);
     pane.getChildren().add(iv4);
-    pane.getChildren().add(iv5); //image triangle bas
-    pane.getChildren().add(iv6);
+    // pane.getChildren().add(iv5); //image triangle bas
+    // pane.getChildren().add(iv6);
     pane.getChildren().add(iv7);
     pane.getChildren().add(iv8);
     pane.getChildren().add(score);
@@ -324,15 +338,17 @@ public class FlipperMap extends Application{
     shape.addShape(r8);
     for(Border b:border.getBorders()){
       if(!(b instanceof Flip)){
-        pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
+        Line l=new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY());
+        l.setStrokeWidth(5);
+        pane.getChildren().add(l);
       }
     }
+    shapeBorder=new ShapeBorder(border,shape);
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        Border s=border.isSliding(balle);
-        Border b=border.isOnALine(balle);
-        Border sh=shape.isOnALine(balle);
+        Border s=shapeBorder.isSliding(balle);
+        Border b=shapeBorder.isOnALine(balle);
         /////////Mouvement du launcher/////////
         boolean collisionLauncher=false;
         if(launchUp==true){
@@ -365,34 +381,29 @@ public class FlipperMap extends Application{
 
         /////////Collision/////////
         if(collisionLauncher==false){
-          if(sh!=null){
-            balle.setFutur(balle.collision(sh));
-            j1.addScore(sh.getBorderScore());
-            score.setText(j1.getPseudo()+" : "+Integer.toString(j1.getScore()));
-          }
-          else if(b!=null&&s!=null){
+          if(b!=null&&s!=null){
             if(b.isSuccessive(s))
             balle.setFutur(balle.sliding(b));
             else
             balle.setFutur(balle.slidingColliding(s,b));
           }
+          else if(s!=null){
+            balle.setFutur(balle.sliding(s));
+          }
           else if(b!=null){
-            pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),1,Color.RED));
             balle.setFutur(balle.collision(b));
             if(b.getScoring()){
               j1.addScore(b.getBorderScore());
               score.setText("SCORE : "+Integer.toString(j1.getScore()));
             }
-          }
-          else if(s!=null){
-            balle.setFutur(balle.sliding(s));
           }else{
             balle.setFutur(balle.futur());
           }
         }
 
         /////////Actualisation des Position/////////
-        circle.relocate(balle.getPos().getX(),balle.getPos().getY());
+        circle.setCenterX(balle.getPos().getX());
+        circle.setCenterY(balle.getPos().getY());
         leftFlip.setEndX(flipLeft.getPosY().getX());
         leftFlip.setEndY(flipLeft.getPosY().getY());
         lineLauncher.setStartY(launcher.getPosX().getY());
@@ -402,6 +413,8 @@ public class FlipperMap extends Application{
       }
     }));
     Scene scene2=new Scene(pane,600,900);
+    pane.setId("pane");
+    scene2.getStylesheets().addAll("file:style.css");
     scene2.setFill(Color.BROWN);
     scene2.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
       if(key.getCode()==KeyCode.LEFT) {
