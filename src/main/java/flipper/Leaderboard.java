@@ -19,7 +19,7 @@ public class Leaderboard{
       while (i.hasNext()) {
         JSONObject slide = (JSONObject) i.next();
         String nom = (String)slide.get("nom");
-        String score = (String)slide.get("score");
+        String score = String.valueOf(slide.get("score"));
         Joueur tmp1 = new Joueur();
         tmp1.setPseudo(nom);
         tmp1.setScore(Integer.parseInt(score));
@@ -32,22 +32,38 @@ public class Leaderboard{
     }
   }
 
-  public static void sort(){
-    ArrayList<Joueur> tmp = new ArrayList<Joueur>();
-    int i;
-    if(players.size()>10){
-      i=10;
-    }else{
-      i=players.size();
-    }
-    for(int j=0;j<i;j++){
+  public static JSONArray sortncut(JSONArray jsonArr){ //on trie les scores par ordre croissant puis on s'arrête à la dixième valeur (le reste est supprimé)
+     JSONArray sortedJsonArray = new JSONArray();
+     //On transforme notre JSONArray en List/ArrayList
+     List<JSONObject> jsonValues = new ArrayList<JSONObject>();
+     for (int i = 0; i < jsonArr.size(); i++) {
+         jsonValues.add((JSONObject) jsonArr.get(i));
+     }
+     Collections.sort( jsonValues, new Comparator<JSONObject>() { //On trie le jsonValues
+         private static final String KEY_NAME = "score";
+         @Override
+         public int compare(JSONObject a, JSONObject b) {
+             String valA = new String();
+             String valB = new String();
 
-    }
+             try {
+                 valA = String.valueOf(a.get(KEY_NAME));
+                 valB = String.valueOf(b.get(KEY_NAME));
+             }catch(Exception e){
+               e.printStackTrace();
+             }
+             return valA.compareTo(valB);
+         }
+     });
+     for (int i = 0; i < jsonValues.size(); i++) {
+         sortedJsonArray.add(jsonValues.get(i));
+     }
+     return sortedJsonArray;
   }
 
-  public void save(Joueur j){
+  public static void save(Joueur j){
     File tmp = new File("src/main/java/flipper/leaderboard.json");
-    try(InputStream in = new FileInputStream(tmp)){
+    try(InputStream in = new FileInputStream(tmp)){ //le fichier existe déjà
       String content = IOUtils.toString(in, StandardCharsets.UTF_8);
       JSONParser parser = new JSONParser();
       JSONArray json = (JSONArray) parser.parse(content);
@@ -55,10 +71,11 @@ public class Leaderboard{
       tmp1.put("nom",j.getPseudo());
       tmp1.put("score",j.getScore());
       json.add(tmp1);
+      JSONArray json2 = sortncut(json);
       FileWriter fw = new FileWriter (tmp);
-      fw.write(json.toJSONString());
+      fw.write(json2.toJSONString());
       fw.close();
-    }catch(FileNotFoundException e){
+    }catch(FileNotFoundException e){ //la toute première partie donc pas de fichier de highscores
       try{
         JSONArray json = new JSONArray();
         JSONObject tmp1 = new JSONObject();

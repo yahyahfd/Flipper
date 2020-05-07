@@ -10,7 +10,7 @@ public class Borders{
   public ArrayList<Border> getBorders(){
     return borders;
   }
-  public Border isOnALine(Balle balle){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
+  public Border isOnALine(Balle balle){
     double dist=-1;
     Border b=null;
     for(Border border : this.borders){
@@ -23,7 +23,7 @@ public class Borders{
     }
     return b;
   }
-  public Border isSliding(Balle balle){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
+  public Border isSliding(Balle balle){
     for(Border border : this.borders){
       if(border.isSliding(balle)==true){
         return border;

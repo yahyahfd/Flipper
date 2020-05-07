@@ -38,6 +38,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.geometry.*;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.TextField;
+import java.util.ArrayList;
 public class FlipperMap extends Application{
   ShapeBorder shapeBorder;
   boolean flipLUP=false;
@@ -147,6 +148,16 @@ public class FlipperMap extends Application{
     score.setFont(Font.font("Sans serif", FontWeight.NORMAL, FontPosture.REGULAR, 21));
     score.setFill(Color.BLACK);
 
+    //Ecran d'après jeu
+    GridPane endSc = new GridPane();
+    endSc.setAlignment(Pos.CENTER);
+    Label finalScore = new Label();
+    Button btnnn = new Button("Menu Principal");
+    VBox vbfinal = new VBox(10);
+    vbfinal.getChildren().addAll(finalScore,btnnn);
+    vbfinal.setAlignment(Pos.CENTER);
+    endSc.add(vbfinal,0,0);
+    Scene scene3 = new Scene(endSc,1000,400);
 
     //
 
@@ -410,6 +421,32 @@ public class FlipperMap extends Application{
         lineLauncher.setEndY(launcher.getPosY().getY());
         rightFlip.setEndX(flipRight.getPosY().getX());
         rightFlip.setEndY(flipRight.getPosY().getY());
+
+        /////////Fin du jeu/////////
+        ////Forme en bas des flips qui marque la fin du jeu
+        Border a1 = new Border(new Position(220,765),new Position(275,775),0.9);
+        Border a2 = new Border(new Position(350,765),new Position(294,775),0.9);
+        Border a3 = new Border(new Position(275,775),new Position(294,775),0.9);
+        ArrayList<Border> endgame = new ArrayList<Border>();
+        endgame.add(a1);
+        endgame.add(a2);
+        endgame.add(a3);
+        boolean resfinal = false;
+        for(Border txd : endgame){
+          if(txd.collision(balle)==true){
+            resfinal=true;
+            Leaderboard.save(j1);
+            Leaderboard.load();
+            for(int i=0;i<Leaderboard.players.size();i++){
+              Label tmp = new Label(Leaderboard.players.get(i).getPseudo()+" "+Leaderboard.players.get(i).getScore());
+              aScore.add(tmp,0,i);
+            }
+          }
+        }
+        if(resfinal==true){
+          finalScore.setText("Score Finale en tant que "+j1.getPseudo()+(": ")+Integer.toString(j1.getScore()));
+          primaryStage.setScene(scene3);
+        }
       }
     }));
     Scene scene2=new Scene(pane,600,900);
@@ -444,6 +481,11 @@ public class FlipperMap extends Application{
         primaryStage.setScene(scene2);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+      }
+    });
+    btnnn.setOnAction(new EventHandler<ActionEvent>() {
+      @Override public void handle(ActionEvent e) {
+        primaryStage.setScene(scene1);
       }
     });
   }
