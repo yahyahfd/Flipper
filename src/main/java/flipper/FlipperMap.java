@@ -151,23 +151,17 @@ public class FlipperMap extends Application{
     //
 
     Moteur_Polygone qq=new Moteur_Polygone(0.5,0);
-    qq.addPos(new Position(480,540));
-    qq.addPos(new Position(390,680));
-    qq.addPos(new Position(480,660));
+    qq.addPos(new Position(490,540));
+    qq.addPos(new Position(390,700));
+    qq.addPos(new Position(490,680));
     RandomShape rr=new RandomShape(qq);
-    Polygon pp=new Polygon();
-    pp.getPoints().addAll(qq.getAllPosition());
-    pane.getChildren().add(pp);
     //
 
     Moteur_Polygone q=new Moteur_Polygone(0.5,50);
-    q.addPos(new Position(110,640));
     q.addPos(new Position(110,540));
-    q.addPos(new Position(200,700));
+    q.addPos(new Position(110,680));
+    q.addPos(new Position(210,700));
     RandomShape r=new RandomShape(q);
-    Polygon p=new Polygon();
-    p.getPoints().addAll(q.getAllPosition());
-    pane.getChildren().add(p);
     //
 
     Moteur_Polygone q3=new Moteur_Polygone(0.5,50);
@@ -302,7 +296,6 @@ public class FlipperMap extends Application{
     ImageView iv6 = new ImageView();
     iv6.setImage(triangle2);
     iv6.setPreserveRatio(true);
-    iv6.setFitHeight(150);
     iv6.setX(390);iv6.setY(540);
 
     ImageView iv7 = new ImageView();
@@ -321,8 +314,8 @@ public class FlipperMap extends Application{
     pane.getChildren().add(iv2);
     pane.getChildren().add(iv3);
     pane.getChildren().add(iv4);
-    // pane.getChildren().add(iv5); //image triangle bas
-    // pane.getChildren().add(iv6);
+    pane.getChildren().add(iv5); //image triangle bas
+    pane.getChildren().add(iv6);
     pane.getChildren().add(iv7);
     pane.getChildren().add(iv8);
     pane.getChildren().add(score);
@@ -381,16 +374,10 @@ public class FlipperMap extends Application{
 
         /////////Collision/////////
         if(collisionLauncher==false){
-          if(b!=null&&s!=null){
-            if(b.isSuccessive(s))
-            balle.setFutur(balle.sliding(b));
-            else
-            balle.setFutur(balle.slidingColliding(s,b));
-          }
-          else if(s!=null){
+          if(s!=null){
             balle.setFutur(balle.sliding(s));
           }
-          else if(b!=null){
+          if((b!=null&&b!=s)||(b!=null&&(b instanceof Flip))){
             balle.setFutur(balle.collision(b));
             if(b.getScoring()){
               j1.addScore(b.getBorderScore());

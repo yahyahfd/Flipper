@@ -24,7 +24,7 @@ public class RandomShape extends moteurShape{
 
   public void addRoundedBorder(double d,int border){
     if(border>q.getPos().size())return;
-    roundedBorder.add(border,new Moteur_Polygone_Inscribed(q,border,20,q.getBorderLength(border)/2,d));
+    roundedBorder.add(border,new Moteur_Polygone_Inscribed(q,border,10,q.getBorderLength(border)/2,d));
   }
   public double getArea(){
     double a=0;

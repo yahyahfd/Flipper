@@ -48,8 +48,8 @@ public class TestGraphique extends Application{
     border=new Borders();
     // border.addBorder(f1);
     // border.addBorder(f2);
-    border.addBorder(new Border(new Position(0,0),new Position(900,900),0.9));
-    // border.addBorder(new Border(new Position(400,0),new Position(400,900),0.9));
+    border.addBorder(new Border(new Position(0,0),new Position(1400,600),0.9));
+    border.addBorder(new Border(new Position(1100,0),new Position(1000,700),0.9));
     // // border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
     // border.addBorder(new Border(new Position(110,550),new Position(150,500),0.9));
     // border.addBorder(new Border(new Position(350,500),new Position(400,450),0.9));
@@ -90,17 +90,25 @@ public class TestGraphique extends Application{
       public void handle(ActionEvent t){
         Border s=border.isOnALine(balle);
         Border ss=border.isSliding(balle);
-        if(ss!=null){
+        // if(s!=null&&ss!=null){
+        //   if(s.isSuccessive(ss))
+        //   balle.setFutur(balle.sliding(s));
+        //   else
+        //   balle.setFutur(balle.slidingColliding(ss,s));
+        // }
+         if(ss!=null){
+          balle.setFutur(balle.sliding(ss));
+        }
+         if(s!=null&&s!=ss){
+          balle.setFutur(balle.collision(s));
+        }
           // pane.getChildren().add(new Line(s.getPosX().getX(),s.getPosX().getY(),s.getPosY().getX(),s.getPosY().getY()));
           // Position p2=balle.pointOfCollision(s);
           // Position pc=p2.closestToPoint(s.getPosX(),s.getPosY());
           // System.out.println(pc);
           // pane.getChildren().add(new Circle(p2.getX(),p2.getY(),3,Color.WHITE));
           // pane.getChildren().add(new Circle(pc.getX(),pc.getY(),3,Color.GREEN));
-          balle.setFutur(balle.sliding(ss));
-        }else if(s!=null){
-          balle.setFutur(balle.collision(s));
-        }else{
+        else{
           balle.setFutur(balle.futur());
         }
         circle.setCenterX(balle.getPos().getX());
