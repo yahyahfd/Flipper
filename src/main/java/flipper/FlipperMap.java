@@ -248,13 +248,13 @@ public class FlipperMap extends Application{
 
     //
 
-    Moteur_Polygone_Inscribed r8=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(240,340),35,35);
+    Moteur_Polygone_Inscribed r8=new Moteur_Polygone_Inscribed(0.9,50,0,20,new Position(240,340),25,25);
 
     //
 
-    Moteur_Polygone_Inscribed r9=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(360,260),35,35);
+    Moteur_Polygone_Inscribed r9=new Moteur_Polygone_Inscribed(0.9,50,0,20,new Position(360,260),25,25);
 
-    Moteur_Polygone_Inscribed r10=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(240,200),35,35);
+    Moteur_Polygone_Inscribed r10=new Moteur_Polygone_Inscribed(0.9,50,0,20,new Position(240,200),25,25);
 
     Balle balle=new Balle(new Position(40,100),10,5);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
@@ -387,19 +387,19 @@ public class FlipperMap extends Application{
     iv7.setImage(rond);
     iv7.setPreserveRatio(true);
     iv7.setFitHeight(50);
-    iv7.setX(240);iv7.setY(340);
+    iv7.setX(215);iv7.setY(315);
 
     ImageView iv8 = new ImageView();
     iv8.setImage(rond);
     iv8.setPreserveRatio(true);
     iv8.setFitHeight(50);
-    iv8.setX(360);iv8.setY(260);
+    iv8.setX(335);iv8.setY(235);
 
     ImageView iv9 = new ImageView();
     iv9.setImage(rond);
     iv9.setPreserveRatio(true);
     iv9.setFitHeight(50);
-    iv9.setX(240);iv9.setY(200);
+    iv9.setX(215);iv9.setY(175);
 
     ImageView iv10 = new ImageView();
     iv10.setImage(forme1);
