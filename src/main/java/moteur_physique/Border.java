@@ -114,8 +114,11 @@ public void setBorderScore(int bs){
     return balle.getPos().distance(balle.getPos().closestToPoint(posX,posY));//retourne la distance entre la balle et le point le plus proche de la balle appartenant au segment
   }
 
-  public double angle(Vecteur v){
-    return this.unitaire.angle(v);
+  public Vecteur angle(){
+    if(unitaire.getY()<0){
+      return new Vecteur(-unitaire.getX(),-unitaire.getY());
+    }
+    return unitaire;
   }
   public boolean horizontale(){
     return posX.getY()==posY.getY();
