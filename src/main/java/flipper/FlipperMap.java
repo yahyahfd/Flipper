@@ -150,21 +150,33 @@ public class FlipperMap extends Application{
 
     //
 
-    Moteur_Polygone qq=new Moteur_Polygone(0.5,0);
-    qq.addPos(new Position(480,540));
-    qq.addPos(new Position(390,680));
-    qq.addPos(new Position(480,660));
+    Moteur_Polygone qq=new Moteur_Polygone(0.5,0);      //Triangle droite
+    qq.addPos(new Position(419,622));
+    qq.addPos(new Position(438,627));
+    qq.addPos(new Position(438,670));
+    qq.addPos(new Position(430,682));
+    qq.addPos(new Position(360,696));
+    qq.addPos(new Position(349,679));
     RandomShape rr=new RandomShape(qq);
+    rr.addRoundedBorder(10,0);
+    rr.addRoundedBorder(10,2);
+    rr.addRoundedBorder(10,4);
     Polygon pp=new Polygon();
     pp.getPoints().addAll(qq.getAllPosition());
     pane.getChildren().add(pp);
     //
 
-    Moteur_Polygone q=new Moteur_Polygone(0.5,50);
-    q.addPos(new Position(110,640));
-    q.addPos(new Position(110,540));
-    q.addPos(new Position(200,700));
+    Moteur_Polygone q=new Moteur_Polygone(0.5,50);       //Triangle gauche
+    q.addPos(new Position(127,629));
+    q.addPos(new Position(145,621));
+    q.addPos(new Position(216,681));
+    q.addPos(new Position(205,698));
+    q.addPos(new Position(145,686));
+    q.addPos(new Position(128,662));
     RandomShape r=new RandomShape(q);
+    r.addRoundedBorder(10,0);
+    r.addRoundedBorder(10,2);
+    r.addRoundedBorder(10,4);
     Polygon p=new Polygon();
     p.getPoints().addAll(q.getAllPosition());
     pane.getChildren().add(p);
@@ -173,11 +185,11 @@ public class FlipperMap extends Application{
     Moteur_Polygone q3=new Moteur_Polygone(0.5,50);   //rect haut
     q3.addPos(new Position(300,100));
     q3.addPos(new Position(320,100));
-    q3.addPos(new Position(320,180));
-    q3.addPos(new Position(300,180));
+    q3.addPos(new Position(320,160));
+    q3.addPos(new Position(300,160));
     RandomShape r3=new RandomShape(q3);
-    r3.addRoundedBorder(20,0);
-    r3.addRoundedBorder(20,2);
+    r3.addRoundedBorder(10,0);
+    r3.addRoundedBorder(10,2);
     Polygon pp2=new Polygon();
     pp2.getPoints().addAll(q3.getAllPosition());
     pane.getChildren().add(pp2);
@@ -185,13 +197,13 @@ public class FlipperMap extends Application{
     //
 
     Moteur_Polygone q4=new Moteur_Polygone(0.5,50);
-    q4.addPos(new Position(280,430));
-    q4.addPos(new Position(300,430));
-    q4.addPos(new Position(300,520));
-    q4.addPos(new Position(280,520));
+    q4.addPos(new Position(280,440));
+    q4.addPos(new Position(300,440));
+    q4.addPos(new Position(300,500));
+    q4.addPos(new Position(280,500));
     RandomShape r4=new RandomShape(q4);
-    r4.addRoundedBorder(20,0);
-    r4.addRoundedBorder(20,2);
+    r4.addRoundedBorder(10,0);
+    r4.addRoundedBorder(10,2);
     Polygon pp3=new Polygon();
     pp3.getPoints().addAll(q4.getAllPosition());
     pane.getChildren().add(pp3);
@@ -201,11 +213,11 @@ public class FlipperMap extends Application{
     Moteur_Polygone q5=new Moteur_Polygone(0.5,50);//polygone
     q5.addPos(new Position(200,520));//on ajoute chaque bordure
     q5.addPos(new Position(220,520));
-    q5.addPos(new Position(220,600));
-    q5.addPos(new Position(200,600));//ici on ajoute 4 bordure pour créer un Quadrilatere
+    q5.addPos(new Position(220,580));
+    q5.addPos(new Position(200,580));//ici on ajoute 4 bordure pour créer un Quadrilatere
     RandomShape r5=new RandomShape(q5);
-    r5.addRoundedBorder(20,0);//on ajoute une "ellipse" avec une "courbure" 50 a la premiere bordure
-    r5.addRoundedBorder(20,2);//on ajoute une "ellipse" avec une "courbure" 50 a la troisieme bordure
+    r5.addRoundedBorder(10,0);//on ajoute une "ellipse" avec une "courbure" 50 a la premiere bordure
+    r5.addRoundedBorder(10,2);//on ajoute une "ellipse" avec une "courbure" 50 a la troisieme bordure
     Polygon pp4=new Polygon();
     pp4.getPoints().addAll(q5.getAllPosition());
     pane.getChildren().add(pp4);
@@ -215,11 +227,11 @@ public class FlipperMap extends Application{
     Moteur_Polygone q6=new Moteur_Polygone(0.5,50);
     q6.addPos(new Position(360,520));
     q6.addPos(new Position(380,520));
-    q6.addPos(new Position(380,600));
-    q6.addPos(new Position(360,600));
+    q6.addPos(new Position(380,580));
+    q6.addPos(new Position(360,580));
     RandomShape r6=new RandomShape(q6);
-    r6.addRoundedBorder(20,0);
-    r6.addRoundedBorder(20,2);
+    r6.addRoundedBorder(10,0);
+    r6.addRoundedBorder(10,2);
     Polygon pp5=new Polygon();
     pp5.getPoints().addAll(q6.getAllPosition());
     pane.getChildren().add(pp5);
@@ -256,11 +268,13 @@ public class FlipperMap extends Application{
 
     //
 
-    Moteur_Polygone_Inscribed r8=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(240,340),40,40);
+    Moteur_Polygone_Inscribed r8=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(240,340),35,35);
 
     //
 
-    Moteur_Polygone_Inscribed r9=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(360,260),40,40);
+    Moteur_Polygone_Inscribed r9=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(360,260),35,35);
+
+    Moteur_Polygone_Inscribed r10=new Moteur_Polygone_Inscribed(0.9,50,0,30,new Position(240,200),35,35);
 
     Balle balle=new Balle(new Position(40,100),10,5);
     Circle circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
@@ -351,9 +365,9 @@ public class FlipperMap extends Application{
 
     ImageView iv = new ImageView();
     iv.setImage(rect);
-    iv.setPreserveRatio(true);
     iv.setFitHeight(80);
-    iv.setX(300);iv.setY(100);
+    iv.setPreserveRatio(true);
+    iv.setX(300);iv.setY(90);
 
     ImageView iv2 = new ImageView();
     iv2.setImage(rect);
@@ -365,34 +379,43 @@ public class FlipperMap extends Application{
     iv3.setImage(rect);
     iv3.setPreserveRatio(true);
     iv3.setFitHeight(80);
-    iv3.setX(200);iv3.setY(520);
+    iv3.setX(200);iv3.setY(510);
 
     ImageView iv4 = new ImageView();
     iv4.setImage(rect);
     iv4.setPreserveRatio(true);
     iv4.setFitHeight(80);
-    iv4.setX(360);iv4.setY(520);
+    iv4.setX(360);iv4.setY(510);
 
     ImageView iv5 = new ImageView();
     iv5.setImage(triangle);
     iv5.setPreserveRatio(true);
-    iv5.setX(110);iv5.setY(540);
+    iv5.setFitHeight(80);
+    iv5.setX(347);iv5.setY(617);
 
     ImageView iv6 = new ImageView();
     iv6.setImage(triangle2);
     iv6.setPreserveRatio(true);
-    iv6.setFitHeight(150);
-    iv6.setX(390);iv6.setY(540);
+    iv6.setFitHeight(80);
+    iv6.setX(127);iv6.setY(618);
 
     ImageView iv7 = new ImageView();
     iv7.setImage(rond);
-    iv2.setFitHeight(20);
+    iv7.setPreserveRatio(true);
+    iv7.setFitHeight(50);
     iv7.setX(240);iv7.setY(340);
 
     ImageView iv8 = new ImageView();
     iv8.setImage(rond);
-    iv2.setFitHeight(20);
+    iv8.setPreserveRatio(true);
+    iv8.setFitHeight(50);
     iv8.setX(360);iv8.setY(260);
+
+    ImageView iv9 = new ImageView();
+    iv9.setImage(rond);
+    iv9.setPreserveRatio(true);
+    iv9.setFitHeight(50);
+    iv9.setX(240);iv9.setY(200);
 
     pane.getChildren().add(lineLauncher);//flip gauche
     pane.getChildren().add(leftFlip);//flip gauche
@@ -402,10 +425,11 @@ public class FlipperMap extends Application{
     pane.getChildren().add(iv2);
     pane.getChildren().add(iv3);
     pane.getChildren().add(iv4);
-    // pane.getChildren().add(iv5); //image triangle bas
-    // pane.getChildren().add(iv6);
+    pane.getChildren().add(iv5); //image triangle bas
+    pane.getChildren().add(iv6);
     pane.getChildren().add(iv7);
     pane.getChildren().add(iv8);
+    pane.getChildren().add(iv9);
     pane.getChildren().add(score);
 
     shape=new Shapes();
@@ -418,6 +442,7 @@ public class FlipperMap extends Application{
     shape.addShape(r7);
     shape.addShape(r8);
     shape.addShape(r9);
+    shape.addShape(r10);
     for(Border b:border.getBorders()){
       if(!(b instanceof Flip)){
         Line l=new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY());
