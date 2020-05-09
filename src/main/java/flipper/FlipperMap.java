@@ -423,27 +423,8 @@ public class FlipperMap extends Application{
         rightFlip.setEndY(flipRight.getPosY().getY());
 
         /////////Fin du jeu/////////
-        ////Forme en bas des flips qui marque la fin du jeu
-        Border a1 = new Border(new Position(220,765),new Position(275,775),0.9);
-        Border a2 = new Border(new Position(350,765),new Position(294,775),0.9);
-        Border a3 = new Border(new Position(275,775),new Position(294,775),0.9);
-        ArrayList<Border> endgame = new ArrayList<Border>();
-        endgame.add(a1);
-        endgame.add(a2);
-        endgame.add(a3);
-        boolean resfinal = false;
-        for(Border txd : endgame){
-          if(txd.collision(balle)==true){
-            resfinal=true;
-            Leaderboard.save(j1);
-            Leaderboard.load();
-            for(int i=0;i<Leaderboard.players.size();i++){
-              Label tmp = new Label(Leaderboard.players.get(i).getPseudo()+" "+Leaderboard.players.get(i).getScore());
-              aScore.add(tmp,0,i);
-            }
-          }
-        }
-        if(resfinal==true){
+        if(Borders.endGamex(balle)==true){
+          Leaderboard.save(j1);
           finalScore.setText("Score Finale en tant que "+j1.getPseudo()+(": ")+Integer.toString(j1.getScore()));
           primaryStage.setScene(scene3);
         }
@@ -489,5 +470,4 @@ public class FlipperMap extends Application{
       }
     });
   }
-
 }

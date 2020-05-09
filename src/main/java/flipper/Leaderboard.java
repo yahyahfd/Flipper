@@ -58,6 +58,12 @@ public class Leaderboard{
      for (int i = 0; i < jsonValues.size(); i++) {
          sortedJsonArray.add(jsonValues.get(i));
      }
+     if(sortedJsonArray.size()>10){
+       JSONArray sortedJsonArraybis = new JSONArray();
+       for(int i=0;i<10;i++){
+         sortedJsonArraybis.add(sortedJsonArray.get(i));
+       }
+     }
      return sortedJsonArray;
   }
 
