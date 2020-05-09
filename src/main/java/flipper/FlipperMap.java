@@ -38,7 +38,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.geometry.*;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.TextField;
-import java.util.ArrayList;
 public class FlipperMap extends Application{
   ShapeBorder shapeBorder;
   boolean flipLUP=false;
@@ -355,6 +354,13 @@ public class FlipperMap extends Application{
       }
     }
     shapeBorder=new ShapeBorder(border,shape);
+
+    //Zone en dessous des flips
+    Borders endB = new Borders();
+    endB.addBorder(new Border(new Position(220,765),new Position(275,775),0.9));
+    endB.addBorder(new Border(new Position(350,765),new Position(294,775),0.9));
+    endB.addBorder(new Border(new Position(275,775),new Position(294,775),0.9));
+
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
@@ -423,7 +429,7 @@ public class FlipperMap extends Application{
         rightFlip.setEndY(flipRight.getPosY().getY());
 
         /////////Fin du jeu/////////
-        if(Borders.endGamex(balle)==true){
+        if(endB.endGamex(balle)==true){
           Leaderboard.save(j1);
           finalScore.setText("Score Finale en tant que "+j1.getPseudo()+(": ")+Integer.toString(j1.getScore()));
           primaryStage.setScene(scene3);
