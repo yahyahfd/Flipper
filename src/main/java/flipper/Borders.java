@@ -31,4 +31,13 @@ public class Borders{
     }
     return null;
   }
+
+  public boolean endGamex(Balle balle){// Teste si la partie est finie (zone en bas des flips touchée)
+    for(Border txd : this.borders){
+      if(txd.collision(balle)==true){
+        return true;
+      }
+    }
+    return false;
+  }
 }

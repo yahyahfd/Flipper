@@ -15,39 +15,58 @@ public class Leaderboard{
       String content = IOUtils.toString(in, StandardCharsets.UTF_8);
       JSONParser parser = new JSONParser();
       JSONArray json = (JSONArray) parser.parse(content);
-      Iterator i = json.iterator();
+      JSONArray json2 = sortncut(json);
+      Iterator i = json2.iterator();
+      players = new ArrayList<Joueur>();
       while (i.hasNext()) {
         JSONObject slide = (JSONObject) i.next();
         String nom = (String)slide.get("nom");
-        String score = (String)slide.get("score");
+        String score = String.valueOf(slide.get("score"));
         Joueur tmp1 = new Joueur();
         tmp1.setPseudo(nom);
         tmp1.setScore(Integer.parseInt(score));
         players.add(tmp1);
       }
-    }catch(FileNotFoundException e1){
-      System.out.println("Leaderboard file not found");
-    }catch(Exception e){
-      e.printStackTrace();
+    }catch(Exception e1){
+      System.out.println("Leaderboard file not found, empty or badly written/corrupted.");
     }
   }
 
-  public static void sort(){
-    ArrayList<Joueur> tmp = new ArrayList<Joueur>();
-    int i;
-    if(players.size()>10){
-      i=10;
-    }else{
-      i=players.size();
-    }
-    for(int j=0;j<i;j++){
+  public static JSONArray sortncut(JSONArray jsonArr){ //on trie les scores par ordre croissant puis on s'arrête à la neuvième valeur (le reste n'est pas affichée masi reste présent dans le fichier JSON)
+     JSONArray sortedJsonArray = new JSONArray();
+     //On transforme notre JSONArray en List/ArrayList
+     List<JSONObject> jsonValues = new ArrayList<JSONObject>();
+     for (int i = 0; i < jsonArr.size(); i++) {
+         jsonValues.add((JSONObject) jsonArr.get(i));
+     }
+     Collections.sort( jsonValues, new Comparator<JSONObject>() { //On trie le jsonValues
+         public int compare(JSONObject a, JSONObject b) {
+             String valA = new String();
+             String valB = new String();
 
-    }
+             try {
+                 valA = String.valueOf(a.get("score"));
+                 valB = String.valueOf(b.get("score"));
+             }catch(Exception e){
+               e.printStackTrace();
+             }
+             return Integer.parseInt(valB)-Integer.parseInt(valA);
+         }
+     });
+     for (int i = 0; i < jsonValues.size(); i++) {
+         sortedJsonArray.add(jsonValues.get(i));
+     }
+     if(sortedJsonArray.size()>9){
+       JSONArray sortedJsonArraybis = new JSONArray();
+       for(int i=0;i<10;i++){
+         sortedJsonArraybis.add(sortedJsonArray.get(i));
+       }
+     }
+     return sortedJsonArray;
   }
-
-  public void save(Joueur j){
+  public static void save(Joueur j){
     File tmp = new File("src/main/java/flipper/leaderboard.json");
-    try(InputStream in = new FileInputStream(tmp)){
+    try(InputStream in = new FileInputStream(tmp)){ //le fichier existe déjà
       String content = IOUtils.toString(in, StandardCharsets.UTF_8);
       JSONParser parser = new JSONParser();
       JSONArray json = (JSONArray) parser.parse(content);
@@ -58,7 +77,7 @@ public class Leaderboard{
       FileWriter fw = new FileWriter (tmp);
       fw.write(json.toJSONString());
       fw.close();
-    }catch(FileNotFoundException e){
+    }catch(Exception e){ //pas de fichier de highscores ou fichier vide/mal écris
       try{
         JSONArray json = new JSONArray();
         JSONObject tmp1 = new JSONObject();
@@ -69,10 +88,8 @@ public class Leaderboard{
         fw.write(json.toJSONString());
         fw.close();
       }catch(Exception ee){
-        ee.printStackTrace();
+        System.out.println("Leaderboard file not found, empty or badly written/corrupted.");
       }
-    }catch(Exception e1){
-      e1.printStackTrace();
     }
   }
 }
