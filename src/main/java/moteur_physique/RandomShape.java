@@ -21,7 +21,6 @@ public class RandomShape extends moteurShape{
       roundedBorder.add(null);
     }
   }
-
   public void addRoundedBorder(double d,int border){
     if(border>q.getPos().size())return;
     roundedBorder.add(border,new Moteur_Polygone_Inscribed(q,border,10,q.getBorderLength(border)/2,d));
@@ -42,24 +41,20 @@ public class RandomShape extends moteurShape{
         if(be!=null)borders.add(be);
       }
     }
-    Border be=q.isInTheShape(balle);
-    if(be!=null)borders.add(be);
+    Border ba=q.isInTheShape(balle);
+    if(ba!=null){
+      int index=q.getBorderIndex(ba);
+      if(ba!=null&&roundedBorder.get(index)==null)borders.add(ba);
+    }
     Border b=null;
     for(Border border : borders){
-      if(border.collision(balle)==true){
-        if(dist==-1||dist>border.distance(balle)){
-          dist=border.distance(balle);
-          b=border;
-          b.setScoringTrue();
-          b.setBorderScore(this.getShapeScore());
-
-        }
+      if(dist==-1||dist>border.distance(balle)){
+        dist=border.distance(balle);
+        b=border;
+        b.setScoringTrue();
+        b.setBorderScore(this.getShapeScore());
       }
     }
     return b;
-  }
-
-  public Border isSliding(Balle balle){
-    return q.isSliding(balle);
   }
 }

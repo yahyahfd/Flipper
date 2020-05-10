@@ -45,7 +45,21 @@ public class Balle{
     double y=pos.getY()+vy*t;
     return new Position(x,y);
   }
+  public Position futur(double t){
+    double vy=v.getY()+a.getY()*t;
+    double vx=v.getX()+a.getX()*t;
+    double x=pos.getX()+vx*t;
+    double y=pos.getY()+vy*t;
+    return new Position(x,y);
+  }
   public Position collision(Border b){//Mix entre formule donné par le prof et https://ericleong.me/research/circle-line/
+    if(b instanceof Launcher){
+      Launcher launcher =(Launcher)b;
+      return collisionLauncher(launcher);
+    }
+    if((Math.abs(v.getX()*b.getUni().getY()-v.getY()*b.getUni().getX())<1||(Math.abs(v.getX())<0.2&&Math.abs(v.getY())<0.2))&&b.isOnTop(this)){
+      if(!b.verticale())return sliding(b);
+    }
     if(b instanceof Flip){ //le cas du flip est differents car on donne une force supplementaire a la balle
       Flip flip=(Flip)b;
       if(flip.getUp()==true){
@@ -59,10 +73,12 @@ public class Balle{
     Position p1=pos.closestToPoint(b.getPosX(),b.getPosY());
     Position p2=pointOfCollision(b);
     Position pc=p2.closestToPoint(b.getPosX(),b.getPosY());
+    double vnorme=v.norme();
     if(pc.isOnTheLine(b.getPosX(),b.getPosY())){//si on est dans le cas ou la balle ne touche pas les bout de la border alors on applique la formule du prof
-      this.pos=p2;//on met la balle au point de collision pour eviter les bug graphique
-      double vx=-v.scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
-      double vy=-v.scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+      double vx=-v.vectUnitaire().scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.vectUnitaire().scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
+      vx=vnorme*vx;
+      double vy=-v.vectUnitaire().scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.vectUnitaire().scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+      vy=vnorme*vy;
       double x=pos.getX()+vx*t;
       double y=pos.getY()+vy*t;
       return new Position(x,y);
@@ -73,8 +89,9 @@ public class Balle{
       double rx=p2.getX()-endpoint.getX();
       double ry=p2.getY()-endpoint.getY();
       Vecteur r=new Vecteur(rx,ry);//vecteur directeur de la nouvelle vitesse
-      double vx=v.norme()*r.vectUnitaire().getX()*b.getRebond();
-      double vy=v.norme()*r.vectUnitaire().getY()*b.getRebond();
+      double vx=vnorme*r.vectUnitaire().getX()*b.getRebond();
+      double vy=vnorme*r.vectUnitaire().getY()*b.getRebond();
+      this.pos=p2;
       double x=pos.getX()+vx*t;
       double y=pos.getY()+vy*t;
       return new Position(x,y);
@@ -102,8 +119,9 @@ public class Balle{
     double vx;
     double vy;
     Vecteur vv=new Vecteur(v.getX()+this.a.getX()*t,v.getY()+this.a.getY()*t);
-    vx=vv.norme()*r.getX();
-    vy=vv.norme()*r.getY();
+    double vvnorme=vv.norme();
+    vx=vvnorme*r.getX();
+    vy=vvnorme*r.getY();
     if(b.horizontale()&&!b.isOnTop(this)){
       vy=v.getY()+this.a.getY()*t;
     }
@@ -129,7 +147,7 @@ public class Balle{
       return new Position(pos.getX(),y);
     }
     else if(launcher.getDown()==false&&launcher.getMoving()==true){
-      return new Position(pos.getX(),pos.getY()-20);//suit le mouvement du launcher;
+      return new Position(pos.getX(),pos.getY()-40);//suit le mouvement du launcher;
     }else if(launcher.getDown()==true&&launcher.getMoving()==true){
       return new Position(pos.getX(),pos.getY()+10);
     }

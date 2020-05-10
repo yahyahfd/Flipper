@@ -23,13 +23,4 @@ public class Shapes{
     }
     return b;
   }
-  public Border isSliding(Balle balle){
-    for(moteurShape shape : this.shapes){
-      Border b=shape.isSliding(balle);
-      if(b!=null){
-        return b;
-      }
-    }
-    return null;
-  }
 }

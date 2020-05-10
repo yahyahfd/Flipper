@@ -19,11 +19,4 @@ public class ShapeBorder{
     if(b!=null)return b;
     return null;
   }
-  public Border isSliding(Balle balle){
-    Border b=borders.isSliding(balle);
-    Border s=shapes.isSliding(balle);
-    if(b!=null)return b;
-    if(s!=null)return s;
-    return null;
-  }
 }

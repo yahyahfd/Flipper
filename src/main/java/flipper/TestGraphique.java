@@ -31,8 +31,10 @@ import javafx.scene.layout.Pane;
 public class TestGraphique extends Application{
   Borders border;
   int a=0;
+  RandomShape r6;
   boolean flipLUP=false;
   boolean flipRUP=false;
+  Border test=new Border(new Position(0,400),new Position(1400,400),0.9);
   public static void main(String[] args) {
     launch(args);
   }
@@ -44,12 +46,12 @@ public class TestGraphique extends Application{
 
     Flip f1=new Flip(new Position(500,400),new Position(0,450),0.5);
     // Flip f2=new Flip(new Position(240,500),new Position(145,520),0.5);
-    Balle balle=new Balle(new Position(50,0),10,5);
+    Balle balle=new Balle(new Position(100,515),10,5);
     border=new Borders();
     // border.addBorder(f1);
     // border.addBorder(f2);
-    border.addBorder(new Border(new Position(0,0),new Position(1400,600),0.9));
-    border.addBorder(new Border(new Position(1100,0),new Position(1000,700),0.9));
+    // border.addBorder(test);
+    // border.addBorder(new Border(new Position(1100,0),new Position(1000,700),0.9));
     // // border.addBorder(new Border(new Position(50,350),new Position(150,400),0.9));
     // border.addBorder(new Border(new Position(110,550),new Position(150,500),0.9));
     // border.addBorder(new Border(new Position(350,500),new Position(400,450),0.9));
@@ -81,6 +83,28 @@ public class TestGraphique extends Application{
         pane.getChildren().add(new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY()));
       }
     }
+    Moteur_Polygone q6=new Moteur_Polygone(0.5,50);
+    q6.addPos(new Position(360,520));
+    q6.addPos(new Position(380,520));
+    q6.addPos(new Position(380,580));
+    q6.addPos(new Position(360,580));
+    Polygon pq=new Polygon();
+    pq.getPoints().addAll(q6.getAllPosition());
+    pq.setFill(Color.BROWN);
+    pq.setStroke(Color.BLACK);
+    pane.getChildren().add(pq);
+    r6=new RandomShape(q6);
+    r6.addRoundedBorder(10,0);
+    r6.addRoundedBorder(10,2);
+    for(Moteur_Polygone_Inscribed qqp : r6.getRoundedBorder()){
+      if(qqp!=null){
+        Polygon pqr=new Polygon();
+        pqr.getPoints().addAll(qqp.getAllPosition());
+        pane.getChildren().add(pqr);
+        pqr.setFill(Color.BROWN);
+        pqr.setStroke(Color.BLACK);
+      }
+    }
     Line lf=new Line(f1.getPosX().getX(),f1.getPosX().getY(),f1.getPosY().getX(),f1.getPosY().getY());
     // Line rf=new Line(f2.getPosX().getX(),f2.getPosX().getY(),f2.getPosY().getX(),f2.getPosY().getY());
     // pane.getChildren().add(lf);
@@ -88,29 +112,38 @@ public class TestGraphique extends Application{
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
-        Border s=border.isOnALine(balle);
-        Border ss=border.isSliding(balle);
+        Border s=r6.isInTheShape(balle);
         // if(s!=null&&ss!=null){
         //   if(s.isSuccessive(ss))
         //   balle.setFutur(balle.sliding(s));
         //   else
         //   balle.setFutur(balle.slidingColliding(ss,s));
-        // }
-         if(ss!=null){
-          balle.setFutur(balle.sliding(ss));
-        }
-         if(s!=null&&s!=ss){
+        //
+         if(s!=null){
+           Line tl=new Line(s.getPosX().getX(),s.getPosX().getY(),s.getPosY().getX(),s.getPosY().getY());
+           pane.getChildren().add(tl);
+           Position p2=balle.pointOfCollision(s);
+           pane.getChildren().add(new Circle(p2.getX(),p2.getY(),3,Color.GREEN));
+           tl.setStroke(Color.WHITE);
+          if(balle.getV().norme()>80)System.out.println(balle.getV().norme());
           balle.setFutur(balle.collision(s));
         }
           // pane.getChildren().add(new Line(s.getPosX().getX(),s.getPosX().getY(),s.getPosY().getX(),s.getPosY().getY()));
-          // Position p2=balle.pointOfCollision(s);
           // Position pc=p2.closestToPoint(s.getPosX(),s.getPosY());
           // System.out.println(pc);
-          // pane.getChildren().add(new Circle(p2.getX(),p2.getY(),3,Color.WHITE));
-          // pane.getChildren().add(new Circle(pc.getX(),pc.getY(),3,Color.GREEN));
         else{
           balle.setFutur(balle.futur());
         }
+        // Position a=test.intersection(balle);
+        // if(a!=null){
+        //   pane.getChildren().add(new Circle(a.getX(),a.getY(),3,Color.GREEN));
+        // }else{
+        //   System.out.println("null");
+        // }
+        // pane.getChildren().add(new Circle(balle.getPos().getX(),balle.getPos().getY(),3,Color.WHITE));
+
+        // System.out.println(balle.getPos());
+        // System.out.println(balle.getV().norme());
         circle.setCenterX(balle.getPos().getX());
         circle.setCenterY(balle.getPos().getY());
       }

@@ -45,21 +45,6 @@ public class Moteur_Polygone extends moteurShape{
     }
     return b;
   }
-
-  public Border isSliding(Balle balle){
-    ArrayList<Border> borders=new ArrayList<Border>();
-    for(int i=0;i<pos.size()-1;i++){
-      borders.add(new Border(pos.get(i),pos.get(i+1),rebond));
-    }
-    borders.add(new Border(pos.get(pos.size()-1),pos.get(0),rebond));
-    for(Border border : borders){
-      if(border.isSliding(balle)==true){
-        return border;
-      }
-    }
-    return null;
-  }
-
   public Double[] getAllPosition(){//Double[] est utilise par javafx
     Double[] d=new Double[pos.size()*2];
     int index=0;
@@ -105,5 +90,15 @@ public class Moteur_Polygone extends moteurShape{
       return pos.get(0).distance(pos.get(border));
     }
     return pos.get(border+1).distance(pos.get(border));
+  }
+  public int getBorderIndex(Border b){
+    ArrayList<Border> borders=new ArrayList<Border>();
+    for(int i=0;i<pos.size()-1;i++){
+      Border t=new Border(pos.get(i),pos.get(i+1),rebond);
+      if(t.equals(b))return i;
+    }
+    Border t=new Border(pos.get(pos.size()-1),pos.get(0),rebond);
+    if(t.equals(b))return pos.size()-1;
+    return -1;
   }
 }

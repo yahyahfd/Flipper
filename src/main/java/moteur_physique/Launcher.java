@@ -31,14 +31,14 @@ public class Launcher extends Border{
   }
   public boolean isOnTop(Balle balle){
     if(!isBeetwen(balle))return false;
-    return super.getPosY().getY()-balle.getPos().getY()<=2&&super.getPosY().getY()-balle.getPos().getY()>=0;
+    return super.getPosY().getY()-balle.getPos().getY()<=balle.getR()+2&&super.getPosY().getY()-balle.getPos().getY()>=balle.getR();
   }
 
   public void moveLauncherUp(){
-    if(super.getPosY().getY()>originY-100){
-      super.getPosY().setY(super.getPosY().getY()-20);
-      super.getPosX().setY(super.getPosX().getY()-20);
-      vitesse+=117;//v=d/t ou t=0.17s et d=2 donc v=11.7
+    if(super.getPosY().getY()>originY-120){
+      super.getPosY().setY(super.getPosY().getY()-40);
+      super.getPosX().setY(super.getPosX().getY()-40);
+      vitesse+=235;//v=d/t ou t=0.17s et d=20 donc v=11.7
       top=false;
       down=false;
       moving=true;

@@ -20,8 +20,7 @@ public class Flip extends Border{
       ny=-ny;
     }
     Position c;
-    if(isSliding(balle))c=balle.getPos();
-    else c=balle.getPos().closestToPoint(super.getPosX(),super.getPosY());
+    c=balle.getPos().closestToPoint(super.getPosX(),super.getPosY());
     double vx=(vitesseRadians/0.16)*super.getPosX().distance(c)*nx;
     double vy=(vitesseRadians/0.16)*super.getPosX().distance(c)*ny;
     return new Vecteur(vx,vy);
@@ -63,46 +62,6 @@ public class Flip extends Border{
       vitesseRadians=0;
       up=false;
     }
-  }
-  public boolean isOnTop(Balle balle){
-    double[] eqFlip=super.getPosX().equationDroite(super.getPosY());
-    if(eqFlip[2]==1)return true;//barre verticale, c'est normalement jamais le cas mais on sait jamais
-    if(!isBeetwen(balle))return false;
-    if(balle.getPos().getY()<=eqFlip[0]*balle.getPos().getX()+eqFlip[1]){//on verifie si on est au dessus de la balle
-      return true;
-    }
-    return false;
-  }
-  public boolean willBeOnTop(Balle balle){
-    double[] eqFlip=super.getPosX().equationDroite(super.getPosY());
-    if(eqFlip[2]==1)return true;//barre verticale, c'est normalement jamais le cas mais on sait jamais
-    if(!isBeetwen(balle))return false;
-    if(balle.futur().getY()<=eqFlip[0]*balle.futur().getX()+eqFlip[1]){//on verifie si on est au dessus de la balle
-      return true;
-    }
-    return false;
-  }
-  public boolean isBeetwen(Balle balle){
-    if(originY.getX()>super.getPosX().getX()){
-      if(balle.getPos().getX()>super.getPosY().getX()||balle.getPos().getX()<super.getPosX().getX())return false;
-    }else{
-      if(balle.getPos().getX()<super.getPosY().getX()||balle.getPos().getX()>super.getPosX().getX())return false;
-    }
-    return true;
-  }
-  public boolean isUnder(Balle balle){
-    double[] eqFlip=super.getPosX().equationDroite(super.getPosY());
-    if(balle.getPos().getY()>eqFlip[0]*balle.getPos().getX()+eqFlip[1]){//on verifie si on est au dessus de la balle
-      return true;
-    }
-    return false;
-  }
-  public boolean willBeUnder(Balle balle){
-      double[] eqFlip=super.getPosX().equationDroite(super.getPosY());
-      if(balle.futur().getY()>eqFlip[0]*balle.futur().getX()+eqFlip[1]){//on verifie si on est au dessus de la balle
-        return true;
-      }
-      return false;
   }
   public void newUniNorm(){
     Vecteur u=new Vecteur(super.getPosY().getX()-super.getPosX().getX(),super.getPosY().getY()-super.getPosX().getY());
