@@ -15,7 +15,9 @@ public class Leaderboard{
       String content = IOUtils.toString(in, StandardCharsets.UTF_8);
       JSONParser parser = new JSONParser();
       JSONArray json = (JSONArray) parser.parse(content);
-      Iterator i = json.iterator();
+      JSONArray json2 = sortncut(json);
+      Iterator i = json2.iterator();
+      players = new ArrayList<Joueur>();
       while (i.hasNext()) {
         JSONObject slide = (JSONObject) i.next();
         String nom = (String)slide.get("nom");
@@ -32,7 +34,7 @@ public class Leaderboard{
     }
   }
 
-  public static JSONArray sortncut(JSONArray jsonArr){ //on trie les scores par ordre croissant puis on s'arrête à la dixième valeur (le reste est supprimé)
+  public static JSONArray sortncut(JSONArray jsonArr){ //on trie les scores par ordre croissant puis on s'arrête à la neuvième valeur (le reste n'est pas affichée masi reste présent dans le fichier JSON)
      JSONArray sortedJsonArray = new JSONArray();
      //On transforme notre JSONArray en List/ArrayList
      List<JSONObject> jsonValues = new ArrayList<JSONObject>();
@@ -40,25 +42,23 @@ public class Leaderboard{
          jsonValues.add((JSONObject) jsonArr.get(i));
      }
      Collections.sort( jsonValues, new Comparator<JSONObject>() { //On trie le jsonValues
-         private static final String KEY_NAME = "score";
-         @Override
          public int compare(JSONObject a, JSONObject b) {
              String valA = new String();
              String valB = new String();
 
              try {
-                 valA = String.valueOf(a.get(KEY_NAME));
-                 valB = String.valueOf(b.get(KEY_NAME));
+                 valA = String.valueOf(a.get("score"));
+                 valB = String.valueOf(b.get("score"));
              }catch(Exception e){
                e.printStackTrace();
              }
-             return valA.compareTo(valB);
+             return Integer.parseInt(valB)-Integer.parseInt(valA);
          }
      });
      for (int i = 0; i < jsonValues.size(); i++) {
          sortedJsonArray.add(jsonValues.get(i));
      }
-     if(sortedJsonArray.size()>10){
+     if(sortedJsonArray.size()>9){
        JSONArray sortedJsonArraybis = new JSONArray();
        for(int i=0;i<10;i++){
          sortedJsonArraybis.add(sortedJsonArray.get(i));
@@ -77,9 +77,8 @@ public class Leaderboard{
       tmp1.put("nom",j.getPseudo());
       tmp1.put("score",j.getScore());
       json.add(tmp1);
-      JSONArray json2 = sortncut(json);
       FileWriter fw = new FileWriter (tmp);
-      fw.write(json2.toJSONString());
+      fw.write(json.toJSONString());
       fw.close();
     }catch(FileNotFoundException e){ //la toute première partie donc pas de fichier de highscores
       try{

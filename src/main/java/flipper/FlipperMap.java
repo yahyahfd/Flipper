@@ -46,9 +46,9 @@ public class FlipperMap extends Application{
   boolean launchUp=false;
   boolean gameon=false;
   Borders border, endB;
-  Button btnn1, btnn2, btnn3, btnnn;
+  Button btnn1, btnn2, btnnn;
   Circle circle;
-  ColumnConstraints col1, col2, column1, column2, columna1;
+  ColumnConstraints col1, col2, column1, column2, columna1, columna2, columna3;
   Flip flipLeft, flipRight;
   GridPane mainmen, leftgp, rightgp, aScore, endSc;
   Image rect, triangle, triangle2, rond;
@@ -80,7 +80,6 @@ public class FlipperMap extends Application{
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
 
     shape=new Shapes();
-    Leaderboard.load();
     /**menu principal*/
     mainmen = new GridPane();
     //on resize les colonnes
@@ -117,15 +116,13 @@ public class FlipperMap extends Application{
     pl1 = new TextField("Guest");
     //Buttons
     btnn1 = new Button("Start");
-    btnn2 = new Button("Settings");
-    btnn3 = new Button("Rules");
+    btnn2 = new Button("Exit");
     vbButtons = new VBox(10);
     vbButtons.setPrefWidth(150);
     pl1.setMaxWidth(vbButtons.getPrefWidth());
     btnn1.setMinWidth(vbButtons.getPrefWidth());
     btnn2.setMinWidth(vbButtons.getPrefWidth());
-    btnn3.setMinWidth(vbButtons.getPrefWidth());
-    vbButtons.getChildren().addAll(pl0,pl1,btnn1,btnn2,btnn3);
+    vbButtons.getChildren().addAll(pl0,pl1,btnn1,btnn2);
     leftgp.add(vbButtons,0,1);
     leftgp.setHalignment(wlc,HPos.CENTER);
     vbButtons.setAlignment(Pos.CENTER);
@@ -147,20 +144,7 @@ public class FlipperMap extends Application{
     rightgp.add(HS,0,0);
     rightgp.setHalignment(HS,HPos.CENTER);
     //Highscores
-    aScore = new GridPane();
-    for (int i = 0; i < 10; i++) {
-      RowConstraints rConstraint = new RowConstraints();
-      rConstraint.setPercentHeight(10);
-      aScore.getRowConstraints().add(rConstraint);
-    }
-    columna1 = new ColumnConstraints();
-    columna1.setPercentWidth(100);
-    aScore.getColumnConstraints().add(columna1);
-    for(int i=0;i<Leaderboard.players.size();i++){
-      Label tmp = new Label(Leaderboard.players.get(i).getPseudo()+" "+Leaderboard.players.get(i).getScore());
-      aScore.add(tmp,0,i);
-    }
-    rightgp.add(aScore,0,1);
+    buildHS();
     //on ajoute maintenant ces deux parties au menu principal
     mainmen.add(leftgp,0,0,1,3);
     mainmen.add(rightgp,1,0,1,3);
@@ -171,7 +155,7 @@ public class FlipperMap extends Application{
     primaryStage.setScene(scene1);
     primaryStage.setTitle("Flipper");
     primaryStage.show();
-    buildPane();
+    buildPane(primaryStage);
     //Adding all the elements to the path
     Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
       public void handle(ActionEvent t){
@@ -247,39 +231,13 @@ public class FlipperMap extends Application{
             primaryStage.setScene(scene3);
             gameon=false;
           }
-        }else{
-          System.out.println("hehe");
         }
       }
     }));
-    scene2=new Scene(pane,600,900);
-    pane.setId("pane");
-    scene2.getStylesheets().addAll("file:style.css");
-    scene2.setFill(Color.BROWN);
-    scene2.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-      if(key.getCode()==KeyCode.LEFT) {
-        flipLUP=true;
-      }
-      if(key.getCode()==KeyCode.RIGHT) {
-        flipRUP=true;
-      }
-      if(key.getCode()==KeyCode.SPACE) {
-        launchUp=true;
-      }
-    });
-    scene2.addEventHandler(KeyEvent.KEY_RELEASED, (key) -> {
-      if(key.getCode()==KeyCode.LEFT) {
-        flipLUP=false;
-      }
-      if(key.getCode()==KeyCode.RIGHT) {
-        flipRUP=false;
-      }
-      if(key.getCode()==KeyCode.SPACE) {
-        launchUp=false;
-      }
-    });
+
     btnn1.setOnAction(new EventHandler<ActionEvent>() {
       @Override public void handle(ActionEvent e) {
+        buildPane(primaryStage);
         j1.setPseudo(pl1.getText());
         primaryStage.setScene(scene2);
         gameon=true;
@@ -287,15 +245,58 @@ public class FlipperMap extends Application{
         timeline.play();
       }
     });
-    btnnn.setOnAction(new EventHandler<ActionEvent>() {
+
+    btnn2.setOnAction(new EventHandler<ActionEvent>() {
       @Override public void handle(ActionEvent e) {
-        primaryStage.setScene(scene1);
-        buildPane();
+        System.exit(0);
       }
     });
   }
 
-  public void buildPane(){
+  public void buildHS(){
+    //On importe les données du ficiers JSON puis on les ajoutes sur le GridPane des Highscores
+    Leaderboard.load();
+    aScore = new GridPane();
+    for (int i = 0; i < 10; i++) {
+      RowConstraints rConstraint = new RowConstraints();
+      rConstraint.setPercentHeight(10);
+      aScore.getRowConstraints().add(rConstraint);
+    }
+    columna1 = new ColumnConstraints();
+    columna1.setPercentWidth(15);
+    columna2 = new ColumnConstraints();
+    columna2.setPercentWidth(70);
+    columna3 = new ColumnConstraints();
+    columna3.setPercentWidth(15);
+    Text lbtmp0 = new Text("Name");
+    Text lbtmp1 = new Text("Rank");
+    Text lbtmp2 = new Text("Score");
+    lbtmp0.setStyle("-fx-font-weight: bold");
+    lbtmp1.setStyle("-fx-font-weight: bold");
+    lbtmp2.setStyle("-fx-font-weight: bold");
+    aScore.add(lbtmp0,0,0);
+    aScore.add(lbtmp1,1,0);
+    aScore.add(lbtmp2,2,0);
+    aScore.getColumnConstraints().addAll(columna1, columna2, columna3);
+    for(int i=0;i<Leaderboard.players.size();i++){
+      Label tmp = new Label(Leaderboard.players.get(i).getPseudo());
+      int k = i+1;
+      Label tmp2 = new Label(""+k);
+      Label tmp3 = new Label(""+Leaderboard.players.get(i).getScore());
+      aScore.add(tmp,0,i+1);
+      aScore.add(tmp2,1,i+1);
+      aScore.add(tmp3,2,i+1);
+    }
+    aScore.setGridLinesVisible(true);
+    columna1.setHalignment(HPos.CENTER);
+    columna2.setHalignment(HPos.CENTER);
+    columna3.setHalignment(HPos.CENTER);
+    rightgp.getChildren().clear();
+    rightgp.add(HS,0,0);
+    rightgp.add(aScore,0,1);
+  }
+
+  public void buildPane(Stage primaryStage){ //Méthode qui permet de créer la partie en buildant la scene2 consacrée au flipper
     /**JEU*/
     pane=new Pane();
     j1 = new Joueur();
@@ -313,6 +314,17 @@ public class FlipperMap extends Application{
     vbfinal.setAlignment(Pos.CENTER);
     endSc.add(vbfinal,0,0);
     scene3 = new Scene(endSc,1000,400);
+
+
+    btnnn.setOnAction(new EventHandler<ActionEvent>() {
+      @Override public void handle(ActionEvent e) {
+        buildHS();
+        primaryStage.setScene(scene1);
+        flipLUP=false;
+        flipRUP=false;
+        launchUp=false;
+      }
+    });
 
     //
 
@@ -513,8 +525,34 @@ public class FlipperMap extends Application{
 
     //Zone en dessous des flips
     endB = new Borders();
-    endB.addBorder(new Border(new Position(220,765),new Position(275,775),0.9));
-    endB.addBorder(new Border(new Position(350,765),new Position(294,775),0.9));
-    endB.addBorder(new Border(new Position(275,775),new Position(294,775),0.9));
+    endB.addBorder(new Border(new Position(220,775),new Position(275,785),0.9));
+    endB.addBorder(new Border(new Position(350,775),new Position(294,785),0.9));
+    endB.addBorder(new Border(new Position(275,785),new Position(294,785),0.9));
+    scene2=new Scene(pane,600,900);
+    pane.setId("pane");
+    scene2.getStylesheets().addAll("file:style.css");
+    scene2.setFill(Color.BROWN);
+    scene2.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+      if(key.getCode()==KeyCode.LEFT) {
+        flipLUP=true;
+      }
+      if(key.getCode()==KeyCode.RIGHT) {
+        flipRUP=true;
+      }
+      if(key.getCode()==KeyCode.SPACE) {
+        launchUp=true;
+      }
+    });
+    scene2.addEventHandler(KeyEvent.KEY_RELEASED, (key) -> {
+      if(key.getCode()==KeyCode.LEFT) {
+        flipLUP=false;
+      }
+      if(key.getCode()==KeyCode.RIGHT) {
+        flipRUP=false;
+      }
+      if(key.getCode()==KeyCode.SPACE) {
+        launchUp=false;
+      }
+    });
   }
 }
