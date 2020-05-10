@@ -66,7 +66,6 @@ public class Leaderboard{
      }
      return sortedJsonArray;
   }
-
   public static void save(Joueur j){
     File tmp = new File("src/main/java/flipper/leaderboard.json");
     try(InputStream in = new FileInputStream(tmp)){ //le fichier existe déjà

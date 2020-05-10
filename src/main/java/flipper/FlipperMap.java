@@ -522,7 +522,6 @@ public class FlipperMap extends Application{
       }
     }
     shapeBorder=new ShapeBorder(border,shape);
-
     //Zone en dessous des flips
     endB = new Borders();
     endB.addBorder(new Border(new Position(220,775),new Position(275,785),0.9));
