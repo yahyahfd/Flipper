@@ -99,21 +99,23 @@ public void setBorderScore(int bs){
     return new Position(x,y);
   }
   public boolean collision(Balle balle){// Regardez https://ericleong.me/research/circle-line/#moving-circle-and-static-line-segment pour comprendre
+    Position futur;
+    if(balle.getV().norme()>140){
+      futur=balle.futur(8*0.01);
+      if(balle.getV().norme()>280)futur=futur=balle.futur(4*0.01);
+    }
+    else futur=balle.futur();
     Position a=intersection(balle);
-    Position b=balle.futur().closestToPoint(posX,posY);
-    Position c=posX.closestToPoint(balle.getPos(),balle.futur());
-    Position d=posY.closestToPoint(balle.getPos(),balle.futur());
+    Position b=futur.closestToPoint(posX,posY);
+    Position c=posX.closestToPoint(balle.getPos(),futur);
+    Position d=posY.closestToPoint(balle.getPos(),futur);
     boolean b1=false;
-    if(a!=null)b1=a.isOnTheLine(posX,posY)&&a.isOnTheLine(balle.getPos(),balle.futur());
-    boolean b2=b.distance(balle.futur())<=balle.getR()&&b.isOnTheLine(posX,posY);
-    boolean b3=c.distance(posX)<=balle.getR()&&c.isOnTheLine(balle.getPos(),balle.futur());
-    boolean b4=d.distance(posY)<=balle.getR()&&d.isOnTheLine(balle.getPos(),balle.futur());
+    if(a!=null)b1=a.isOnTheLine(posX,posY)&&a.isOnTheLine(balle.getPos(),futur);
+    boolean b2=b.distance(futur)<=balle.getR()&&b.isOnTheLine(posX,posY);
+    boolean b3=c.distance(posX)<=balle.getR()&&c.isOnTheLine(balle.getPos(),futur);
+    boolean b4=d.distance(posY)<=balle.getR()&&d.isOnTheLine(balle.getPos(),futur);
     return b1||b2||b3||b4;//si une des conditions est bonne alors il y a collision
   }
-  public double distance(Balle balle){
-    return balle.getPos().distance(balle.getPos().closestToPoint(posX,posY));//retourne la distance entre la balle et le point le plus proche de la balle appartenant au segment
-  }
-
   public Vecteur angle(){
     if(unitaire.getY()<0){
       return new Vecteur(-unitaire.getX(),-unitaire.getY());
@@ -126,18 +128,9 @@ public void setBorderScore(int bs){
   public boolean verticale(){
     return posX.getX()==posY.getX();
   }
-  public boolean isSliding(Balle balle){
-    if(verticale())return false;
-    boolean b1=(balle.getV().getX()*unitaire.getY()-balle.getV().getY()*unitaire.getX()>-1&&balle.getV().getX()*unitaire.getY()-balle.getV().getY()*unitaire.getX()<1);//vitesse colineaire a la border
-    boolean b0=Math.abs(balle.getV().getX())<1&&Math.abs(balle.getV().getY())<1;
-    if((b1)&&isOnTop(balle)){
-      return collision(balle);//derniere verification qu'on est bien sur la border
-    }
-    return false;
-  }
-  public Border isCloser(Border border,Balle balle){
-    if(distance(balle)<border.distance(balle))return this;
-    return border;
+  public double distance(Balle balle){
+    Position p1=balle.getPos().closestToPoint(posX,posY);
+    return balle.getPos().distance(p1);
   }
   public boolean isOnTop(Balle balle){
     double[] eqFlip=getPosX().equationDroite(getPosY());
@@ -152,7 +145,10 @@ public void setBorderScore(int bs){
     double y=(eqFlip[0]*(balle.getPos().getX())-(balle.getR()*2)+eqFlip[1]);//la balle  glisse et se met bien au dessus de l'axe
     return y;
   }
-  public boolean isSuccessive(Border b){
-    return posX.isEqual(b.posX)||posX.isEqual(b.posY)||posY.isEqual(b.posY);
+  public boolean equals(Border b){
+    if(b==this)return true;
+    boolean b0=(b.posX.getX()==posX.getX())&&(b.posX.getY()==posX.getY());
+    boolean b1=(b.posY.getX()==posY.getX())&&(b.posY.getY()==posY.getY());
+    return b0&&b1;
   }
 }

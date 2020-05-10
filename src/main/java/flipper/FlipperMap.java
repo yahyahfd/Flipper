@@ -160,26 +160,18 @@ public class FlipperMap extends Application{
         Timeline timeline=new Timeline(new KeyFrame(Duration.millis(17),new EventHandler<ActionEvent>(){
           public void handle(ActionEvent t){
             if(gameon==true){
-              Border s=shapeBorder.isSliding(balle);
               Border b=shapeBorder.isOnALine(balle);
               /////////Mouvement du launcher/////////
               boolean collisionLauncher=false;
               if(launchUp==true){
-                boolean u=launcher.isOnTop(balle);
                 launcher.moveLauncherUp();
-                if(u){
-                  balle.setFutur(balle.collisionLauncher(launcher));
-                  collisionLauncher=true;
-                }else collisionLauncher=false;
               }else{
-                boolean u=launcher.isOnTop(balle);
                 launcher.moveLauncherDown();
-                if(u){
-                  balle.setFutur(balle.collisionLauncher(launcher));
-                  collisionLauncher=true;
-                }else collisionLauncher=false;
               }
-
+              if(b instanceof Launcher){
+                balle.setFutur(balle.collision(b));
+                collisionLauncher=true;
+              }
               /////////Mouvement des flipper/////////
               boolean collision=false;
               if(flipLUP==true){
@@ -194,10 +186,7 @@ public class FlipperMap extends Application{
 
               /////////Collision/////////
               if(collisionLauncher==false){
-                if(s!=null){
-                  balle.setFutur(balle.sliding(s));
-                }
-                if((b!=null&&b!=s)||(b!=null&&(b instanceof Flip))){
+                if(b!=null){
                   balle.setFutur(balle.collision(b));
                   if(b.getScoring()){
                     j1.addScore(b.getBorderScore());
@@ -422,7 +411,7 @@ public class FlipperMap extends Application{
 
     r10=new Moteur_Polygone_Inscribed(0.9,50,0,20,new Position(240,200),25,25);
 
-    balle=new Balle(new Position(40,100),10,5);
+    balle=new Balle(new Position(565,769),10,5);
     circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
 
 
@@ -500,6 +489,7 @@ public class FlipperMap extends Application{
     lineLauncher=new Line(launcher.getPosX().getX(),launcher.getPosX().getY(),launcher.getPosY().getX(),launcher.getPosY().getY());
     border.addBorder(flipLeft);
     border.addBorder(flipRight);
+    border.addBorder(launcher);
     leftFlip.setStrokeWidth(5);
     rightFlip.setStrokeWidth(5);
     lineLauncher.setStrokeWidth(5);
@@ -614,7 +604,7 @@ public class FlipperMap extends Application{
     shape.addShape(r9);
     shape.addShape(r10);
     for(Border b:border.getBorders()){
-      if(!(b instanceof Flip)){
+      if(!(b instanceof Flip)&&!(b instanceof Launcher)){
         Line l=new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY());
         l.setStrokeWidth(5);
         pane.getChildren().add(l);
