@@ -38,7 +38,6 @@ public class Moteur_Polygone extends moteurShape{
         if(dist==-1||dist>border.distance(balle)){
           dist=border.distance(balle);
           b=border;
-          b.setScoringTrue();
           b.setBorderScore(this.getPolyScore());
         }
       }
