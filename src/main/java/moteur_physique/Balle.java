@@ -91,7 +91,7 @@ public class Balle{
       Vecteur r=new Vecteur(rx,ry);//vecteur directeur de la nouvelle vitesse
       double vx=vnorme*r.vectUnitaire().getX()*b.getRebond();
       double vy=vnorme*r.vectUnitaire().getY()*b.getRebond();
-      this.pos=p2;
+      setFutur(p2);
       double x=pos.getX()+vx*t;
       double y=pos.getY()+vy*t;
       return new Position(x,y);
