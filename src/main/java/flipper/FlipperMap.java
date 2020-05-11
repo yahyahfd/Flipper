@@ -188,10 +188,8 @@ public class FlipperMap extends Application{
               if(collisionLauncher==false){
                 if(b!=null){
                   balle.setFutur(balle.collision(b));
-                  if(b.getScoring()){
-                    j1.addScore(b.getBorderScore());
-                    score.setText("SCORE : "+Integer.toString(j1.getScore()));
-                  }
+                  j1.addScore(b.getBorderScore());
+                  score.setText("SCORE : "+Integer.toString(j1.getScore()));
                 }else{
                   balle.setFutur(balle.futur());
                 }
@@ -603,6 +601,7 @@ public class FlipperMap extends Application{
     shape.addShape(r8);
     shape.addShape(r9);
     shape.addShape(r10);
+    shape.addShape(r77);
     for(Border b:border.getBorders()){
       if(!(b instanceof Flip)&&!(b instanceof Launcher)){
         Line l=new Line(b.getPosX().getX(),b.getPosX().getY(),b.getPosY().getX(),b.getPosY().getY());
