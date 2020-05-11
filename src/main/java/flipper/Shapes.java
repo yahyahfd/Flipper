@@ -16,6 +16,7 @@ public class Shapes{
    */
   public Border isOnALine(Balle balle){
     Border b=null;
+    double dist=-1;
     for(moteurShape shape : this.shapes){
       if(shape.isInTheShape(balle)!=null){
         if(dist==-1||dist>=shape.isInTheShape(balle).distance(balle)){
