@@ -2,6 +2,10 @@
 
 Ce projet consiste de deux mini projet. Un moteur physique codé en java et le flipper codé aussi en java a l'aide de javaFx
 
+## Presentation
+
+https://youtu.be/fdWYf4P-NgE
+
 ## Getting Started
 
 Telechargez le dossier entier
