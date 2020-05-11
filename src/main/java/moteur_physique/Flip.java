@@ -2,7 +2,7 @@ package moteur_physique;
 public class Flip extends Border{
   private final Position originY;
   private boolean up=false;
-  private double vitesseRadians=0;//On prend just w, R sera pris en compte que lors de la collision
+  private double vitesseAngulaire=0;//On prend just w, R sera pris en compte que lors de la collision
   public boolean getUp(){
     return up;
   }
@@ -12,6 +12,10 @@ public class Flip extends Border{
   public Position getOriginY(){
     return originY;
   }
+  /**
+   *  Renvoie le vecteur vitesse du flip en utilisant sa vitesse angulaire
+   * @return Vecteur
+   */
   public Vecteur getV(Balle balle){
     double nx=super.getNorm().getX();
     double ny=super.getNorm().getY();
@@ -19,10 +23,9 @@ public class Flip extends Border{
       nx=-nx;
       ny=-ny;
     }
-    Position c;
-    c=balle.getPos().closestToPoint(super.getPosX(),super.getPosY());
-    double vx=(vitesseRadians/0.16)*super.getPosX().distance(c)*nx;
-    double vy=(vitesseRadians/0.16)*super.getPosX().distance(c)*ny;
+    Position c=balle.getPos().closestToPoint(super.getPosX(),super.getPosY());
+    double vx=(vitesseAngulaire/0.16)*super.getPosX().distance(c)*nx;
+    double vy=(vitesseAngulaire/0.16)*super.getPosX().distance(c)*ny;
     return new Vecteur(vx,vy);
   }
   public Flip(Position posX,Position posY,double rebond){//rebond entre 0 et 1
@@ -42,7 +45,7 @@ public class Flip extends Border{
       super.getPosY().setX(x);
       super.getPosY().setY(y);
       newUniNorm();
-      vitesseRadians+=0.15;
+      vitesseAngulaire+=0.15;
       up=true;
     }else{
       up=false;
@@ -59,7 +62,7 @@ public class Flip extends Border{
       super.getPosY().setX(x);
       super.getPosY().setY(y);
       newUniNorm();
-      vitesseRadians=0;
+      vitesseAngulaire=0;
       up=false;
     }
   }

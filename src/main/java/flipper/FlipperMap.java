@@ -57,10 +57,10 @@ public class FlipperMap extends Application{
   Label wlc, botl, pl0, HS, finalScore;
   Launcher launcher;
   Line leftFlip, rightFlip, lineLauncher;
-  Moteur_Polygone qq, q, q3, q4, q5, q6, q7, q77;
-  Moteur_Polygone_Inscribed r8, r9, r10;
+  Moteur_Polygone qq, q, q3, q4, q5, q6, q7;
+  Moteur_Polygone_Inscribed r8, r9, r10,r77;
   Pane pane;
-  RandomShape rr, r, r3, r4, r5, r6, r7, r77;
+  RandomShape rr, r, r3, r4, r5, r6, r7;
   RowConstraints row1, row2, row3, row4, row5, row6;
   Scene scene1, scene2, scene3;
   Shapes shape;
@@ -385,19 +385,7 @@ public class FlipperMap extends Application{
     q7.addPos(new Position(117,125));
     r7=new RandomShape(q7);
 
-    q77=new Moteur_Polygone(0.5,50);
-    q77.addPos(new Position(161,300));
-    q77.addPos(new Position(192,253));
-    q77.addPos(new Position(175,254));
-    q77.addPos(new Position(142,251));
-    q77.addPos(new Position(115,244));
-    q77.addPos(new Position(83,225));
-    q77.addPos(new Position(56,197));
-    q77.addPos(new Position(95,247));
-    q77.addPos(new Position(125,274));
-    r77=new RandomShape(q77);
-    r77.addRoundedBorder(20,0);
-    r77.addRoundedBorder(20,2);
+    r77=new Moteur_Polygone_Inscribed(0.9,50,0,20,new Position(82,222),25,25);
 
     //
 
@@ -409,7 +397,7 @@ public class FlipperMap extends Application{
 
     r10=new Moteur_Polygone_Inscribed(0.9,50,0,20,new Position(240,200),25,25);
 
-    balle=new Balle(new Position(565,769),10,5);
+    balle=new Balle(new Position(565,769),10);
     circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
 
 
@@ -556,7 +544,9 @@ public class FlipperMap extends Application{
     iv9.setX(215);iv9.setY(175);
 
     iv10 = new ImageView();
-    iv10.setImage(forme1);
+    iv10.setImage(rond);
+    iv10.setPreserveRatio(true);
+    iv10.setFitHeight(50);
     iv10.setX(57);iv10.setY(197);
 
     iv11 = new ImageView();

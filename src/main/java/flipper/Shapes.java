@@ -10,9 +10,13 @@ public class Shapes{
   public ArrayList<moteurShape> getShapes(){
     return shapes;
   }
-  public Border isOnALine(Balle balle){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
-    double dist=-1;
+  /**
+   *  Regarde pour toute les shapes si il y a collision avec la balle et prend la shape la plus proche
+   * @return Border
+   */
+  public Border isOnALine(Balle balle){
     Border b=null;
+    double dist=-1;
     for(moteurShape shape : this.shapes){
       if(shape.isInTheShape(balle)!=null){
         if(dist==-1||dist>=shape.isInTheShape(balle).distance(balle)){

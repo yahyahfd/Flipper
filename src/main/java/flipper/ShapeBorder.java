@@ -1,6 +1,6 @@
 package flipper;
 import moteur_physique.*;
-public class ShapeBorder{
+public class ShapeBorder{//regroupe toute les bordure et shape du jeu
   Borders borders;
   Shapes shapes;
   public ShapeBorder(Borders borders,Shapes shapes){

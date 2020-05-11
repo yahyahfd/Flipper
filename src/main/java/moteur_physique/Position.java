@@ -64,6 +64,10 @@ public class Position {
 	public String toString(){
 		return "x: "+String.valueOf(x)+" y: "+String.valueOf(y);
 	}
+	/**
+   *  Retourne la position sur la ligne [posX,posY] qui la plus proche la position courante(this)
+   * @return Position
+   */
 	public Position closestToPoint(Position posX,Position posY){
 		double lx1=posX.getX();
 		double ly1=posX.getY();
@@ -87,6 +91,10 @@ public class Position {
 		}
 		return new Position(cx,cy);
 	}
+	/**
+   *  Verifie si un points est sur une ligne
+   * @return boolean
+   */
 	public boolean isOnTheLine(Position posX,Position posY){//verifie si this est sur le segment [posX,posY]
     return this.distance(posX)+this.distance(posY)<=posX.distance(posY)+0.1&&this.distance(posX)+this.distance(posY)>=posX.distance(posY)-0.1;
   }
