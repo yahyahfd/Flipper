@@ -44,8 +44,4 @@ public class Vecteur{
   public String toString(){
     return "Vecteur : ("+x+","+y+")";
   }
-  public Vecteur unitaireScale(int scale){
-    if(this.norme()==0)return new Vecteur(0,0);
-    return new Vecteur(this.x/scale,this.y/scale);
-  }
 }

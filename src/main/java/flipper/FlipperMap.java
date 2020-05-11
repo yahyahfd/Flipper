@@ -397,7 +397,7 @@ public class FlipperMap extends Application{
 
     r10=new Moteur_Polygone_Inscribed(0.9,50,0,20,new Position(240,200),25,25);
 
-    balle=new Balle(new Position(565,769),10,5);
+    balle=new Balle(new Position(565,769),10);
     circle=new Circle(balle.getPos().getX(),balle.getPos().getY(),balle.getR());
 
 

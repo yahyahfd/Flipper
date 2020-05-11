@@ -2,13 +2,6 @@ package moteur_physique;
 import java.util.ArrayList;
 
 public class Balle{
-  private boolean sliding=false;
-  public boolean getSliding(){
-    return sliding;
-  }
-  public void setSliding(boolean b){
-    sliding=b;
-  }
   private Position pos;
   public Position getPos(){
     return pos;
@@ -18,9 +11,6 @@ public class Balle{
     return r;
   }
   private double m;//en kg
-  public double getM(){
-    return m;
-  }
   private Vecteur v;
   public Vecteur getV(){
     return this.v;
@@ -28,7 +18,7 @@ public class Balle{
   private Vecteur a;//correspond a l'acceleration, pour l'instant c'est seulement la gravite
   private double t;//intervalle de temps(equivalent a 60fps)
   private double g=10;//constante de gravité
-  public Balle(Position pos,double r,double m){
+  public Balle(Position pos,double r){
     this.pos=pos;
     this.r=r;
     this.m=m;
@@ -52,16 +42,16 @@ public class Balle{
     double y=pos.getY()+vy*t;
     return new Position(x,y);
   }
-  public Position collision(Border b){//Mix entre formule donné par le prof et https://ericleong.me/research/circle-line/
-    if(b instanceof Launcher){
-      Launcher launcher =(Launcher)b;
+  public Position collision(Border border){//Mix entre formule donné par le prof et https://ericleong.me/research/circle-line/
+    if(border instanceof Launcher){
+      Launcher launcher =(Launcher)border;
       return collisionLauncher(launcher);
     }
-    if((Math.abs(v.getX()*b.getUni().getY()-v.getY()*b.getUni().getX())<1||(Math.abs(v.getX())<0.2&&Math.abs(v.getY())<0.2))&&b.isOnTop(this)){
-      if(!b.verticale())return sliding(b);
+    if((Math.abs(v.getX()*border.getUni().getY()-v.getY()*border.getUni().getX())<1||(Math.abs(v.getX())<0.2&&Math.abs(v.getY())<0.2))&&border.isOnTop(this)){
+      if(!border.verticale())return sliding(border);
     }
-    if(b instanceof Flip){ //le cas du flip est differents car on donne une force supplementaire a la balle
-      Flip flip=(Flip)b;
+    if(border instanceof Flip){//le cas du flip est differents car on donne une force supplementaire a la balle
+      Flip flip=(Flip)border;
       if(flip.getUp()==true){
         double vx=flip.getV(this).getX()*2+v.getX();
         double vy=flip.getV(this).getY()*2+v.getY();
@@ -70,41 +60,47 @@ public class Balle{
         return new Position(x,y);
       }
     }
-    Position p1=pos.closestToPoint(b.getPosX(),b.getPosY());
-    Position p2=pointOfCollision(b);
-    Position pc=p2.closestToPoint(b.getPosX(),b.getPosY());
+    Position p1=pos.closestToPoint(border.getPosX(),border.getPosY());
+    Position pointOfCollision=pointOfCollision(border);
+    Position pc=pointOfCollision.closestToPoint(border.getPosX(),border.getPosY());
     double vnorme=v.norme();
-    if(pc.isOnTheLine(b.getPosX(),b.getPosY())){//si on est dans le cas ou la balle ne touche pas les bout de la border alors on applique la formule du prof
-      double vx=-v.vectUnitaire().scalaire(b.getNorm())*b.getRebond()*b.getNorm().getX()+v.vectUnitaire().scalaire(b.getUni())*b.getUni().getX()*b.getRebond();
+    if(pc.isOnTheLine(border.getPosX(),border.getPosY())){//si on est dans le cas ou la balle ne touche pas les bout de la border alors on applique la formule du prof
+      double vx=-v.vectUnitaire().scalaire(border.getNorm())*border.getRebond()*border.getNorm().getX()+v.vectUnitaire().scalaire(border.getUni())*border.getUni().getX()*border.getRebond();
       vx=vnorme*vx;
-      double vy=-v.vectUnitaire().scalaire(b.getNorm())*b.getNorm().getY()*b.getRebond()+v.vectUnitaire().scalaire(b.getUni())*b.getUni().getY()*b.getRebond();
+      double vy=-v.vectUnitaire().scalaire(border.getNorm())*border.getNorm().getY()*border.getRebond()+v.vectUnitaire().scalaire(border.getUni())*border.getUni().getY()*border.getRebond();
       vy=vnorme*vy;
       double x=pos.getX()+vx*t;
       double y=pos.getY()+vy*t;
       return new Position(x,y);
     }
     else{//dans ce cas on applique la formule du site
-      Position endpoint;
-      endpoint=p2.isCloser(b.getPosX(),b.getPosY());
-      double rx=p2.getX()-endpoint.getX();
-      double ry=p2.getY()-endpoint.getY();
-      Vecteur r=new Vecteur(rx,ry);//vecteur directeur de la nouvelle vitesse
-      double vx=vnorme*r.vectUnitaire().getX()*b.getRebond();
-      double vy=vnorme*r.vectUnitaire().getY()*b.getRebond();
-      setFutur(p2);
+      Position endpoint=pointOfCollision.isCloser(border.getPosX(),border.getPosY());
+      double rx=pointOfCollision.getX()-endpoint.getX();
+      double ry=pointOfCollision.getY()-endpoint.getY();
+      Vecteur newSpeed=new Vecteur(rx,ry);//vecteur directeur de la nouvelle vitesse
+      double vx=vnorme*newSpeed.vectUnitaire().getX()*border.getRebond();
+      double vy=vnorme*newSpeed.vectUnitaire().getY()*border.getRebond();
+      this.pos=pointOfCollision;
       double x=pos.getX()+vx*t;
       double y=pos.getY()+vy*t;
       return new Position(x,y);
     }
   }
-  public Position pointOfCollision(Border b){
-    //d1=distance(pos,closestPoint)
-    //d2=distance(futur(),closestPoint)
-    //r=d1 + (d2-d1) * t
-    //tf=(r - d1) / (d2-d1)   0<tf<1
-    //pointOfCollision=pos+v*tf*t
-    double d1=pos.distance(pos.closestToPoint(b.getPosX(),b.getPosY()));
-    double d2=futur().distance(futur().closestToPoint(b.getPosX(),b.getPosY()));
+
+/**
+ *
+ *  Retourne la position ou la balle sera au moment de la collision
+ *  d1=distance(pos,closestPoint)
+ *  d2=distance(futur(),closestPoint)
+ *  r=d1 + (d2-d1) * t
+ *  tf=(r - d1) / (d2-d1)   0<tf<1
+ *  pointOfCollision=pos+v*tf*t
+ * @return Position
+ */
+  public Position pointOfCollision(Border border){
+
+    double d1=pos.distance(pos.closestToPoint(border.getPosX(),border.getPosY()));
+    double d2=futur().distance(futur().closestToPoint(border.getPosX(),border.getPosY()));
     double tf=(r-d1)/(d2-d1);
     double vx=v.getX()+a.getX()*t;
     double vy=v.getY()+a.getY()*t;
@@ -112,8 +108,8 @@ public class Balle{
     double y=pos.getY()+vy*t*tf;
     return new Position(x,y);
   }
-  public Position sliding(Border b){
-    Vecteur r=b.angle();
+  public Position sliding(Border border){
+    Vecteur r=border.angle();
     double x;
     double y;
     double vx;
@@ -122,11 +118,11 @@ public class Balle{
     double vvnorme=vv.norme();
     vx=vvnorme*r.getX();
     vy=vvnorme*r.getY();
-    if(b.horizontale()&&!b.isOnTop(this)){
+    if(border.horizontale()&&!border.isOnTop(this)){
       vy=v.getY()+this.a.getY()*t;
     }
-    else if(b.horizontale()){
-      vx=v.getX()*b.getRebond();
+    else if(border.horizontale()){
+      vx=v.getX()*border.getRebond();
       vy=0;
     }
     x=pos.getX()+vx*t;

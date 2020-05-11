@@ -10,6 +10,10 @@ public class Borders{
   public ArrayList<Border> getBorders(){
     return borders;
   }
+  /**
+   *  Regarde pour toute les border si il y a collision avec la balle et prend la shape la plus proche
+   * @return Border
+   */
   public Border isOnALine(Balle balle){//la classe Balle n'est pas encore sur le git on utilisera donc une position pour l'instant
     double dist=-1;
     Border b=null;

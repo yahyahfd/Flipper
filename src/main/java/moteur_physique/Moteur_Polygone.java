@@ -56,16 +56,23 @@ public class Moteur_Polygone extends moteurShape{
     return d;
   }
 
-  public double getAngleOfBorder(int border){
-    if(border>pos.size()-1)return 2;//-1<=slope<=1 donc 2 veux simplement dire pas possible
-    if(border==pos.size()-1){
-      double dx=pos.get(0).getX()-pos.get(border).getX();
-      double dy=pos.get(0).getY()-pos.get(border).getY();
-      return Math.atan(dy/dx);
-    }
-    double dx=pos.get(border+1).getX()-pos.get(border).getX();
-    double dy=pos.get(border+1).getY()-pos.get(border).getY();
-    return Math.atan(dy/dx);
+  public double getAngleOfBorder(int index){
+    if(index>pos.size()-1)throw new IllegalArgumentException("index de la bordure plus grand que le nombre de bordure actuel");//-1<=slope<=1 donc 2 veux simplement dire pas possible
+    Border border;
+    if(index==pos.size()-1)
+      border=new Border(pos.get(index),pos.get(0),0);
+    else
+      border=new Border(pos.get(index),pos.get(index+1),0);
+
+    if(border.verticale())
+      return Math.PI/2;
+    if(border.horizontale())
+      return 0;
+
+    double[] eqBorder=border.getPosX().equationDroite(border.getPosY());
+    double slope = eqBorder[0];
+    double angle=Math.atan(slope);
+    return angle;
   }
   public Position getBorderCenter(int border){
     if(border>pos.size()-1)return null;
@@ -75,14 +82,6 @@ public class Moteur_Polygone extends moteurShape{
     return new Position((pos.get(border+1).getX()+pos.get(border).getX())/2,(pos.get(border+1).getY()+pos.get(border).getY())/2);
   }
 
-  public double getArea(){//simple formule qui marche pour tout les polygones
-    double sum=0;
-    for(int i=0;i<pos.size()-1;i++){
-      sum=Math.abs(sum+(pos.get(i).getX()*pos.get(i+1).getY())-(pos.get(i).getY()*pos.get(i+1).getX()));
-    }
-    sum= Math.abs(sum+(pos.get(0).getX()*pos.get(pos.size()-1).getY())-(pos.get(0).getY()*pos.get(pos.size()-1).getX()));
-    return Math.abs(sum/2);
-  }
   public double getBorderLength(int border){
     if(border>pos.size()-1)return 0;
     if(border==pos.size()-1){

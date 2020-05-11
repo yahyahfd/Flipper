@@ -38,13 +38,13 @@ public class Border{//une bordure est considerer comme une ligne
   public String toString(){
     return posX.toString()+"\n"+posY.toString();
   }
-private int borderscore;
-public int getBorderScore(){
-  return this.borderscore;
-}
-public void setBorderScore(int bs){
-  this.borderscore = bs;
-}
+  private int borderscore;
+  public int getBorderScore(){
+    return this.borderscore;
+  }
+  public void setBorderScore(int bs){
+    this.borderscore = bs;
+  }
   public Border(Position posX,Position posY,double rebond){
     this.posX=posX;
     this.posY=posY;
@@ -55,9 +55,12 @@ public void setBorderScore(int bs){
     if(rebond>=0&&rebond<=1)this.rebond=rebond;
     else this.rebond=0;
     this.borderscore = 0;
-
   }
-
+  /**
+   *
+   *  Retourne l'intersection entre le vecteur vitesse et la bordure
+   * @return Position
+   */
   public Position intersection(Balle balle){
     double a=0;//equation de droite de la border y=ax+p
     double p=0;
@@ -90,13 +93,13 @@ public void setBorderScore(int bs){
     }
     return new Position(x,y);
   }
-  public boolean collision(Balle balle){// Regardez https://ericleong.me/research/circle-line/#moving-circle-and-static-line-segment pour comprendre
-    Position futur;
-    if(balle.getV().norme()>140){
-      futur=balle.futur(8*0.01);
-      if(balle.getV().norme()>280)futur=futur=balle.futur(4*0.01);
-    }
-    else futur=balle.futur();
+  /**
+   *  Verifie si il ya collision avec la balle
+   *  Regardez https://ericleong.me/research/circle-line/#moving-circle-and-static-line-segment pour comprendre
+   * @return boolean
+   */
+  public boolean collision(Balle balle){
+    Position futur=balle.futur();
     Position a=intersection(balle);
     Position b=futur.closestToPoint(posX,posY);
     Position c=posX.closestToPoint(balle.getPos(),futur);
@@ -108,6 +111,11 @@ public void setBorderScore(int bs){
     boolean b4=d.distance(posY)<=balle.getR()&&d.isOnTheLine(balle.getPos(),futur);
     return b1||b2||b3||b4;//si une des conditions est bonne alors il y a collision
   }
+
+  /**
+   *  Retourne le vecteur unitaire mais dans le bon sens(vers le bas)
+   * @return Vecteur
+   */
   public Vecteur angle(){
     if(unitaire.getY()<0){
       return new Vecteur(-unitaire.getX(),-unitaire.getY());
@@ -124,6 +132,10 @@ public void setBorderScore(int bs){
     Position p1=balle.getPos().closestToPoint(posX,posY);
     return balle.getPos().distance(p1);
   }
+  /**
+   *  Verifie si la balle est au dessus de la ligne
+   * @return boolean
+   */
   public boolean isOnTop(Balle balle){
     double[] eqFlip=getPosX().equationDroite(getPosY());
     if(eqFlip[2]==1)return true;//barre verticale,on renvoie true quoi qu'il arrive
@@ -132,11 +144,7 @@ public void setBorderScore(int bs){
     }
     return false;
   }
-  public double stayOnTop(Balle balle){
-    double[] eqFlip=getPosX().equationDroite(getPosY());
-    double y=(eqFlip[0]*(balle.getPos().getX())-(balle.getR()*2)+eqFlip[1]);//la balle  glisse et se met bien au dessus de l'axe
-    return y;
-  }
+  
   public boolean equals(Border b){
     if(b==this)return true;
     boolean b0=(b.posX.getX()==posX.getX())&&(b.posX.getY()==posX.getY());

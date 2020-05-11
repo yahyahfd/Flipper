@@ -21,13 +21,12 @@ public class Moteur_Polygone_Inscribed extends Moteur_Polygone{
     double rotation=p.getAngleOfBorder(border);
     double cx=p.getBorderCenter(border).getX();
     double cy=p.getBorderCenter(border).getY();
-    double x=cx+(Math.cos(rotation)*a);
-    double y=cy+(Math.sin(rotation)*b);
-    super.addPos(new Position(x,y));
-    for(int i=1;i<nbBorder;i++){
-      x=Math.cos(angle*i)*a+cx;
-      y=Math.sin(angle*i)*b+cy;
-      super.addPos(new Position(x,y));
+    for(int i=0;i<nbBorder;i++){
+      double x=Math.cos(angle*i+rotation)*a+cx;
+      double y=Math.sin(angle*i+rotation)*b+cy;
+      double xx=Math.cos(rotation)*(x-cx)-Math.sin(rotation)*(y-cy)+cx;
+      double yy=Math.sin(rotation)*(x-cx)+Math.cos(rotation)*(y-cy)+cy;
+      super.addPos(new Position(xx,yy));
     }
   }
 }
