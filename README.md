@@ -25,7 +25,7 @@ Vous aurez besoin de java et de gradle.
 
 ## Authors
 
-Les membres de ce projet sont Tanel OUBADIA, Yayha HAFID et Adam SAIMI
+Les membres de ce projet sont Tanel OUBADIA, Yahya HAFID et Adam SAIMI
 
 ## How to Play
 
