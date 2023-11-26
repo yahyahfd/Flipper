@@ -20,7 +20,7 @@ make run
 
 ## Prerequisites
 
-Vous aurez besoin de java et de gradle.
+Vous aurez besoin de java 17 et de gradle 7.3.
 
 
 ## Authors
